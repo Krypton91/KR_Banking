@@ -1,0 +1,1 @@
+static const int KR_BANKING_MENU = 86721531;

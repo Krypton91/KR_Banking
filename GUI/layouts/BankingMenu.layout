@@ -1,0 +1,459 @@
+FrameWidgetClass MainRoot {
+ position -0.00013 -0.00016
+ size 0.99967 1
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  PanelWidgetClass BankingMenuBody {
+   ignorepointer 1
+   size 0.47693 0.76292
+   halign center_ref
+   valign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_black
+   {
+    PanelWidgetClass Header {
+     ignorepointer 1
+     position 0.00001 0
+     size 0.99917 0.08414
+     halign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_blackbox
+     {
+      TextWidgetClass TextWidget0 {
+       ignorepointer 1
+       size 0.19426 0.99593
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "BANKING"
+       font "gui/fonts/metron-italic28"
+       "text halign" center
+       "text valign" center
+      }
+      ImageWidgetClass CloseWidget {
+       ignorepointer 1
+       position 0.00234 0.04435
+       size 0.04958 0.67821
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
+       mode blend
+       "src alpha" 1
+       stretch 1
+      }
+      ButtonWidgetClass CloseInvi {
+       position 0 0
+       size 0.05135 0.79802
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Empty
+      }
+     }
+    }
+    PanelWidgetClass PanelTabControl {
+     ignorepointer 1
+     color 0.2275 0.2275 0.2275 1
+     position 0.00004 0.08408
+     size 1.00011 0.05677
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+     {
+      ButtonWidgetClass BtnTabBank {
+       color 0.5608 0.0706 0.0706 1
+       position 0 -0.01007
+       size 0.269 1.0129
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Editor
+       text "Bank Account"
+      }
+      ButtonWidgetClass BtnTabClanBank {
+       color 0.5608 0.0706 0.0706 1
+       position 0.26877 -0.01917
+       size 0.269 1.0129
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Editor
+       text "Clan Account"
+      }
+     }
+    }
+    PanelWidgetClass PanelBankAcc {
+     visible 1
+     ignorepointer 1
+     position 0.00003 0.14132
+     size 0.99935 0.85878
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass PDABody {
+       ignorepointer 1
+       position 0 -0.02171
+       size 0.5966 0.7863
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        PanelWidgetClass PanelBankAmount {
+         ignorepointer 1
+         position 0.00024 0.07187
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ImageWidgetClass ImageWidget0 {
+           ignorepointer 1
+           size 0.10169 1.00281
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           imageTexture "{7AB473DF73D521A2}KR_Banking/GUI/textures/BankLogo.edds"
+           mode blend
+           "src alpha" 1
+           stretch 1
+          }
+          TextWidgetClass BankAmountValueText {
+           ignorepointer 1
+           position 0.05128 0.00368
+           size 0.89606 1.00135
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text " [KGB] Sample Value"
+           "text valign" center
+          }
+         }
+        }
+        PanelWidgetClass PanelCashAmount {
+         ignorepointer 1
+         position 0.00056 0.19011
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ImageWidgetClass ImageCashIcon {
+           ignorepointer 1
+           position -0.00065 0
+           size 0.10234 1.00281
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           imageTexture "{3246EACF47D2E247}KR_Banking/GUI/textures/CashIcon.edds"
+           mode blend
+           "src alpha" 1
+           stretch 1
+          }
+          TextWidgetClass TextCashOnPlayer {
+           ignorepointer 1
+           position 0.05128 0.00368
+           size 0.89606 1.00135
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text " [KGB] Sample Value"
+           "text valign" center
+          }
+         }
+        }
+        PanelWidgetClass PanelInteract {
+         ignorepointer 1
+         position -0.0004 0.31956
+         size 0.99993 0.10913
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          EditBoxWidgetClass EditBoxWidget0 {
+           color 0.502 0 0 1
+           position 0.00147 0.12675
+           size 0.99931 0.73141
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Editor
+           font "gui/fonts/metron-bold22"
+          }
+         }
+        }
+        PanelWidgetClass PanelBankAmount0 {
+         ignorepointer 1
+         position -0.00069 0.45341
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ButtonWidgetClass btnWitdraw {
+           color 0.502 0 0 1
+           position 0 -0.00394
+           size 0.41659 0.98413
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "WITHDRAW"
+           font "gui/fonts/metron-bold22"
+          }
+          ButtonWidgetClass btnWitdraw0 {
+           color 0.502 0 0 1
+           size 0.41659 0.98413
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "WITHDRAW"
+           font "gui/fonts/metron-bold22"
+          }
+          ButtonWidgetClass btnDeposit {
+           color 0.502 0 0 1
+           position 0 0
+           size 0.41659 0.98413
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "DEPOSIT"
+           font "gui/fonts/metron-bold22"
+          }
+         }
+        }
+       }
+      }
+      ButtonWidgetClass BtnRobBank {
+       color 0.502 0 0 1
+       position 0 -0
+       size 0.32635 0.08611
+       halign right_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Rob ATM"
+       font "gui/fonts/metron-bold22"
+      }
+     }
+    }
+    PanelWidgetClass PanelClanAcc {
+     visible 0
+     ignorepointer 1
+     position 0.00003 0.14132
+     size 0.99935 0.85878
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass PDABody0 {
+       ignorepointer 1
+       position 0 -0.02171
+       size 0.5966 0.7863
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        PanelWidgetClass PanelBankAmount1 {
+         ignorepointer 1
+         position 0.00024 0.07187
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ImageWidgetClass ImageWidget1 {
+           ignorepointer 1
+           size 0.10169 1.00281
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           imageTexture "{7AB473DF73D521A2}KR_Banking/GUI/textures/BankLogo.edds"
+           mode blend
+           "src alpha" 1
+           stretch 1
+          }
+          TextWidgetClass BankClanAmmount {
+           ignorepointer 1
+           position 0.05128 0.00368
+           size 0.89606 1.00135
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text " [KGB] Sample Value"
+           "text valign" center
+          }
+         }
+        }
+        PanelWidgetClass PanelCashAmount0 {
+         ignorepointer 1
+         position 0.00056 0.19011
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ImageWidgetClass ImageCashIcon0 {
+           ignorepointer 1
+           position -0.00065 0
+           size 0.10234 1.00281
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           imageTexture "{3246EACF47D2E247}KR_Banking/GUI/textures/CashIcon.edds"
+           mode blend
+           "src alpha" 1
+           stretch 1
+          }
+          TextWidgetClass TextCashOnPlayer0 {
+           ignorepointer 1
+           position 0.05128 0.00368
+           size 0.89606 1.00135
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text " [KGB] Sample Value"
+           "text valign" center
+          }
+         }
+        }
+        PanelWidgetClass PanelInteract0 {
+         ignorepointer 1
+         position -0.0004 0.31956
+         size 0.99993 0.10913
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          EditBoxWidgetClass InputBoxClan {
+           color 0.502 0 0 1
+           position 0 0
+           size 0.99931 1.01429
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Editor
+          }
+         }
+        }
+        PanelWidgetClass PanelBankAmount2 {
+         ignorepointer 1
+         position -0.00069 0.45341
+         size 0.99988 0.09612
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          ButtonWidgetClass btnWitdrawClan {
+           color 0.502 0 0 1
+           position 0 -0.00394
+           size 0.41659 0.98413
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "WITHDRAW"
+           font "gui/fonts/metron-bold22"
+          }
+          ButtonWidgetClass btnDepositClan {
+           color 0.502 0 0 1
+           size 0.41659 0.98413
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "DEPOSIT"
+           font "gui/fonts/metron-bold22"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
