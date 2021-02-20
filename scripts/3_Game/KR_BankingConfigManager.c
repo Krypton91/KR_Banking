@@ -46,12 +46,14 @@ class KR_BankingConfigManager
         ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
         ATM.Insert(new ref ATMPosition("KR_ATM", "11475.6 342.984 11320", "210 0 0"));
         ATMRobSpots.Insert(new ref RobAtmSpawns("7541.557 213.997 5137.169", "100 0 0", "An Atm gets robbed in Mogilevka!"));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble1", 1.0));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble5", 5.0));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble10", 10.0));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble25", 25.0));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble50", 50.0));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100.0));
+
+        //Importent to start with the highest Value of money because math.Floor.
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100));
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble50", 50));
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble25", 25));
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble10", 10));
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble5", 5));
+        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble1", 1));
         Save();
     }
 
@@ -148,9 +150,9 @@ class RobAtmSpawns
 class CurrencySettings
 {
     string CurrencyName;
-    float CurrencyValue;
+    int CurrencyValue;
 
-    void CurrencySettings(string curname, float curvalue)
+    void CurrencySettings(string curname, int curvalue)
     {
         CurrencyName = curname;
         CurrencyValue = curvalue;

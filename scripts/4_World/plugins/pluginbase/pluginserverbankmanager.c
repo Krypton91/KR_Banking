@@ -21,6 +21,7 @@ class PluginKRBankingManagerServer extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","PlayerDataRequest", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "ServerConfigRequest", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "WithdrawRequest", this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "DepositRequest", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -89,6 +90,22 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
+    void DepositRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+        if(type == CallType.Server)
+        {
+            Param2<int, int> data;
+            if(!ctx.Read(data)) return;
+            if(type == CallType.Server)
+            {
+                if(data.param2 == 1)
+                {
+                    DepositMoneyOnOwnBank(sender, data.param1);
+                }
+            }
+        }
+    }
+
     void WithdrawRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
         if(type == CallType.Server)
@@ -115,19 +132,269 @@ class PluginKRBankingManagerServer extends PluginBase
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
             
-            playerdata.WitdrawMoney(Ammount);
-            AddCurrencyToPlayersInventory(identity.GetPlainId(), Ammount);
+            playerdata.WitdrawMoney(CorrectAmountToWitdraw);
+
+            AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
 
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param1< int >( playerdata.GetBankCredit() ), true, identity);
             //Todo add here logs.
         }
     }
 
-    protected void AddCurrencyToPlayersInventory(string PlainID, int Ammount)
+
+    void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
     {
-        Print("Try to add " + PlainID + " Money with ammount:" + Ammount);
+        KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
+        if(playerdata)
+        {
+            playerdata.DepositMoney()
+        }
     }
 
+    protected int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
+	{
+		if(amountToAdd <= 0)
+		{
+			return 0;
+		}
+		int amountStillNeeded = amountToAdd;
+		
+		int maxQuantity;
+		int quantityNeeded;
+		int quantityLeftToAdd;
+		
+		for(int i = 0; i < GetKR_BankingServerConfig().BankingCurrency.Count(); i++)
+		{
+			quantityNeeded = Math.Floor(amountStillNeeded / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue);
+			if(quantityNeeded > 0)
+			{
+				quantityLeftToAdd = AddCurrencyToInventory(player, i, quantityNeeded);
+                //Print("Adding " + GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName + " " + quantityNeeded.ToString());
+				amountStillNeeded -= (quantityNeeded - quantityLeftToAdd) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+				
+				if(amountStillNeeded == 0)
+				{
+					return 0;
+				}
+			}
+		}
+		return amountStillNeeded;
+	}
+    //!Creates Currency in invenory & returns the ammount what is not addable.
+    protected int AddCurrencyToInventory(PlayerBase player, int CurrencyArrayIndex, int ammountToAdd)
+	{
+		if(ammountToAdd <= 0)
+		{
+			return 0;
+		}
+		
+		int quantityLeftToAdd = ammountToAdd;
+		
+		CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
+		
+		array<EntityAI> invArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invArray);
+		ItemBase currencyItem;
+		
+		int addableQuantity;
+		
+		for(int i = 0; i < invArray.Count(); i++) //Add currency to already in the inventory existing currency
+		{
+			if(invArray.Get(i).GetType() == currency.CurrencyName)
+			{
+				Class.CastTo(currencyItem, invArray.Get(i));
+				if(currencyItem)
+				{
+					addableQuantity = GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
+					if(addableQuantity > 0)
+					{
+						if(addableQuantity >= quantityLeftToAdd)
+						{
+							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + quantityLeftToAdd);
+							quantityLeftToAdd = 0;
+						}
+						else
+						{
+							SetItemQuantity(currencyItem, GetItemQuantityMax(currencyItem));
+							quantityLeftToAdd -= addableQuantity;
+						}
+					}
+					
+					if(quantityLeftToAdd == 0)
+					{
+						return 0;
+					}
+				}
+			}
+		}
+		
+		EntityAI createdCurrencyEntity;
+		int currencyItemMaxQuantity;
+		InventoryLocation invLocation = new InventoryLocation();
+		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, invLocation)) //Create new currency in the inventory
+		{
+			createdCurrencyEntity = player.GetHumanInventory().CreateInInventory(currency.CurrencyName);
+			if(Class.CastTo(currencyItem, createdCurrencyEntity)
+            {
+				currencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
+				if(currencyItemMaxQuantity == 0)
+				{
+					SetItemQuantity(currencyItem, 0);
+					quantityLeftToAdd -= 1;
+				}
+				else
+				{
+					if(quantityLeftToAdd <= currencyItemMaxQuantity)
+					{
+						SetItemQuantity(currencyItem, quantityLeftToAdd);
+						quantityLeftToAdd = 0;
+					}
+					else
+					{
+						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
+						quantityLeftToAdd -= currencyItemMaxQuantity;
+					}
+				}
+				
+				if(quantityLeftToAdd == 0)
+				{
+					return 0;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+		if(!player.GetHumanInventory().GetEntityInHands()) //Create new currency in the hands of the player
+		{
+			createdCurrencyEntity = player.GetHumanInventory().CreateInHands(currency.CurrencyName);
+			Class.CastTo(currencyItem, createdCurrencyEntity);
+			if(currencyItem)
+			{
+				currencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
+				if(currencyItemMaxQuantity == 0)
+				{
+					SetItemQuantity(currencyItem, 0);
+					quantityLeftToAdd -= 1;
+				}
+				else
+				{
+					if(quantityLeftToAdd <= currencyItemMaxQuantity)
+					{
+						SetItemQuantity(currencyItem, quantityLeftToAdd);
+						quantityLeftToAdd = 0;
+					}
+					else
+					{
+						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
+						quantityLeftToAdd -= currencyItemMaxQuantity;
+					}
+				}
+				
+				if(quantityLeftToAdd == 0)
+				{
+					return 0;
+				}
+			}
+		}
+		return quantityLeftToAdd;
+	}
+
+    /* QUANTITY SECTION */ 
+    protected void SetItemQuantity(ItemBase item, int quantity)
+	{
+		if(!item || quantity < 0)
+		{
+			return;
+		}
+		
+		if(item.IsMagazine())
+		{
+			Magazine magazine = Magazine.Cast(item);
+			if(magazine)
+			{
+				magazine.ServerSetAmmoCount(quantity);
+			}
+		}
+		else
+		{
+			item.SetQuantity(quantity);
+		}
+	}
+
+    int GetItemMaxQuantity(string itemClassname) // duplicate now useable for everyone!
+	{
+		TStringArray searching_in = new TStringArray;
+		searching_in.Insert( CFG_MAGAZINESPATH  + " " + itemClassname + " count");
+		//searching_in.Insert( CFG_WEAPONSPATH );
+		searching_in.Insert( CFG_VEHICLESPATH + " " + itemClassname + " varQuantityMax");
+
+		for ( int s = 0; s < searching_in.Count(); ++s )
+		{
+			string path = searching_in.Get( s );
+
+			if ( GetGame().ConfigIsExisting( path ) )
+			{
+				return g_Game.ConfigGetInt( path );
+			}
+		}
+
+		return 0;
+	}
+
+    protected int GetItemQuantity(ItemBase item)
+	{
+		if(!item)
+		{
+			return 0;
+		}
+		
+		if(item.IsMagazine())
+		{
+			Magazine magazineItem = Magazine.Cast(item);
+			if(magazineItem)
+			{
+				return magazineItem.GetAmmoCount();
+			}
+		}
+		return item.GetQuantity();
+	}
+
+    protected int GetItemQuantityMax(ItemBase item)
+	{
+		if(!item)
+		{
+			return 0;
+		}
+		
+		if(item.IsMagazine())
+		{
+			Magazine magazine = Magazine.Cast(item);
+			if(magazine)
+			{
+				return magazine.GetAmmoMax();
+			}
+		}
+		return item.GetQuantityMax();
+	}
+
+    //!retrurns PlayerBase with steam64ID if player is connected to server!
+    PlayerBase RemoteFindPlayer(string Steam64ID)
+    {
+        array<Man> onlinePlayers = new array<Man>;
+        GetGame().GetPlayers(onlinePlayers);
+
+        for(int i = 0; i < onlinePlayers.Count(); i++)
+        {
+            if(onlinePlayers.Get(i).GetIdentity().GetPlainId() == Steam64ID)
+            {
+                return PlayerBase.Cast(onlinePlayers.Get(i));
+            }
+        }
+        return NULL;
+    }
 
     int GetPlayersBankAmount(PlayerIdentity identity)
     {
