@@ -56,6 +56,9 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_WithdrawOwnAccBtn:
                 HandleWitdrawMoneyFromBank(1);
                 break;
+            case m_DepositOwnAccBtn:
+                HandleDepositMoney(1);
+                break;
         }
 
         return super.OnClick(w, x, y, button);
@@ -65,8 +68,17 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleWitdrawMoneyFromBank(int mode)
     {
         int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
-        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+        if(parsedMoney)
+            GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
     }
+    
+    void HandleDepositMoney(int mode)
+    {
+        int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        if(parsedMoney)
+            GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
+    }
+
     void SwitchTab(int TabIndex)
     {
         int lastTab;

@@ -147,7 +147,10 @@ class PluginKRBankingManagerServer extends PluginBase
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
-            playerdata.DepositMoney()
+            playerdata.DepositMoney(Ammount);
+            Print("Sucessfully added: " + Ammount.ToString() + " to bank account!");
+            RemoveCurrencyFromPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
+            GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param1< int >( playerdata.GetBankCredit() ), true, identity);
         }
     }
 
@@ -157,9 +160,8 @@ class PluginKRBankingManagerServer extends PluginBase
 		{
 			return 0;
 		}
+        
 		int amountStillNeeded = amountToAdd;
-		
-		int maxQuantity;
 		int quantityNeeded;
 		int quantityLeftToAdd;
 		
@@ -180,6 +182,81 @@ class PluginKRBankingManagerServer extends PluginBase
 		}
 		return amountStillNeeded;
 	}
+
+    protected int RemoveCurrencyFromPlayer(PlayerBase player, int amountToRemove)
+	{
+		if(amountToRemove <= 0)
+		{
+			return 0;
+		}
+		
+		int amountStillNeeded = amountToRemove;
+		
+		array<ref CurrencySettings> currency = GetKR_BankingServerConfig().BankingCurrency;
+		
+		array<EntityAI> inventory = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, inventory);
+		
+		ItemBase item;
+		
+		int currencyValue;
+		int quantityNeeded;
+		for(int i = currency.Count() - 1; i >= 0; i--)
+		{
+			for(int j = 0; j < inventory.Count(); j++)
+			{
+				if(currency.Get(i).CurrencyName == inventory.Get(j).GetType())
+				{
+					Class.CastTo(item, inventory.Get(j));
+					if(item)
+					{
+						currencyValue = currency.Get(i).CurrencyValue;
+						quantityNeeded = Math.Floor(amountStillNeeded / currencyValue); //floor is probably unnecessary since both are int
+						if(GetItemQuantityMax(item) == 0)
+						{
+							GetGame().ObjectDelete(item);
+							if(quantityNeeded >= 1)
+							{
+								amountStillNeeded -= currencyValue;
+							}
+							else
+							{
+								return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);							
+							}
+						}
+						else
+						{
+							if(quantityNeeded >= GetItemQuantity(item))
+							{
+								amountStillNeeded -= GetItemQuantity(item) * currencyValue;
+								GetGame().ObjectDelete(item);
+							}
+							else
+							{
+								SetItemQuantity(item, GetItemQuantity(item) - quantityNeeded);
+								amountStillNeeded -= quantityNeeded * currencyValue;
+								
+								if(amountStillNeeded < currencyValue)
+								{
+									if(GetItemQuantity(item) == 1)
+									{
+										GetGame().ObjectDelete(item);
+									}
+									else
+									{
+										SetItemQuantity(item, GetItemQuantity(item) - 1);
+									}
+									return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
+    
     //!Creates Currency in invenory & returns the ammount what is not addable.
     protected int AddCurrencyToInventory(PlayerBase player, int CurrencyArrayIndex, int ammountToAdd)
 	{
