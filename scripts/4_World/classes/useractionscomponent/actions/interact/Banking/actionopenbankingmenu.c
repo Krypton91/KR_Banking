@@ -28,8 +28,8 @@ class ActionOpenBankingMenu: ActionInteractBase
 			return false;
 		
 		Object target_object = target.GetObject();
-		KR_BankingATM atmbase;
 		if(!target_object) return false;
+		KR_BankingATM atmbase;
 		vector playersPos = player.GetPosition();
 		vector targetPos = target_object.GetPosition();
 		float distancetobank = vector.Distance(playersPos, targetPos);

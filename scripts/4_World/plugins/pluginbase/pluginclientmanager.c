@@ -5,6 +5,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
     protected ref KR_BankingClientConfig            m_clientSettings;
+
     void PluginKrBankingClientManager()
     {
         Init();
@@ -27,7 +28,7 @@ class PluginKrBankingClientManager extends PluginBase
             m_PlayersCurrency = data.param1;
             if(m_BankingMenu)
             {
-                m_BankingMenu.UpdatePlayersTab();//Ivoke an Update
+                m_BankingMenu.UpdateUI();//Ivoke an Update
             }
         }
     }
@@ -81,6 +82,36 @@ class PluginKrBankingClientManager extends PluginBase
     {
         return m_PlayersCurrency;
     }
+
+    //!Returns the currency Ammount in Players Invenory
+    int GetPlayerCurrencyAmount()
+	{
+		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+		
+		int currencyAmount = 0;
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+
+		ItemBase item;
+		
+		for (int i = 0; i < itemsArray.Count(); i++)
+		{
+			Class.CastTo(item, itemsArray.Get(i));
+
+			if (!item)
+				continue;
+
+			for (int j = 0; j < GetBankingClientManager().GetServersCurrencyData().Count(); j++)
+			{
+				if(item.GetType() == GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyName)
+				{
+					currencyAmount += GetItemAmount(item) *  GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyValue;
+				}
+			}
+		}
+		return currencyAmount;
+	}
 
     bool WaitForServerResponse()
     {

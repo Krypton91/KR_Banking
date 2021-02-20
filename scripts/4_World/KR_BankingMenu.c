@@ -98,15 +98,15 @@ class KR_BankingMenu extends UIScriptedMenu
         }
     }
 
-    void UpdatePlayersTab()
+    void UpdateUI()//If you add UI stuff what needs to be updated from remote you can just add this here!
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
-        m_OnPlayerCurrencyLabel.SetText(" " + GetPlayerCurrencyAmount().ToString());
+        m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
     }
 
     override void OnShow()
 	{
-        UpdatePlayersTab();
+        UpdateUI();
 
 		super.OnShow();
 
@@ -130,35 +130,6 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         m_IsBankingMenuOpen = visible;
     }
-
-    int GetPlayerCurrencyAmount()
-	{
-		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
-		
-		int currencyAmount = 0;
-		
-		array<EntityAI> itemsArray = new array<EntityAI>;
-		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
-
-		ItemBase item;
-		
-		for (int i = 0; i < itemsArray.Count(); i++)
-		{
-			Class.CastTo(item, itemsArray.Get(i));
-
-			if (!item)
-				continue;
-
-			for (int j = 0; j < GetBankingClientManager().GetServersCurrencyData().Count(); j++)
-			{
-				if(item.GetType() == GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyName)
-				{
-					currencyAmount += GetItemAmount(item) *  GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyValue;
-				}
-			}
-		}
-		return currencyAmount;
-	}
 
     int GetItemAmount(ItemBase item)
 	{
