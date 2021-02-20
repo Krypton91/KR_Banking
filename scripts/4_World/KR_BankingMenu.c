@@ -126,27 +126,15 @@ class KR_BankingMenu extends UIScriptedMenu
         return m_IsBankingMenuOpen;
     }
 
+    void ClearPlayerInputBox()
+    {
+        m_OwnAccInputBox.SetText("");
+    }
+
     void SetIsBankingMenuOpen(bool visible)
     {
         m_IsBankingMenuOpen = visible;
     }
-
-    int GetItemAmount(ItemBase item)
-	{
-		Magazine mgzn = Magazine.Cast(item);
-				
-		int itemAmount = 0;
-		if( item.IsMagazine() )
-		{
-			itemAmount = mgzn.GetAmmoCount();
-		}
-		else
-		{
-			itemAmount = QuantityConversions.GetItemQuantity(item);
-		}
-		
-		return itemAmount;
-	}
 
     override void OnHide()
 	{

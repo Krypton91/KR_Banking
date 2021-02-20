@@ -102,17 +102,34 @@ class PluginKrBankingClientManager extends PluginBase
 			if (!item)
 				continue;
 
-			for (int j = 0; j < GetBankingClientManager().GetServersCurrencyData().Count(); j++)
+			for (int j = 0; j < GetServersCurrencyData().Count(); j++)
 			{
-				if(item.GetType() == GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyName)
+				if(item.GetType() == GetServersCurrencyData().Get(j).CurrencyName)
 				{
-					currencyAmount += GetItemAmount(item) *  GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyValue;
+					currencyAmount += GetItemAmount(item) * GetServersCurrencyData().Get(j).CurrencyValue;
 				}
 			}
 		}
 		return currencyAmount;
 	}
 
+    int GetItemAmount(ItemBase item)
+	{
+		Magazine mgzn = Magazine.Cast(item);
+				
+		int itemAmount = 0;
+		if( item.IsMagazine() )
+		{
+			itemAmount = mgzn.GetAmmoCount();
+		}
+		else
+		{
+			itemAmount = QuantityConversions.GetItemQuantity(item);
+		}
+		
+		return itemAmount;
+	}
+    
     bool WaitForServerResponse()
     {
         return m_IsWaitingForServersResponse;

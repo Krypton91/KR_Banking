@@ -141,7 +141,6 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
-
     void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
@@ -154,25 +153,27 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
-    protected int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
+
+    /* THANKS TO DAEMON FORGE! <3 */
+    int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
 	{
 		if(amountToAdd <= 0)
 		{
 			return 0;
 		}
-        
+
 		int amountStillNeeded = amountToAdd;
 		int quantityNeeded;
-		int quantityLeftToAdd;
+		int quantityLeft;
 		
 		for(int i = 0; i < GetKR_BankingServerConfig().BankingCurrency.Count(); i++)
 		{
 			quantityNeeded = Math.Floor(amountStillNeeded / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue);
 			if(quantityNeeded > 0)
 			{
-				quantityLeftToAdd = AddCurrencyToInventory(player, i, quantityNeeded);
+				quantityLeft = AddCurrencyToInventory(player, i, quantityNeeded);
                 //Print("Adding " + GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName + " " + quantityNeeded.ToString());
-				amountStillNeeded -= (quantityNeeded - quantityLeftToAdd) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+				amountStillNeeded -= (quantityNeeded - quantityLeft) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 				
 				if(amountStillNeeded == 0)
 				{
@@ -183,35 +184,32 @@ class PluginKRBankingManagerServer extends PluginBase
 		return amountStillNeeded;
 	}
 
-    protected int RemoveCurrencyFromPlayer(PlayerBase player, int amountToRemove)
+    int RemoveCurrencyFromPlayer(PlayerBase player, int amountToRemove)
 	{
-		if(amountToRemove <= 0)
+		int amountStillNeeded = amountToRemove;
+
+        if(amountToRemove <= 0)
 		{
 			return 0;
 		}
-		
-		int amountStillNeeded = amountToRemove;
-		
-		array<ref CurrencySettings> currency = GetKR_BankingServerConfig().BankingCurrency;
-		
-		array<EntityAI> inventory = new array<EntityAI>;
-		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, inventory);
+
+		array<EntityAI> invItems = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invItems);
 		
 		ItemBase item;
 		
 		int currencyValue;
 		int quantityNeeded;
-		for(int i = currency.Count() - 1; i >= 0; i--)
+		for(int i = GetKR_BankingServerConfig().BankingCurrency.Count() - 1; i >= 0; i--)
 		{
-			for(int j = 0; j < inventory.Count(); j++)
+			for(int j = 0; j < invItems.Count(); j++)
 			{
-				if(currency.Get(i).CurrencyName == inventory.Get(j).GetType())
+				if(GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName == invItems.Get(j).GetType())
 				{
-					Class.CastTo(item, inventory.Get(j));
-					if(item)
+					if(Class.CastTo(item, invItems.Get(j))
 					{
-						currencyValue = currency.Get(i).CurrencyValue;
-						quantityNeeded = Math.Floor(amountStillNeeded / currencyValue); //floor is probably unnecessary since both are int
+						currencyValue = GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+						quantityNeeded = amountStillNeeded / currencyValue;
 						if(GetItemQuantityMax(item) == 0)
 						{
 							GetGame().ObjectDelete(item);
@@ -221,7 +219,7 @@ class PluginKRBankingManagerServer extends PluginBase
 							}
 							else
 							{
-								return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);							
+								return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);
 							}
 						}
 						else
@@ -257,15 +255,14 @@ class PluginKRBankingManagerServer extends PluginBase
 		return 0;
 	}
     
-    //!Creates Currency in invenory & returns the ammount what is not addable.
-    protected int AddCurrencyToInventory(PlayerBase player, int CurrencyArrayIndex, int ammountToAdd)
+    int AddCurrencyToInventory(PlayerBase player, int CurrencyArrayIndex, int ammountToAdd)
 	{
 		if(ammountToAdd <= 0)
 		{
 			return 0;
 		}
 		
-		int quantityLeftToAdd = ammountToAdd;
+		int quantityLeft = ammountToAdd;
 		
 		CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
 		
@@ -285,19 +282,19 @@ class PluginKRBankingManagerServer extends PluginBase
 					addableQuantity = GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
 					if(addableQuantity > 0)
 					{
-						if(addableQuantity >= quantityLeftToAdd)
+						if(addableQuantity >= quantityLeft)
 						{
-							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + quantityLeftToAdd);
-							quantityLeftToAdd = 0;
+							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + quantityLeft);
+							quantityLeft = 0;
 						}
 						else
 						{
 							SetItemQuantity(currencyItem, GetItemQuantityMax(currencyItem));
-							quantityLeftToAdd -= addableQuantity;
+							quantityLeft -= addableQuantity;
 						}
 					}
 					
-					if(quantityLeftToAdd == 0)
+					if(quantityLeft == 0)
 					{
 						return 0;
 					}
@@ -307,8 +304,8 @@ class PluginKRBankingManagerServer extends PluginBase
 		
 		EntityAI createdCurrencyEntity;
 		int currencyItemMaxQuantity;
-		InventoryLocation invLocation = new InventoryLocation();
-		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, invLocation)) //Create new currency in the inventory
+		InventoryLocation il = new InventoryLocation();
+		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, il))
 		{
 			createdCurrencyEntity = player.GetHumanInventory().CreateInInventory(currency.CurrencyName);
 			if(Class.CastTo(currencyItem, createdCurrencyEntity)
@@ -317,23 +314,23 @@ class PluginKRBankingManagerServer extends PluginBase
 				if(currencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					quantityLeftToAdd -= 1;
+					quantityLeft -= 1;
 				}
 				else
 				{
-					if(quantityLeftToAdd <= currencyItemMaxQuantity)
+					if(quantityLeft <= currencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, quantityLeftToAdd);
-						quantityLeftToAdd = 0;
+						SetItemQuantity(currencyItem, quantityLeft);
+						quantityLeft = 0;
 					}
 					else
 					{
 						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
-						quantityLeftToAdd -= currencyItemMaxQuantity;
+						quantityLeft -= currencyItemMaxQuantity;
 					}
 				}
 				
-				if(quantityLeftToAdd == 0)
+				if(quantityLeft == 0)
 				{
 					return 0;
 				}
@@ -354,33 +351,33 @@ class PluginKRBankingManagerServer extends PluginBase
 				if(currencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					quantityLeftToAdd -= 1;
+					quantityLeft -= 1;
 				}
 				else
 				{
-					if(quantityLeftToAdd <= currencyItemMaxQuantity)
+					if(quantityLeft <= currencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, quantityLeftToAdd);
-						quantityLeftToAdd = 0;
+						SetItemQuantity(currencyItem, quantityLeft);
+						quantityLeft = 0;
 					}
 					else
 					{
 						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
-						quantityLeftToAdd -= currencyItemMaxQuantity;
+						quantityLeft -= currencyItemMaxQuantity;
 					}
 				}
 				
-				if(quantityLeftToAdd == 0)
+				if(quantityLeft == 0)
 				{
 					return 0;
 				}
 			}
 		}
-		return quantityLeftToAdd;
+		return quantityLeft;
 	}
 
     /* QUANTITY SECTION */ 
-    protected void SetItemQuantity(ItemBase item, int quantity)
+    void SetItemQuantity(ItemBase item, int quantity)
 	{
 		if(!item || quantity < 0)
 		{
@@ -421,7 +418,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		return 0;
 	}
 
-    protected int GetItemQuantity(ItemBase item)
+    int GetItemQuantity(ItemBase item)
 	{
 		if(!item)
 		{
@@ -439,7 +436,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		return item.GetQuantity();
 	}
 
-    protected int GetItemQuantityMax(ItemBase item)
+    int GetItemQuantityMax(ItemBase item)
 	{
 		if(!item)
 		{
