@@ -1,17 +1,19 @@
 class KR_BankingClientConfig
 {
-    float   MaxCurrency;
+    int     MaxCurrency;
     float   InteractDelay;
-    bool    isRobActiv;
+    bool    isRobActive;
     bool    isBankCardNeeded;
+    ref array<ref CurrencySettings> BankingCurrency;
     protected bool ConfigRecvied;
 
-    void KR_BankingClientConfig(float mxcur, float interdelay, bool rob, bool card)
+    void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, ref array<ref CurrencySettings> ServersCurrency )
     {
         MaxCurrency = mxcur;
         InteractDelay = interdelay;
-        isRobActiv = rob;
+        isRobActive = rob;
         isBankCardNeeded = card;
+        BankingCurrency = ServersCurrency;
     }
 
     bool hasConfigfromServer()

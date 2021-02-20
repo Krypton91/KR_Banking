@@ -4,14 +4,19 @@ const protected static string m_ConfigPath = m_ProfileDIR + m_ConfigDIR + "/" + 
 class KR_BankingConfigManager
 {
 
-    float MenuDelay;
-    float startCurrency;
-    float maxCurrency;
-    bool IsClanAccountActiv;
-    bool MakeLogs;
-    bool IsRobEventActiv;
-    bool RobMessagesActiv;
-    bool NeedsBankCardToOpenMenu;
+    float   MenuDelay;
+    int     startCurrency;
+    int     maxCurrency;
+    int     maxNegativAmmount;
+    bool    IsClanAccountActive;
+    bool    MakeLogs;
+    bool    IsRobEventActive;
+    bool    RobMessagesActive;
+    int     PayCheckValue;
+    float   PayCheckTickTime;
+    int     MinPlayersForPayCheck;
+    bool    CanAddToFullAcc;
+    bool    NeedsBankCardToOpenMenu;
     ref array<ref ATMPosition> ATM;
     ref array<ref RobAtmSpawns> ATMRobSpots;
     ref array<ref CurrencySettings> BankingCurrency;
@@ -26,10 +31,16 @@ class KR_BankingConfigManager
     {
         MenuDelay = 1.0;
         startCurrency = 0;
-        IsClanAccountActiv = true;
+        maxCurrency = 10000;
+        maxNegativAmmount = 0;
+        IsClanAccountActive = true;
         MakeLogs = true;
-        IsRobEventActiv = true;
-        RobMessagesActiv = true;
+        IsRobEventActive = true;
+        RobMessagesActive = true;
+        PayCheckValue = 500;
+        PayCheckTickTime = 1;
+        MinPlayersForPayCheck = 1;
+        CanAddToFullAcc = true;
         NeedsBankCardToOpenMenu = false;
 
         ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
@@ -68,6 +79,11 @@ class KR_BankingConfigManager
             settings.LoadDefaultSettings();
         }
         return settings;
+    }
+
+    float GetCorrectPayCheckTime()
+    {
+        return PayCheckTickTime * 60000;
     }
 };
 
@@ -110,7 +126,7 @@ class RobAtmSpawns
     protected vector Position;
     protected vector Direction;
     string RobMessage;
-    
+
     void RobAtmSpawns(vector atmPos, vector atmDirection, string robmsg)
     {
         Position = atmPos;

@@ -23,10 +23,13 @@ class ActionOpenBankingMenu: ActionInteractBase
 	{
 		if (GetGame().IsServer())
             return true;
+		
 		if(GetBankingClientManager().WaitForServerResponse())
 			return false;
+		
 		Object target_object = target.GetObject();
 		KR_BankingATM atmbase;
+		if(!target_object) return false;
 		vector playersPos = player.GetPosition();
 		vector targetPos = target_object.GetPosition();
 		float distancetobank = vector.Distance(playersPos, targetPos);

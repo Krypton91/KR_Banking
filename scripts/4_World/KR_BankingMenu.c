@@ -53,11 +53,20 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_ClanAccBtn:
                 SwitchTab(2);
                 break;
+            case m_WithdrawOwnAccBtn:
+                HandleWitdrawMoneyFromBank(1);
+                break;
         }
 
         return super.OnClick(w, x, y, button);
     }
 
+
+    void HandleWitdrawMoneyFromBank(int mode)
+    {
+        int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+    }
     void SwitchTab(int TabIndex)
     {
         int lastTab;
@@ -80,12 +89,13 @@ class KR_BankingMenu extends UIScriptedMenu
     void UpdatePlayersTab()
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
+        m_OnPlayerCurrencyLabel.SetText(" " + GetPlayerCurrencyAmount().ToString());
     }
 
     override void OnShow()
 	{
         UpdatePlayersTab();
-        
+
 		super.OnShow();
 
 		PPEffects.SetBlurMenu(0.5);
@@ -103,10 +113,57 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         return m_IsBankingMenuOpen;
     }
+
     void SetIsBankingMenuOpen(bool visible)
     {
         m_IsBankingMenuOpen = visible;
     }
+
+    int GetPlayerCurrencyAmount()
+	{
+		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+		
+		int currencyAmount = 0;
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+
+		ItemBase item;
+		
+		for (int i = 0; i < itemsArray.Count(); i++)
+		{
+			Class.CastTo(item, itemsArray.Get(i));
+
+			if (!item)
+				continue;
+
+			for (int j = 0; j < GetBankingClientManager().GetServersCurrencyData().Count(); j++)
+			{
+				if(item.GetType() == GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyName)
+				{
+					currencyAmount += GetItemAmount(item) *  GetBankingClientManager().GetServersCurrencyData().Get(j).CurrencyValue;
+				}
+			}
+		}
+		return currencyAmount;
+	}
+
+    int GetItemAmount(ItemBase item)
+	{
+		Magazine mgzn = Magazine.Cast(item);
+				
+		int itemAmount = 0;
+		if( item.IsMagazine() )
+		{
+			itemAmount = mgzn.GetAmmoCount();
+		}
+		else
+		{
+			itemAmount = QuantityConversions.GetItemQuantity(item);
+		}
+		
+		return itemAmount;
+	}
 
     override void OnHide()
 	{
@@ -122,4 +179,4 @@ class KR_BankingMenu extends UIScriptedMenu
         SetIsBankingMenuOpen( false );
 		Close();
 	}
-}
+};
