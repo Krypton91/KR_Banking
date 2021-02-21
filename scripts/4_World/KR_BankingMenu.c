@@ -177,9 +177,14 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
                 CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
                 break;
+            case m_BtnYesCreate:
+                SpawnClanCreatePopup();
+                break;
+            case m_BtnFinallyCreate:
+                HandleClanCreate();
+                break;
             
         }
-
         return super.OnClick(w, x, y, button);
     }
 
@@ -204,9 +209,31 @@ class KR_BankingMenu extends UIScriptedMenu
         m_IsYesNoVisible = false;
     }
 
+    void SpawnClanCreatePopup()
+    {
+        if(!m_PanelNewClan.IsVisible())
+        {
+            m_PanelName.Show(true);
+        }
+    }
+
+    void HideNewClanPopup()
+    {
+        if(m_PanelNewClan.IsVisible())
+        {
+            m_PanelName.Show(false);
+        }
+    }
+
     void HandleTransferCancel()
     {
         m_YesNoMessage.Show(false);
+    }
+
+    void HandleClanCreate()
+    {
+
+        HideNewClanPopup();
     }
 
     void SwitchTab(int TabIndex)
