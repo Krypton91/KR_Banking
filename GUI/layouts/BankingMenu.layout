@@ -523,18 +523,6 @@ FrameWidgetClass MainRoot {
         }
        }
       }
-      MultilineTextWidgetClass MultilineTextWidget0 {
-       ignorepointer 1
-       position 0.02493 0.50337
-       size 0.96379 0.39164
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "Krypton deposited 4029 Ruble to Clan Account \n Andre Withdrawed 322 Ruble from Clan Account hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-       font "gui/fonts/metron58"
-       wrap 1
-      }
       ButtonWidgetClass BtnRob {
        visible 1
        color 0.502 0 0 1
@@ -575,6 +563,14 @@ FrameWidgetClass MainRoot {
        text "50%"
        font "gui/fonts/metron-bold28"
        "exact text" 0
+      }
+      TextListboxWidgetClass TextListboxWidgetLogs {
+       position 193.907 421.42398
+       size 527.336 189.856
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
       }
      }
     }

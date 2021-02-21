@@ -32,6 +32,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnSendTransfer;
     protected ButtonWidget              m_BtnFinallyCreate;
     protected ButtonWidget              m_BtnYesCreate;
+    protected ButtonWidget              m_WithdrawClan;
 
     protected EditBoxWidget             m_OwnAccInputBox;
     protected EditBoxWidget             m_ClanAccInputBox;
@@ -49,10 +50,15 @@ class KR_BankingMenu extends UIScriptedMenu
     protected TextWidget                m_CurrentProgressMinTxt;
     protected TextWidget                m_CurrentMaxProgressTxt;
     protected TextWidget                m_ProgressTextClan;
+    protected TextWidget                m_ClanAmount;
+    protected TextWidget                m_CashOnPlayer;
+
+
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
     protected TextListboxWidget         m_TransferPlayerList;
+    protected TextListboxWidget         m_ClanLogs;
 
     protected MultilineTextWidget       m_YesNoMsgHeadline;
     protected MultilineTextWidget       m_YesNoMsgBody;
@@ -93,6 +99,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
+            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btinWithdrawClan"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
@@ -122,7 +129,9 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ProgressText                  = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage"));
             m_CurrentProgressMinTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetCurrent"));
             m_CurrentMaxProgressTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetMax"));
-            m_ProgressTextClan              = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage1"));
+            m_ProgressTextClan              = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage0"));
+            m_CashOnPlayer                  = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer0"));
+            m_ClanAmount                    = TextWidget.Cast(layoutRoot.FindAnyWidget("BankClanAmount"));
 
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
@@ -130,6 +139,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ListboxMember                 = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxMember"));
             m_ListboxPlayers                = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
             m_TransferPlayerList            = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidget0"));
+            m_ClanLogs                      = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidgetLogs"));
 
             m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
             m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit"));                  
