@@ -106,6 +106,11 @@ class PluginKrBankingClientManager extends PluginBase
         return m_clientSettings.BankingCurrency;
     }
 
+    ref KR_BankingClientConfig GetClientSettings()
+    {
+        return m_clientSettings;
+    }
+
     int GetBankCredits()
     {
         return m_PlayersCurrency;

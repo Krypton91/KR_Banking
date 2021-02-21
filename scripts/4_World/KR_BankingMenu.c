@@ -35,6 +35,11 @@ class KR_BankingMenu extends UIScriptedMenu
     protected TextWidget                m_OnPlayerCurrencyLabel;
     protected TextWidget                m_PriceToCreate;
     protected TextWidget                m_OnPlayerCurrencyLabel2;
+    protected TextWidget                m_CurrentValueOnBank;
+    protected TextWidget                m_CurrentMaxOnBank;
+    protected TextWidget                m_ProgressText;
+    protected TextWidget                m_CurrentProgressMinTxt;
+    protected TextWidget                m_CurrentMaxProgressTxt;
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
@@ -48,6 +53,9 @@ class KR_BankingMenu extends UIScriptedMenu
     protected CheckBoxWidget            m_CheckBoxKick;
     protected CheckBoxWidget            m_CheckBoxAdd;
     protected CheckBoxWidget            m_CheckBoxPermissions;
+
+    protected ProgressBarWidget         m_OwnBankAccountProgressbar;
+
 
     protected ref bankingplayerlistobj  m_target
     void KR_BankingMenu()
@@ -92,6 +100,9 @@ class KR_BankingMenu extends UIScriptedMenu
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
             m_PriceToCreate                 = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPrice"));
             m_OnPlayerCurrencyLabel2        = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText0"));
+            m_ProgressText                  = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage"));
+            m_CurrentProgressMinTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetCurrent"));
+            m_CurrentMaxProgressTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetMax"));
 
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
@@ -105,6 +116,8 @@ class KR_BankingMenu extends UIScriptedMenu
             m_CheckBoxKick                  = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxKick"));
             m_CheckBoxAdd                   = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxInvite"));
             m_CheckBoxPermissions           = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxPermission"));
+
+            m_OwnBankAccountProgressbar     = ProgressBarWidget.Cast(layoutRoot.FindAnyWidget("ProgressBarWidget0"));
 
 
             m_IsBankingMenuInitialized = true;
@@ -147,6 +160,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
                 CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
                 break;
+            
         }
 
         return super.OnClick(w, x, y, button);
@@ -212,6 +226,16 @@ class KR_BankingMenu extends UIScriptedMenu
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
         m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+
+        /* Set progressbar */
+        int CurrentAmountOnBank = GetBankingClientManager().GetBankCredits();
+        int MaxOnBank = GetBankingClientManager().GetClientSettings().MaxCurrency;
+    	int progValue = 100 * CurrentAmountOnBank / MaxOnBank;
+        float parsedfloat = progValue.ToString().ToFloat();
+        m_OwnBankAccountProgressbar.SetCurrent(parsedfloat);
+        m_ProgressText.SetText(progValue.ToString() + "%");
+        m_CurrentProgressMinTxt.SetText(CurrentAmountOnBank.ToString() + "K");
+        m_CurrentMaxProgressTxt.SetText(MaxOnBank.ToString() + "K");
     }
 
     void DrawCorrectMenu()
@@ -228,6 +252,7 @@ class KR_BankingMenu extends UIScriptedMenu
         }
     }
 
+    //!This Updates the Playerlists from remote!
     void InvokePlayerList()
     {
         m_TransferPlayerList.ClearItems();
