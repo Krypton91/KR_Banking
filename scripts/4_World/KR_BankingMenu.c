@@ -7,6 +7,12 @@ class KR_BankingMenu extends UIScriptedMenu
     protected Widget                    m_ClanBankAccountTab;
     protected Widget                    m_YesNoMessage;
     protected Widget                    m_TransferTab;
+    protected Widget                    m_ClanSettings;
+    protected Widget                    m_PanelAdmin;
+    protected Widget                    m_PanelPerms;
+    protected Widget                    m_PanelNewClan;
+    protected Widget                    m_PanelNewClanPrice;
+
     protected ButtonWidget              m_CloseUiBtn;
     protected ButtonWidget              m_BankAccBtn;
     protected ButtonWidget              m_ClanAccBtn;
@@ -16,12 +22,29 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_YesConfirmBtn;
     protected ButtonWidget              m_NoConfirmBtn;
     protected ButtonWidget              m_BtnClanSettings;
+    protected ButtonWidget              m_BtnKick;
+    protected ButtonWidget              m_BtnAdd;
+    protected ButtonWidget              m_BtnEdit;
+    protected ButtonWidget              m_BtnBack;
+    protected ButtonWidget              m_BtnSave;
+
     protected EditBoxWidget             m_OwnAccInputBox;
     protected TextWidget                m_OwnedCurrencyLabel;
     protected TextWidget                m_OnPlayerCurrencyLabel;
+    protected TextWidget                m_PriceToCreate;
+
+    protected TextListboxWidget         m_ListboxPlayers;
+    protected TextListboxWidget         m_ListboxMember;
 
     protected MultilineTextWidget       m_YesNoMsgHeadline;
     protected MultilineTextWidget       m_YesNoMsgBody;
+
+    protected CheckBoxWidget            m_CheckBoxWithdraw;
+    protected CheckBoxWidget            m_CheckBoxDeposit;
+    protected CheckBoxWidget            m_CheckBoxKick;
+    protected CheckBoxWidget            m_CheckBoxAdd;
+    protected CheckBoxWidget            m_CheckBoxPermissions;
+
 
     void KR_BankingMenu()
     {
@@ -37,6 +60,12 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ClanBankAccountTab            = Widget.Cast(layoutRoot.FindAnyWidget("PanelClanAcc"));
             m_TransferTab                   = Widget.Cast(layoutRoot.FindAnyWidget("PDABodyTransfer"));
             m_YesNoMessage                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelYesNoMsg"));
+            m_ClanSettings                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelClanSettings"));
+            m_PanelAdmin                    = Widget.Cast(layoutRoot.FindAnyWidget("PanelAdmin"));
+            m_PanelPerms                    = Widget.Cast(layoutRoot.FindAnyWidget("PanelPerms"));
+            m_PanelNewClan                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelNewClan"));
+            m_PanelNewClanPrice             = Widget.Cast(layoutRoot.FindAnyWidget("PanelNewClanPrice"));
+
             m_CloseUiBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("CloseInvi"));
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
@@ -46,11 +75,29 @@ class KR_BankingMenu extends UIScriptedMenu
             m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
             m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
             m_BtnClanSettings               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClanSettings"));
+            m_BtnKick                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonKick"));
+            m_BtnAdd                        = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit0"));
+            m_BtnEdit                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit"));
+            m_BtnBack                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonBack"));
+            m_BtnSave                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
+
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
+            m_PriceToCreate                 = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPrice"));
+
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
+
+            m_ListboxMember                 = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxMember"));
+            m_ListboxPlayers                = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
+
+            m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
+            m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit"));                  
+            m_CheckBoxKick                  = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxKick"));
+            m_CheckBoxAdd                   = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxInvite"));
+            m_CheckBoxPermissions           = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxPermission"));
+
 
             m_IsBankingMenuInitialized = true;
         }
