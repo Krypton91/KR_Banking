@@ -41,9 +41,9 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param5<int, float, bool, bool, ref array<ref CurrencySettings>> data;
+            Param1<ref KR_BankingClientConfig> data;
             if ( !ctx.Read( data ) ) return;
-            m_clientSettings = new KR_BankingClientConfig(data.param1, data.param2, data.param3, data.param4, data.param5);
+            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency);
         }
     }
 

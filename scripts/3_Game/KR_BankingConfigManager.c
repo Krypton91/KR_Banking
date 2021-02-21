@@ -7,7 +7,6 @@ class KR_BankingConfigManager
     float   MenuDelay;
     int     startCurrency;
     int     maxCurrency;
-    int     maxNegativAmmount;
     bool    IsClanAccountActive;
     int     CostsToCreateClan;
     int     CostsToInviteAnPlayer;
@@ -35,7 +34,6 @@ class KR_BankingConfigManager
         MenuDelay = 1.0;
         startCurrency = 0;
         maxCurrency = 10000;
-        maxNegativAmmount = 0;
         IsClanAccountActive = true;
         CostsToCreateClan = 5000;
         CostsToInviteAnPlayer = 1000;

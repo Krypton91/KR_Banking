@@ -44,6 +44,8 @@ class PluginKRBankingManagerServer extends PluginBase
         Print("[KR Banking] START GIVE PAYCHECKS!");
         array<Man> onlinePlayers = new array<Man>();
         GetGame().GetPlayers(onlinePlayers);
+		if(m_krserverconfig.MinPlayersForPayCheck > onlinePlayers.Count())
+			return;
         if(m_krserverconfig.MinPlayersForPayCheck >= onlinePlayers.Count())
         {
             for(int i = 0; i < onlinePlayers.Count(); i++)
@@ -99,7 +101,9 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
         if(type == CallType.Server)
         {
-            GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param5< int, float, bool, bool, ref array<ref CurrencySettings>  >( m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency ), true, sender);
+			//we just save this in a new class in memory because they can read the memory & find out the positions.
+			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency);
+            GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param1< ref KR_BankingClientConfig >( clientsettings ), true, sender);
         }
     }
 
@@ -128,22 +132,19 @@ class PluginKRBankingManagerServer extends PluginBase
             if(!ctx.Read(data)) return;
             if(type == CallType.Server)
             {
-				Print("Params from RPC was correct!");
                	KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 				if(ownpldata)
 				{
-					Print("Own bank account here!");
 					if(ownpldata.GetBankCredit() > data.param2)
 					{
 						//has enough
-						Print("targets bank found!");
 						PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
 						if(!targetPlayer) return;
 
 						PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
 						
 						KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
-						if(targetpl)
+						if(targetpl && targetIdentity != sender)
 						{
 							targetpl.DepositMoney(data.param2);
 							ownpldata.WitdrawMoney(data.param2);
@@ -151,6 +152,12 @@ class PluginKRBankingManagerServer extends PluginBase
 							#ifdef NOTIFICATIONS
 							NotificationSystem.SimpleNoticiation(" You received " + data.param2 + " from: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, targetIdentity);
 							NotificationSystem.SimpleNoticiation(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, sender);
+							#endif
+						}
+						else
+						{
+							#ifdef NOTIFICATIONS
+							NotificationSystem.SimpleNoticiation(" You cannot transfer yourself money.", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, targetIdentity);
 							#endif
 						}
 					}
