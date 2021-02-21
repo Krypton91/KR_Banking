@@ -30,6 +30,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnSave;
     protected ButtonWidget              m_BtnSendTransfer;
     protected ButtonWidget              m_BtnFinallyCreate;
+    protected ButtonWidget              m_BtnYesCreate;
 
     protected EditBoxWidget             m_OwnAccInputBox;
     protected EditBoxWidget             m_TransferInputBox;
