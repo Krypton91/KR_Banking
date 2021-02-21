@@ -1,23 +1,27 @@
 class KR_BankingMenu extends UIScriptedMenu
 {
-    protected bool              m_IsBankingMenuInitialized = false;
-    protected bool              m_IsBankingMenuOpen = false;
-    protected Widget            m_OwnBankAccountTab;
-    protected Widget            m_ClanBankAccountTab;
-    protected Widget            m_YesNoMessage;
-    protected Widget            m_TransferTab;
-    protected ButtonWidget      m_CloseUiBtn;
-    protected ButtonWidget      m_BankAccBtn;
-    protected ButtonWidget      m_ClanAccBtn;
-    protected ButtonWidget      m_WithdrawOwnAccBtn;
-    protected ButtonWidget      m_DepositOwnAccBtn;
-    protected ButtonWidget      m_TransferBtn;
-    protected ButtonWidget      m_YesConfirmBtn;
-    protected ButtonWidget      m_NoConfirmBtn;
-    protected ButtonWidget      m_BtnClanSettings;
-    protected EditBoxWidget     m_OwnAccInputBox;
-    protected TextWidget        m_OwnedCurrencyLabel;
-    protected TextWidget        m_OnPlayerCurrencyLabel;
+    protected bool                      m_IsBankingMenuInitialized = false;
+    protected bool                      m_IsBankingMenuOpen = false;
+    protected bool                      m_IsYesNoVisible = false;
+    protected Widget                    m_OwnBankAccountTab;
+    protected Widget                    m_ClanBankAccountTab;
+    protected Widget                    m_YesNoMessage;
+    protected Widget                    m_TransferTab;
+    protected ButtonWidget              m_CloseUiBtn;
+    protected ButtonWidget              m_BankAccBtn;
+    protected ButtonWidget              m_ClanAccBtn;
+    protected ButtonWidget              m_WithdrawOwnAccBtn;
+    protected ButtonWidget              m_DepositOwnAccBtn;
+    protected ButtonWidget              m_TransferBtn;
+    protected ButtonWidget              m_YesConfirmBtn;
+    protected ButtonWidget              m_NoConfirmBtn;
+    protected ButtonWidget              m_BtnClanSettings;
+    protected EditBoxWidget             m_OwnAccInputBox;
+    protected TextWidget                m_OwnedCurrencyLabel;
+    protected TextWidget                m_OnPlayerCurrencyLabel;
+
+    protected MultilineTextWidget       m_YesNoMsgHeadline;
+    protected MultilineTextWidget       m_YesNoMsgBody;
 
     void KR_BankingMenu()
     {
@@ -45,6 +49,8 @@ class KR_BankingMenu extends UIScriptedMenu
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
+            m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
+            m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
 
             m_IsBankingMenuInitialized = true;
         }
@@ -89,8 +95,7 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleWitdrawMoneyFromBank(int mode)
     {
         int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
-        if(parsedMoney)
-            GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
     }
     
     void HandleDepositMoney(int mode)
@@ -102,7 +107,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleTransferConfirm()
     {
-
+        GetBankingClientManager().RequestRemoteForTransfer("", 1);
     }
 
     void HandleTransferCancel()
@@ -140,6 +145,18 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+    }
+
+    //!Creates a yes no Message.
+    void CreateYesNoMessage(string Headline, string BodyMessage)
+    {
+        if(!m_IsYesNoVisible)
+        {
+            m_YesNoMsgHeadline.SetText(" " + Headline);
+            m_YesNoMsgBody.SetText(" " + BodyMessage);
+            m_YesNoMessage.Show(true);
+            m_IsYesNoVisible = true;
+        }
     }
 
     override void OnShow()
