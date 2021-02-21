@@ -13,7 +13,7 @@ class ClanDataBaseManager
 
     protected ref TStringArray m_ClanLogs;
 
-    void ClanDataBaseManager(string ClanID = "", string OwnersPlainID = "", string ClanName = "", int m_BankAmount = 0)
+    void ClanDataBaseManager(string ClanID = "", string OwnersPlainID = "", string ClanName = "")
     {
         m_ClanID = ClanID;
         m_OwnersPlainID = OwnersPlainID;
@@ -56,17 +56,16 @@ class ClanDataBaseManager
         m_Prefix = Prefix;
         SaveClanData(this);
     }
-    
+    //BE SURE CLANDATA GETS SAVED FROM LOGS!
     void DepositMoney(int Money)
     {
         m_BankAmount += Money;
-        SaveClanData(this);
     }
     
+    //BE SURE CLANDATA GETS SAVED FROM LOGS!
     void WitdrawMoney(int Money)
     {
-        m_BankAmount += Money;
-        SaveClanData(this);
+        m_BankAmount -= Money;
     }
 
     int GetBankCredit()

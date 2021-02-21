@@ -459,6 +459,7 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          {
           EditBoxWidgetClass InputBoxClan {
+           visible 1
            color 0.502 0 0 1
            position 0 0
            size 0.99931 1.01429

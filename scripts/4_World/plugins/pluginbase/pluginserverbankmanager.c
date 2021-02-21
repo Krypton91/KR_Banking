@@ -184,6 +184,10 @@ class PluginKRBankingManagerServer extends PluginBase
                 {
                     WitdrawMoneyFromBankAccount(sender, data.param1);
                 }
+				else if(data.param2 == 2)
+				{
+					WitdrawMoneyFromClanBankAccount(sender, data.param1);
+				}
             }
         }
     }
@@ -248,6 +252,29 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
+	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Ammount)
+	{
+		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
+        if(playerdata)
+        {
+			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
+			if(clanDB)
+			{
+				if(Ammount <= clanDB.GetBankCredit())
+				{
+					playerdata.DepositMoney(Ammount);
+					clanDB.WitdrawMoney(Ammount);
+					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+				}
+			}
+			else
+			{
+				Error("Cant Load Clan Data of Player: " + identity.GetName());
+			}
+        }
+	}
+
     void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
@@ -280,11 +307,18 @@ class PluginKRBankingManagerServer extends PluginBase
 				if(SumToInsert > MaxPlaceAbleAmount)
 					SumToInsert = MaxPlaceAbleAmount;
 				
-				playerdata.WitdrawMoney(SumToInsert);
-				clanDB.DepositMoney(SumToInsert);
-				clanDB.WriteLog(identity.GetName() + " ");
-				Print("Sucessfully added: " + SumToInsert.ToString() + " to clan account: " + clanDB.GetName());
-				GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+				if(playerdata.GetBankCredit() >= SumToInsert )
+				{
+					playerdata.WitdrawMoney(SumToInsert);
+					clanDB.DepositMoney(SumToInsert);
+					clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
+					Print("Sucessfully added: " + SumToInsert.ToString() + " to clan account: " + clanDB.GetName());
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+				}
+				else
+				{
+
+				}
 			}
 			else
 			{
@@ -348,7 +382,6 @@ class PluginKRBankingManagerServer extends PluginBase
 		if(!clan || !permissions) return;
 
 		clan.AddMember(SteamID, MemberName, permissions);
-		Print("Remote: sucesfully added member: " + MemberName + " to clan: " + clan.GetName());
 	} 
 
 	string GenerateRandomClanID()
@@ -660,7 +693,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		return item.GetQuantityMax();
 	}
 
-    //!retrurns PlayerBase with steam64ID if player is connected to server!
+    //!retrurns PlayerBase with steam64ID if player is connected to server! Duplicate of Garagemod now useable in SDK!
     PlayerBase RemoteFindPlayer(string Steam64ID)
     {
         array<Man> onlinePlayers = new array<Man>;

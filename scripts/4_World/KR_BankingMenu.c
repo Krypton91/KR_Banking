@@ -34,6 +34,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnYesCreate;
 
     protected EditBoxWidget             m_OwnAccInputBox;
+    protected EditBoxWidget             m_ClanAccInputBox;
     protected EditBoxWidget             m_TransferInputBox;
     protected EditBoxWidget             m_EditBoxClanName;
     protected EditBoxWidget             m_EditBoxClanTag;
@@ -109,6 +110,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
+            m_ClanAccInputBox               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("InputBoxClan"));
             m_EditBoxClanName               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetName"));
             m_EditBoxClanTag                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetTag"));
 
@@ -169,7 +171,6 @@ class KR_BankingMenu extends UIScriptedMenu
                 break;
             case m_YesConfirmBtn:
                 HandleTransferConfirm();
-                Print("Yes button clicked!");
                 break;
             case m_NoConfirmBtn:
                 HandleTransferCancel();
@@ -202,14 +203,21 @@ class KR_BankingMenu extends UIScriptedMenu
     
     void HandleDepositMoney(int mode)
     {
-        int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        int parsedMoney;
+        if(mode == 1)
+        {
+            parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        }
+        else if(mode == 2)
+        {
+            parsedMoney = m_ClanAccInputBox.GetText().ToInt();
+        }
         if(parsedMoney)
             GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
     }
 
     void HandleTransferConfirm()
     {
-        Print("HandleConfirmTransfer");
         GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
         m_IsYesNoVisible = false;
     }
