@@ -5,6 +5,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
     protected ref KR_BankingClientConfig            m_clientSettings
+    protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
 
     void PluginKrBankingClientManager()
     {
@@ -15,6 +16,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         GetRPCManager().AddRPC("KR_BANKING","PlayerDataResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING","ServerConfigResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
     }
 
@@ -42,7 +44,19 @@ class PluginKrBankingClientManager extends PluginBase
             m_clientSettings = new KR_BankingClientConfig(data.param1, data.param2, data.param3, data.param4, data.param5);
         }
     }
-    
+
+    void PlayeristResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Client)
+        {
+            Param1<ref array<ref bankingplayerlistobj>> data;
+            if ( !ctx.Read( data ) ) return;
+            m_BankingPlayers = data.param1;
+            if(m_BankingMenu)
+                m_BankingMenu.InvokePlayerList();
+        }
+    }
+
     void OpenBankingMenu()
     {
         GetRPCManager().SendRPC("KR_BANKING", "PlayerDataRequest", null, true); //Send RPC for data.
@@ -59,6 +73,11 @@ class PluginKrBankingClientManager extends PluginBase
                 m_BankingMenu.SetIsBankingMenuOpen(true);
             }
         }
+    }
+
+    void RequestOnlinePlayers()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "PlayerListRequst", null, true);
     }
 
     void RequestRemoteToWitdraw(int ammount, int mode)
@@ -118,6 +137,11 @@ class PluginKrBankingClientManager extends PluginBase
 		}
 		return currencyAmount;
 	}
+    
+    ref array<ref bankingplayerlistobj> GetOnlinePlayers()
+    {
+        return m_BankingPlayers;
+    }
 
     int GetItemAmount(ItemBase item)
 	{

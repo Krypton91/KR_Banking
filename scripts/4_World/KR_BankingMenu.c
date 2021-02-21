@@ -35,6 +35,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
+    protected TextListboxWidget         m_TransferPlayerList;
 
     protected MultilineTextWidget       m_YesNoMsgHeadline;
     protected MultilineTextWidget       m_YesNoMsgBody;
@@ -91,6 +92,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
             m_ListboxMember                 = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxMember"));
             m_ListboxPlayers                = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
+            m_TransferPlayerList            = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidget0"));
 
             m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
             m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit"));                  
@@ -181,6 +183,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_TransferTab.Show(false);
                 break;
             case 3:
+                GetBankingClientManager().RequestOnlinePlayers();
                 m_TransferTab.Show(true);
                 m_OwnBankAccountTab.Show(false);
                 m_ClanBankAccountTab.Show(false);
@@ -192,6 +195,15 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+    }
+
+    void InvokePlayerList()
+    {
+        for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
+        {
+            m_TransferPlayerList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+            m_ListboxPlayers.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+        }
     }
 
     //!Creates a yes no Message.

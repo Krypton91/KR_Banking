@@ -9,6 +9,9 @@ class KR_BankingConfigManager
     int     maxCurrency;
     int     maxNegativAmmount;
     bool    IsClanAccountActive;
+    int     CostsToCreateClan;
+    int     CostsToInviteAnPlayer;
+    int     MaxClanAccountLimit;
     bool    MakeLogs;
     bool    IsRobEventActive;
     bool    RobMessagesActive;
@@ -34,6 +37,9 @@ class KR_BankingConfigManager
         maxCurrency = 10000;
         maxNegativAmmount = 0;
         IsClanAccountActive = true;
+        CostsToCreateClan = 5000;
+        CostsToInviteAnPlayer = 1000;
+        MaxClanAccountLimit = 200000;
         MakeLogs = true;
         IsRobEventActive = true;
         RobMessagesActive = true;
