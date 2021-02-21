@@ -4,7 +4,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected int                                   m_PlayersCurrency;
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
-    protected ref KR_BankingClientConfig            m_clientSettings;
+    protected ref KR_BankingClientConfig            m_clientSettings
 
     void PluginKrBankingClientManager()
     {
@@ -82,7 +82,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         return m_PlayersCurrency;
     }
-
+    
     //!Returns the currency Ammount in Players Invenory
     int GetPlayerCurrencyAmount()
 	{
