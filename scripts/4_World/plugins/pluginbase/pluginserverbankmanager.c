@@ -26,6 +26,7 @@ class PluginKRBankingManagerServer extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "DepositRequest", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "PlayerListRequst", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "TransferRequest", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanCreateRequest", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -102,7 +103,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(type == CallType.Server)
         {
 			//we just save this in a new class in memory because they can read the memory & find out the positions.
-			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency);
+			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan);
             GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param1< ref KR_BankingClientConfig >( clientsettings ), true, sender);
         }
     }
@@ -119,6 +120,10 @@ class PluginKRBankingManagerServer extends PluginBase
                 {
                     DepositMoneyOnOwnBank(sender, data.param1);
                 }
+				else
+				{
+					DepositMoneyOnClanBank(sender, data.param1);
+				}
             }
         }
     }
@@ -135,7 +140,7 @@ class PluginKRBankingManagerServer extends PluginBase
                	KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 				if(ownpldata)
 				{
-					if(ownpldata.GetBankCredit() > data.param2)
+					if(ownpldata.GetBankCredit() >= data.param2)
 					{
 						//has enough
 						PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
@@ -161,10 +166,6 @@ class PluginKRBankingManagerServer extends PluginBase
 							#endif
 						}
 					}
-					else
-					{
-
-					}
 					//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string>( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
 				}
             }
@@ -183,6 +184,10 @@ class PluginKRBankingManagerServer extends PluginBase
                 {
                     WitdrawMoneyFromBankAccount(sender, data.param1);
                 }
+				else if(data.param2 == 2)
+				{
+					WitdrawMoneyFromClanBankAccount(sender, data.param1);
+				}
             }
         }
     }
@@ -191,12 +196,40 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		if(type == CallType.Server)
         {
-            if(type == CallType.Server)
-            {
-                UpdatePlayerList();
-				GetRPCManager().SendRPC("KR_BANKING", "PlayeristResponse", new Param1< ref array<ref bankingplayerlistobj> >( m_BankingPlayers ), true, sender);
-            }
+            UpdatePlayerList();
+			GetRPCManager().SendRPC("KR_BANKING", "PlayeristResponse", new Param1< ref array<ref bankingplayerlistobj> >( m_BankingPlayers ), true, sender);
         }
+	}
+
+	void ClanCreateRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{	
+			Param2<string, string> data;
+			if(!ctx.Read(data)) return;
+
+			ref ClanDataBaseManager usersNewClan = RegisterNewClan(data.param1, sender.GetPlainId());
+			if(usersNewClan)
+			{
+				//void AddClanMember(ref ClanDataBaseManager clan, ref PermissionObject permissions, string SteamID, string MemberName)
+				PermissionObject perms = new PermissionObject();
+				perms.GiveClanOwner();
+				AddClanMember(usersNewClan, perms, sender.GetPlainId(), sender.GetName());
+
+				string ClanID = usersNewClan.GetClanID();
+
+				KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+				if(playerdata && ClanID)
+				{
+					playerdata.SetClan(ClanID);
+					Print("Sucesfully created clan with name: " + usersNewClan.GetName());
+				}
+			}
+			else
+			{
+				Error("Failed to create clan please report this to the dev team!");
+			}
+		}
 	}
 
     void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Ammount)
@@ -219,6 +252,29 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
+	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Ammount)
+	{
+		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
+        if(playerdata)
+        {
+			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
+			if(clanDB)
+			{
+				if(Ammount <= clanDB.GetBankCredit())
+				{
+					playerdata.DepositMoney(Ammount);
+					clanDB.WitdrawMoney(Ammount);
+					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+				}
+			}
+			else
+			{
+				Error("Cant Load Clan Data of Player: " + identity.GetName());
+			}
+        }
+	}
+
     void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
@@ -238,6 +294,39 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
+	void DepositMoneyOnClanBank(PlayerIdentity identity, int Ammount)
+    {
+        KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
+        if(playerdata)
+        {
+			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
+			if(clanDB)
+			{
+				int MaxPlaceAbleAmount = m_krserverconfig.MaxClanAccountLimit;
+				int SumToInsert = Ammount + clanDB.GetBankCredit();
+				if(SumToInsert > MaxPlaceAbleAmount)
+					SumToInsert = MaxPlaceAbleAmount;
+				
+				if(playerdata.GetBankCredit() >= SumToInsert )
+				{
+					playerdata.WitdrawMoney(SumToInsert);
+					clanDB.DepositMoney(SumToInsert);
+					clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
+					Print("Sucessfully added: " + SumToInsert.ToString() + " to clan account: " + clanDB.GetName());
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+				}
+				else
+				{
+
+				}
+			}
+			else
+			{
+				Error("Cant Load Clan Data of Player: " + identity.GetName());
+			}
+        }
+    }
+
 	void UpdatePlayerList()
 	{
 		m_BankingPlayers.Clear();
@@ -253,6 +342,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
 		}
 	}
+
 	//!retuns sum of bc acc
 	int GetMaxPlaceAbleAmmountForBank(KR_JsonDatabaseHandler playerdata)
 	{
@@ -267,11 +357,15 @@ class PluginKRBankingManagerServer extends PluginBase
 		return sum;
 	}
 
-	void RegisterNewClan(string ClanName, string ClanOwnersID)
+	/* ======== CLAN SECTION ===========*/
+	//!Creates a new clan & returns the clan after creating (Important: will return null if creation failed.)
+	ref  ClanDataBaseManager RegisterNewClan(string ClanName, string ClanOwnersID)
 	{
 		//string ClanName, string ClanID, string ownersPlainID
 		string ClanID = GenerateRandomClanID();
 		ClanDataBaseManager clanDB = ClanDataBaseManager.CreateClan(ClanName, ClanID, ClanOwnersID);
+
+		/*
 		if(clanDB)
 		{
 			//string PlainID, string PlayerName, Permission
@@ -279,7 +373,16 @@ class PluginKRBankingManagerServer extends PluginBase
 			perms.GiveClanOwner();
 			clanDB.AddMember("76561198796326626", "DevKrypton",perms);
 		}
+		*/
+		return clanDB;
 	}
+
+	void AddClanMember(ref ClanDataBaseManager clan, ref PermissionObject permissions, string SteamID, string MemberName)
+	{
+		if(!clan || !permissions) return;
+
+		clan.AddMember(SteamID, MemberName, permissions);
+	} 
 
 	string GenerateRandomClanID()
 	{
@@ -590,7 +693,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		return item.GetQuantityMax();
 	}
 
-    //!retrurns PlayerBase with steam64ID if player is connected to server!
+    //!retrurns PlayerBase with steam64ID if player is connected to server! Duplicate of Garagemod now useable in SDK!
     PlayerBase RemoteFindPlayer(string Steam64ID)
     {
         array<Man> onlinePlayers = new array<Man>;

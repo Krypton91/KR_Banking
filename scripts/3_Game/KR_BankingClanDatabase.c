@@ -7,8 +7,11 @@ class ClanDataBaseManager
     protected string    m_OwnersPlainID;
     protected string    m_ClanName;
     protected string    m_Prefix;
+    protected int       m_BankAmount;
 
     protected ref array<ref ClanMemberObject> m_Members;
+
+    protected ref TStringArray m_ClanLogs;
 
     void ClanDataBaseManager(string ClanID = "", string OwnersPlainID = "", string ClanName = "")
     {
@@ -16,6 +19,7 @@ class ClanDataBaseManager
         m_OwnersPlainID = OwnersPlainID;
         m_ClanName = ClanName;
         m_Members = new ref array<ref ClanMemberObject>;
+        m_ClanLogs = new ref TStringArray();
     }
 
     static ClanDataBaseManager LoadClanData(string ClanID, string username = "")
@@ -47,6 +51,38 @@ class ClanDataBaseManager
         SaveClanData(this);
     }
 
+    void SetPrefix(string Prefix)
+    {
+        m_Prefix = Prefix;
+        SaveClanData(this);
+    }
+    //BE SURE CLANDATA GETS SAVED FROM LOGS!
+    void DepositMoney(int Money)
+    {
+        m_BankAmount += Money;
+    }
+    
+    //BE SURE CLANDATA GETS SAVED FROM LOGS!
+    void WitdrawMoney(int Money)
+    {
+        m_BankAmount -= Money;
+    }
+
+    int GetBankCredit()
+    {
+        return m_BankAmount;
+    }
+
+    void WriteLog(string LogLine)
+    {
+        if(m_ClanLogs.Count() > 20)
+        {
+            m_ClanLogs.Remove(19);
+        }
+        m_ClanLogs.Insert(LogLine);
+        SaveClanData(this);
+    }
+
     static ClanDataBaseManager CreateClan(string ClanName, string ClanID, string ownersPlainID)
     {
         ClanDataBaseManager database = new ClanDataBaseManager(ClanID, ownersPlainID, ClanName);
@@ -66,6 +102,11 @@ class ClanDataBaseManager
 		}
 
         JsonFileLoader<ClanDataBaseManager>.JsonSaveFile(m_ProfilesDIR + m_ClansFolder + "/" + database.GetClanID() + ".json", database);
+    }
+
+    string GetName()
+    {
+        return m_ClanName;
     }
 
     string GetClanID()

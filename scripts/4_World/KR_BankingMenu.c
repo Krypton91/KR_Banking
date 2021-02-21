@@ -19,6 +19,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_ClanAccBtn;
     protected ButtonWidget              m_WithdrawOwnAccBtn;
     protected ButtonWidget              m_DepositOwnAccBtn;
+    protected ButtonWidget              m_DepositClanAccbtn;
     protected ButtonWidget              m_TransferBtn;
     protected ButtonWidget              m_YesConfirmBtn;
     protected ButtonWidget              m_NoConfirmBtn;
@@ -33,6 +34,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnYesCreate;
 
     protected EditBoxWidget             m_OwnAccInputBox;
+    protected EditBoxWidget             m_ClanAccInputBox;
     protected EditBoxWidget             m_TransferInputBox;
     protected EditBoxWidget             m_EditBoxClanName;
     protected EditBoxWidget             m_EditBoxClanTag;
@@ -92,6 +94,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
+            m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
             m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
             m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
@@ -107,6 +110,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
+            m_ClanAccInputBox               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("InputBoxClan"));
             m_EditBoxClanName               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetName"));
             m_EditBoxClanTag                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetTag"));
 
@@ -167,7 +171,6 @@ class KR_BankingMenu extends UIScriptedMenu
                 break;
             case m_YesConfirmBtn:
                 HandleTransferConfirm();
-                Print("Yes button clicked!");
                 break;
             case m_NoConfirmBtn:
                 HandleTransferCancel();
@@ -175,11 +178,19 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnSendTransfer:
                 int rowIndex = m_TransferPlayerList.GetSelectedRow();
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
-                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
+                break;
+            case m_BtnYesCreate:
+                SpawnClanCreatePopup();
+                break;
+            case m_BtnFinallyCreate:
+                HandleClanCreate();
+                break;
+            case m_DepositClanAccbtn:
+                HandleDepositMoney(2);
                 break;
             
         }
-
         return super.OnClick(w, x, y, button);
     }
 
@@ -192,21 +203,46 @@ class KR_BankingMenu extends UIScriptedMenu
     
     void HandleDepositMoney(int mode)
     {
-        int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        int parsedMoney;
+        if(mode == 1)
+        {
+            parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        }
+        else if(mode == 2)
+        {
+            parsedMoney = m_ClanAccInputBox.GetText().ToInt();
+        }
         if(parsedMoney)
             GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
     }
 
     void HandleTransferConfirm()
     {
-        Print("HandleConfirmTransfer");
         GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
         m_IsYesNoVisible = false;
+    }
+
+    void SpawnClanCreatePopup()
+    {
+        m_PanelName.Show(true);
+    }
+
+    void HideNewClanPopup()
+    {
+        m_PanelName.Show(false);
     }
 
     void HandleTransferCancel()
     {
         m_YesNoMessage.Show(false);
+    }
+
+    void HandleClanCreate()
+    {
+        string ClansName    = m_EditBoxClanName.GetText();
+        string ClanTag      = m_EditBoxClanTag.GetText();
+        GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
+        HideNewClanPopup();
     }
 
     void SwitchTab(int TabIndex)
@@ -251,8 +287,8 @@ class KR_BankingMenu extends UIScriptedMenu
         float parsedfloat = progValue.ToString().ToFloat();
         m_OwnBankAccountProgressbar.SetCurrent(parsedfloat);
         m_ProgressText.SetText(progValue.ToString() + "%");
-        m_CurrentProgressMinTxt.SetText(CurrentAmountOnBank.ToString() + "K");
-        m_CurrentMaxProgressTxt.SetText(MaxOnBank.ToString() + "K");
+        m_CurrentProgressMinTxt.SetText((CurrentAmountOnBank / 1000).ToString() + "K");
+        m_CurrentMaxProgressTxt.SetText((MaxOnBank / 1000).ToString() + "K");
     }
 
     void DrawCorrectMenu()

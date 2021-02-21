@@ -86,9 +86,9 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabBank {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position 0.31381 0.03434
-       size 0.35528 1.0129
-       valign center_ref
+       position -0.00101 0
+       size 0.3573 1.0129
+       halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -98,9 +98,8 @@ FrameWidgetClass MainRoot {
       }
       ButtonWidgetClass BtnTabClanBank {
        color 0.5608 0.0706 0.0706 1
-       position 0.00125 0.03344
-       size 0.31285 1.0129
-       valign center_ref
+       position 0 0
+       size 0.32171 1.0129
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -111,10 +110,9 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabTransfer {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position 0 0.03934
-       size 0.331 1.02316
+       position 0 0
+       size 0.32303 1.02316
        halign right_ref
-       valign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -306,6 +304,23 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          style Loading
+         {
+          TextWidgetClass TextWidgetPercentage {
+           ignorepointer 1
+           size 0.33771 0.75953
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "50%"
+           font "gui/fonts/metron-bold28"
+           "exact text" 0
+           "text halign" center
+           "text valign" center
+          }
+         }
         }
         TextWidgetClass TextWidgetMax {
          ignorepointer 1
@@ -333,18 +348,6 @@ FrameWidgetClass MainRoot {
          font "gui/fonts/metron-bold28"
          "exact text" 0
          "text valign" center
-        }
-        TextWidgetClass TextWidgetPercentage {
-         ignorepointer 1
-         position 0.44036 0.92872
-         size 0.11 0.051
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "50%"
-         font "gui/fonts/metron-bold28"
-         "exact text" 0
         }
        }
       }
@@ -456,6 +459,7 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          {
           EditBoxWidgetClass InputBoxClan {
+           visible 1
            color 0.502 0 0 1
            position 0 0
            size 0.99931 1.01429
