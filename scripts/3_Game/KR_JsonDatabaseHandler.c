@@ -21,6 +21,11 @@ class KR_JsonDatabaseHandler
         m_PayCheckBonus = 0;
     }
 
+    int GetBonusAmount()
+    {
+        return m_BonusCurrency;
+    }
+    
     int GetBankCredit()
     {
         return m_OwnedCurrency;

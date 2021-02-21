@@ -52,12 +52,21 @@ class PluginKRBankingManagerServer extends PluginBase
                    KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
                    if(playerdata)
                    {
+
                        //Json Loadet we can now add him the Money.
                        int ammountTOAddForSpecialUser = m_krserverconfig.PayCheckValue;
                        if(playerdata.GetPayCheckBonus() != 0)
                        {
                             ammountTOAddForSpecialUser =  (ammountTOAddForSpecialUser / 100) * playerdata.GetPayCheckBonus() + m_krserverconfig.PayCheckValue;
                        }
+					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser)
+					   {
+						   #ifdef NOTIFICATIONS
+						   NotificationSystem.SimpleNoticiation("Error with adding Paycheck Bank is already full!", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, identity);
+						   #endif
+						   continue;
+					   }
+
                        playerdata.DepositMoney(ammountTOAddForSpecialUser);
                        Print("Sucessfully added to players: " + identity.GetPlainId() + " bank " + ammountTOAddForSpecialUser.ToString() + " $");
                        #ifdef NOTIFICATIONS
@@ -128,6 +137,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(playerdata)
         {
             if(Ammount == 0) return;
+
             int CorrectAmountToWitdraw = Ammount;
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
@@ -146,13 +156,34 @@ class PluginKRBankingManagerServer extends PluginBase
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
-            playerdata.DepositMoney(Ammount);
-            Print("Sucessfully added: " + Ammount.ToString() + " to bank account!");
-            RemoveCurrencyFromPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
+			
+			int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
+			int SumToInsert = Ammount + playerdata.GetBankCredit();
+			if(SumToInsert > MaxPlaceAbleAmount)
+				SumToInsert = MaxPlaceAbleAmount;
+			
+			Print("Player try to insert: " + Ammount + " number was parsed to: " + MaxPlaceAbleAmount);
+            playerdata.DepositMoney(SumToInsert);
+            Print("Sucessfully added: " + SumToInsert.ToString() + " to bank account!");
+            RemoveCurrencyFromPlayer(RemoteFindPlayer(identity.GetPlainId()), SumToInsert);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param1< int >( playerdata.GetBankCredit() ), true, identity);
         }
     }
 
+
+	//!retuns sum of bc acc
+	int GetMaxPlaceAbleAmmountForBank(KR_JsonDatabaseHandler playerdata)
+	{
+		int currentBankAmount = playerdata.GetBankCredit();
+		int maxConfigAmount = m_krserverconfig.maxCurrency;
+
+		int sum = maxConfigAmount - currentBankAmount;
+
+		if(playerdata.GetBonusAmount())
+			sum += playerdata.GetBonusAmount();
+		
+		return sum;
+	}
 
     /* THANKS TO DAEMON FORGE! <3 */
     int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
