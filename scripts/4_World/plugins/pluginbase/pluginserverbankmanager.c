@@ -25,6 +25,7 @@ class PluginKRBankingManagerServer extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "WithdrawRequest", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "DepositRequest", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "PlayerListRequst", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "TransferRequest", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -117,6 +118,51 @@ class PluginKRBankingManagerServer extends PluginBase
             }
         }
     }
+
+	void TransferRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		Print("RPC to transfer recvied!");
+		if(type == CallType.Server)
+        {
+            Param2<ref bankingplayerlistobj, int> data;
+            if(!ctx.Read(data)) return;
+            if(type == CallType.Server)
+            {
+				Print("Params from RPC was correct!");
+               	KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+				if(ownpldata)
+				{
+					Print("Own bank account here!");
+					if(ownpldata.GetBankCredit() > data.param2)
+					{
+						//has enough
+						Print("targets bank found!");
+						PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
+						if(!targetPlayer) return;
+
+						PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
+						
+						KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
+						if(targetpl)
+						{
+							targetpl.DepositMoney(data.param2);
+							ownpldata.WitdrawMoney(data.param2);
+
+							#ifdef NOTIFICATIONS
+							NotificationSystem.SimpleNoticiation(" You received " + data.param2 + " from: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, targetIdentity);
+							NotificationSystem.SimpleNoticiation(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, sender);
+							#endif
+						}
+					}
+					else
+					{
+
+					}
+					//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string>( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
+				}
+            }
+        }
+	}
 
     void WithdrawRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{

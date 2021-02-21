@@ -27,11 +27,14 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnEdit;
     protected ButtonWidget              m_BtnBack;
     protected ButtonWidget              m_BtnSave;
+    protected ButtonWidget              m_BtnSendTransfer;
 
     protected EditBoxWidget             m_OwnAccInputBox;
+    protected EditBoxWidget             m_TransferInputBox;
     protected TextWidget                m_OwnedCurrencyLabel;
     protected TextWidget                m_OnPlayerCurrencyLabel;
     protected TextWidget                m_PriceToCreate;
+    protected TextWidget                m_OnPlayerCurrencyLabel2;
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
@@ -46,7 +49,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected CheckBoxWidget            m_CheckBoxAdd;
     protected CheckBoxWidget            m_CheckBoxPermissions;
 
-
+    protected ref bankingplayerlistobj  m_target
     void KR_BankingMenu()
     {
        
@@ -73,19 +76,22 @@ class KR_BankingMenu extends UIScriptedMenu
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
-            m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
-            m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
             m_BtnClanSettings               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClanSettings"));
             m_BtnKick                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonKick"));
             m_BtnAdd                        = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit0"));
             m_BtnEdit                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit"));
             m_BtnBack                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonBack"));
             m_BtnSave                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
+            m_BtnSendTransfer               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnSend"));
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
+            m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
             m_PriceToCreate                 = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPrice"));
+            m_OnPlayerCurrencyLabel2        = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText0"));
 
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
@@ -131,9 +137,15 @@ class KR_BankingMenu extends UIScriptedMenu
                 break;
             case m_YesConfirmBtn:
                 HandleTransferConfirm();
+                Print("Yes button clicked!");
                 break;
             case m_NoConfirmBtn:
                 HandleTransferCancel();
+                break;
+            case m_BtnSendTransfer:
+                int rowIndex = m_TransferPlayerList.GetSelectedRow();
+                m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
                 break;
         }
 
@@ -156,7 +168,9 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleTransferConfirm()
     {
-        GetBankingClientManager().RequestRemoteForTransfer("", 1);
+        Print("HandleConfirmTransfer");
+        GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
+        m_IsYesNoVisible = false;
     }
 
     void HandleTransferCancel()
@@ -197,6 +211,7 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+        m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
     }
 
     void DrawCorrectMenu()
