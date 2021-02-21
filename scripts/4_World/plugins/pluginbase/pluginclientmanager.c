@@ -28,7 +28,7 @@ class PluginKrBankingClientManager extends PluginBase
             m_PlayersCurrency = data.param1;
             if(m_BankingMenu)
             {
-                m_BankingMenu.UpdateUI();//Ivoke an Update
+                m_BankingMenu.UpdateUI();//Invoke an Update
             }
         }
     }

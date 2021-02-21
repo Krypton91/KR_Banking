@@ -4,11 +4,17 @@ class KR_BankingMenu extends UIScriptedMenu
     protected bool              m_IsBankingMenuOpen = false;
     protected Widget            m_OwnBankAccountTab;
     protected Widget            m_ClanBankAccountTab;
+    protected Widget            m_YesNoMessage;
+    protected Widget            m_TransferTab;
     protected ButtonWidget      m_CloseUiBtn;
     protected ButtonWidget      m_BankAccBtn;
     protected ButtonWidget      m_ClanAccBtn;
     protected ButtonWidget      m_WithdrawOwnAccBtn;
     protected ButtonWidget      m_DepositOwnAccBtn;
+    protected ButtonWidget      m_TransferBtn;
+    protected ButtonWidget      m_YesConfirmBtn;
+    protected ButtonWidget      m_NoConfirmBtn;
+    protected ButtonWidget      m_BtnClanSettings;
     protected EditBoxWidget     m_OwnAccInputBox;
     protected TextWidget        m_OwnedCurrencyLabel;
     protected TextWidget        m_OnPlayerCurrencyLabel;
@@ -25,11 +31,17 @@ class KR_BankingMenu extends UIScriptedMenu
             layoutRoot                      = GetGame().GetWorkspace().CreateWidgets("KR_Banking/GUI/layouts/BankingMenu.layout");
             m_OwnBankAccountTab             = Widget.Cast(layoutRoot.FindAnyWidget("PanelBankAcc"));
             m_ClanBankAccountTab            = Widget.Cast(layoutRoot.FindAnyWidget("PanelClanAcc"));
+            m_TransferTab                   = Widget.Cast(layoutRoot.FindAnyWidget("PDABodyTransfer"));
+            m_YesNoMessage                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelYesNoMsg"));
             m_CloseUiBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("CloseInvi"));
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
+            m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
+            m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
+            m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_BtnClanSettings               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClanSettings"));
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
@@ -53,11 +65,20 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_ClanAccBtn:
                 SwitchTab(2);
                 break;
+            case m_TransferBtn:
+                SwitchTab(3);
+                break;
             case m_WithdrawOwnAccBtn:
                 HandleWitdrawMoneyFromBank(1);
                 break;
             case m_DepositOwnAccBtn:
                 HandleDepositMoney(1);
+                break;
+            case m_YesConfirmBtn:
+                HandleTransferConfirm();
+                break;
+            case m_NoConfirmBtn:
+                HandleTransferCancel();
                 break;
         }
 
@@ -79,6 +100,16 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
     }
 
+    void HandleTransferConfirm()
+    {
+
+    }
+
+    void HandleTransferCancel()
+    {
+        m_YesNoMessage.Show(false);
+    }
+
     void SwitchTab(int TabIndex)
     {
         int lastTab;
@@ -90,10 +121,17 @@ class KR_BankingMenu extends UIScriptedMenu
             case 1:
                 m_OwnBankAccountTab.Show(true);
                 m_ClanBankAccountTab.Show(false);
+                m_TransferTab.Show(false);
                 break;
             case 2:
-                m_OwnBankAccountTab.Show(false);
                 m_ClanBankAccountTab.Show(true);
+                m_OwnBankAccountTab.Show(false);
+                m_TransferTab.Show(false);
+                break;
+            case 3:
+                m_TransferTab.Show(true);
+                m_OwnBankAccountTab.Show(false);
+                m_ClanBankAccountTab.Show(false);
                 break;
         }
     }
