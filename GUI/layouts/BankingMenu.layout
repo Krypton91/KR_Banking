@@ -124,7 +124,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -726,7 +726,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
       }
-      TextListboxWidgetClass TextListboxWidget1 {
+      TextListboxWidgetClass TextListboxMember {
        position 0.00554 0.08115
        size 0.42012 0.58622
        hexactpos 0
@@ -808,7 +808,7 @@ FrameWidgetClass MainRoot {
          font "gui/fonts/metron-bold28"
         }
         PanelWidgetClass PanelPerms {
-         visible 1
+         visible 0
          ignorepointer 1
          position 0.2329 0.0033
          size 0.30597 0.98387
@@ -903,7 +903,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelNewClan {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.002 0.144
      size 0.997 0.851
@@ -947,7 +947,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        {
-        TextWidgetClass TextWidget4 {
+        TextWidgetClass TextWidgetPrice {
          ignorepointer 1
          position 0.132 0.34582
          size 0.72264 0.58251
