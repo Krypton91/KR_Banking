@@ -11,7 +11,7 @@ class KR_JsonDatabaseHandler
     protected int       m_BonusCurrency;
     protected string    m_ClanID;
 
-    void KR_JsonDatabaseHandler(string plainID = "", string username = "", int bonuscurrency = 0, string clanid = "")
+    void KR_JsonDatabaseHandler(string plainID = "", string username = "", int bonuscurrency = 0, string clanid = "NONE")
     {
         m_Steam64ID = plainID;
         m_PlayerName = username;
@@ -106,6 +106,11 @@ class KR_JsonDatabaseHandler
 		}
 
         JsonFileLoader<KR_JsonDatabaseHandler>.JsonSaveFile(m_ProfilesDIR + m_PlayersFolder + "/" + database.GetSteamID() + ".json", database);
+    }
+
+    string GetClanID()
+    {
+        return m_ClanID;
     }
 
     void SetPlayerName(string username)

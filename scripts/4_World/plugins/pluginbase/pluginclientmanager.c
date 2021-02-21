@@ -4,6 +4,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected int                                   m_PlayersCurrency;
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
+    protected string                                m_ClanID;
     protected ref KR_BankingClientConfig            m_clientSettings
     protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
 
@@ -25,9 +26,10 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param1<int> data;
+            Param2<int, string> data;
             if ( !ctx.Read( data ) ) return;
             m_PlayersCurrency = data.param1;
+            m_ClanID          = data.param2;
             if(m_BankingMenu)
             {
                 m_BankingMenu.UpdateUI();//Invoke an Update
@@ -51,6 +53,7 @@ class PluginKrBankingClientManager extends PluginBase
         {
             Param1<ref array<ref bankingplayerlistobj>> data;
             if ( !ctx.Read( data ) ) return;
+            m_BankingPlayers.Clear();
             m_BankingPlayers = data.param1;
             if(m_BankingMenu)
                 m_BankingMenu.InvokePlayerList();
@@ -137,10 +140,17 @@ class PluginKrBankingClientManager extends PluginBase
 		}
 		return currencyAmount;
 	}
-    
+
     ref array<ref bankingplayerlistobj> GetOnlinePlayers()
     {
         return m_BankingPlayers;
+    }
+
+    bool hasClan()
+    {
+        if(m_ClanID && m_ClanID != "NONE")
+            return true;
+        return false;
     }
 
     int GetItemAmount(ItemBase item)

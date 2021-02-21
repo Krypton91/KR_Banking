@@ -176,9 +176,10 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_OwnBankAccountTab.Show(true);
                 m_ClanBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
+                m_PanelNewClan.Show(false);
                 break;
             case 2:
-                m_ClanBankAccountTab.Show(true);
+                DrawCorrectMenu();
                 m_OwnBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
                 break;
@@ -187,6 +188,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_TransferTab.Show(true);
                 m_OwnBankAccountTab.Show(false);
                 m_ClanBankAccountTab.Show(false);
+                m_PanelNewClan.Show(false);
                 break;
         }
     }
@@ -197,8 +199,24 @@ class KR_BankingMenu extends UIScriptedMenu
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
     }
 
+    void DrawCorrectMenu()
+    {
+        if(GetBankingClientManager().hasClan())
+        {
+            m_ClanBankAccountTab.Show(true);
+            m_PanelNewClan.Show(false);
+        } 
+        else
+        {
+            m_PanelNewClan.Show(true);
+            m_ClanBankAccountTab.Show(false);
+        }
+    }
+
     void InvokePlayerList()
     {
+        m_TransferPlayerList.ClearItems();
+        m_ListboxPlayers.ClearItems();
         for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
         {
             m_TransferPlayerList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
