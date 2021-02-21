@@ -72,6 +72,12 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "DepositRequest", new Param2<int, int>(ammount, mode), true);
         Print("Sucessfully requested remote to Deposit Ammount: " + ammount);
     }
+
+    void RequestRemoteForTransfer(string TargetsSteamID, int ammount)
+    {
+        if(TargetsSteamID)
+            GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<string, int>(TargetsSteamID, ammount), true);
+    }
     
     array<ref CurrencySettings> GetServersCurrencyData()
     {

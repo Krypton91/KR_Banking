@@ -14,6 +14,7 @@ class PluginKRBankingManagerServer extends PluginBase
         RegisterServersideRPCs();
         SpawnATMs();
         InitPayCheck();
+		RegisterNewClan("RB Server is Gay", "76561198796326626");
     }
 
     protected void RegisterServersideRPCs()
@@ -183,6 +184,30 @@ class PluginKRBankingManagerServer extends PluginBase
 			sum += playerdata.GetBonusAmount();
 		
 		return sum;
+	}
+
+	void RegisterNewClan(string ClanName, string ClanOwnersID)
+	{
+		//string ClanName, string ClanID, string ownersPlainID
+		string ClanID = GenerateRandomClanID();
+		ClanDataBaseManager clanDB = ClanDataBaseManager.CreateClan("FirstTestClan", ClanID, ClanOwnersID);
+		if(clanDB)
+		{
+			//string PlainID, string PlayerName, Permission
+			PermissionObject perms = new PermissionObject();
+			perms.GiveClanOwner();
+			clanDB.AddMember("76561198796326626", "DevKrypton",perms);
+		}
+	}
+
+	string GenerateRandomClanID()
+	{
+		const ref array<string> m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
+		string rndf = "";
+		for(int i = 0; i < 16; i++)
+			rndf += m_chars.GetRandomElement();
+		Print("Sucesfully created a new clan with ID: " + rndf);
+		return rndf;
 	}
 
     /* THANKS TO DAEMON FORGE! <3 */
