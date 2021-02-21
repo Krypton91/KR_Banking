@@ -43,7 +43,7 @@ class PluginKrBankingClientManager extends PluginBase
         {
             Param1<ref KR_BankingClientConfig> data;
             if ( !ctx.Read( data ) ) return;
-            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency);
+            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan);
         }
     }
 
@@ -100,7 +100,15 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<ref bankingplayerlistobj, int>(target, ammount), true);
         Print("Sendet Transfer request to remote!");
     }
-    
+
+    void RequestRemoteClanCreate(string Clanname, string ClanTag)
+    {
+        if(!Clanname || !ClanTag)
+            return;
+        GetRPCManager().SendRPC("KR_BANKING", "ClanCreateRequest", new Param2<string, string>(Clanname, ClanTag), true);
+
+        Print("Requested remote to insert new clan!");
+    }
     array<ref CurrencySettings> GetServersCurrencyData()
     {
         return m_clientSettings.BankingCurrency;

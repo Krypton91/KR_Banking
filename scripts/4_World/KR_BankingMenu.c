@@ -19,6 +19,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_ClanAccBtn;
     protected ButtonWidget              m_WithdrawOwnAccBtn;
     protected ButtonWidget              m_DepositOwnAccBtn;
+    protected ButtonWidget              m_DepositClanAccbtn;
     protected ButtonWidget              m_TransferBtn;
     protected ButtonWidget              m_YesConfirmBtn;
     protected ButtonWidget              m_NoConfirmBtn;
@@ -92,6 +93,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
+            m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
             m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
             m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
@@ -183,6 +185,9 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnFinallyCreate:
                 HandleClanCreate();
                 break;
+            case m_DepositClanAccbtn:
+                HandleDepositMoney(2);
+                break;
             
         }
         return super.OnClick(w, x, y, button);
@@ -226,7 +231,9 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleClanCreate()
     {
-
+        string ClansName    = m_EditBoxClanName.GetText();
+        string ClanTag      = m_EditBoxClanTag.GetText();
+        GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
     }
 

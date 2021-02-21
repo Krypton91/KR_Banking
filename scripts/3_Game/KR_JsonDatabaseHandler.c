@@ -54,6 +54,12 @@ class KR_JsonDatabaseHandler
         SavePlayerData(this);
     }
 
+    void SetClan(string ClanID)
+    {
+        m_ClanID = ClanID;
+        SavePlayerData(this);
+    }
+
     static KR_JsonDatabaseHandler LoadPlayerData(string Steam_ID, string username = "")
     {
         if(Steam_ID == "")
