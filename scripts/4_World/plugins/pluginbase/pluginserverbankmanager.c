@@ -15,7 +15,7 @@ class PluginKRBankingManagerServer extends PluginBase
         RegisterServersideRPCs();
         SpawnATMs();
         InitPayCheck();
-		RegisterNewClan("RB Server is Gay", "76561198796326626");
+		//RegisterNewClan("RB Server is Gay", "76561198796326626");
     }
 
     protected void RegisterServersideRPCs()
@@ -218,7 +218,7 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		//string ClanName, string ClanID, string ownersPlainID
 		string ClanID = GenerateRandomClanID();
-		ClanDataBaseManager clanDB = ClanDataBaseManager.CreateClan("FirstTestClan", ClanID, ClanOwnersID);
+		ClanDataBaseManager clanDB = ClanDataBaseManager.CreateClan(ClanName, ClanID, ClanOwnersID);
 		if(clanDB)
 		{
 			//string PlainID, string PlayerName, Permission
