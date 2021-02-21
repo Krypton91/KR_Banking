@@ -1,6 +1,6 @@
 FrameWidgetClass MainRoot {
  visible 1
- position 0.00023 -0.00125
+ position -0.27529 -0.08273
  size 0.99967 1
  halign center_ref
  valign center_ref
@@ -112,8 +112,9 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabTransfer {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position 0.66877 0.0368
-       size 0.33013 1.0129
+       position 0 0.03934
+       size 0.331 1.02316
+       halign right_ref
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -505,6 +506,18 @@ FrameWidgetClass MainRoot {
           }
          }
         }
+        ProgressBarWidgetClass ProgressBarWidgetClan {
+         ignorepointer 1
+         position 0 0.1213
+         size 0.996 0.128
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Loading
+        }
        }
       }
       MultilineTextWidgetClass MultilineTextWidget0 {
@@ -546,98 +559,19 @@ FrameWidgetClass MainRoot {
        text "Clan Settings"
        font "gui/fonts/metron-bold22"
       }
-     }
-    }
-    PanelWidgetClass PanelYesNoMsg {
-     visible 0
-     ignorepointer 1
-     color 0.1333 0.1333 0.1333 1
-     position 0.07097 0.33885
-     size 0.85871 0.34943
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style DayZDefaultPanel
-     {
-      PanelWidgetClass PanelWidgetClan {
-       visible 1
+      TextWidgetClass TextWidgetPercentage0 {
        ignorepointer 1
-       position 5.84531 6.80818
-       size 0.98086 0.91461
-       hexactpos 1
-       vexactpos 1
+       position -0.00095 -0.10672
+       size 0.05438 0.051
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
        hexactsize 0
        vexactsize 0
-       {
-        MultilineTextWidgetClass TextHeadline0 {
-         ignorepointer 1
-         position 0.0952 0.01239
-         size 0.82829 0.25898
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "Transfer Check"
-         font "gui/fonts/metron-bold58"
-        }
-        MultilineTextWidgetClass TextMessage0 {
-         visible 1
-         disabled 0
-         clipchildren 1
-         inheritalpha 0
-         ignorepointer 1
-         position 0.00619 0.2922
-         size 0.98494 0.48997
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         scaled 1
-         text "Are you sure you want to transfer x to x ?"
-         font "gui/fonts/metron-bold58"
-         wrap 1
-        }
-        PanelWidgetClass PanelWidgetmidget0 {
-         ignorepointer 1
-         color 0.502 0 0 1
-         position 0.00606 0.79125
-         size 0.98427 0.18854
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style blank
-         {
-          ButtonWidgetClass ButtonWidget2 {
-           color 0.502 0 0 1
-           position 0 0.01561
-           size 0.3576 0.97493
-           halign right_ref
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style Colorable
-           text "No"
-           font "gui/fonts/metron-bold28"
-          }
-          ButtonWidgetClass ButtonWidget3 {
-           color 0.502 0 0 1
-           size 0.3576 0.97493
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style Colorable
-           text "Yes"
-           font "gui/fonts/metron-bolditalic28"
-          }
-         }
-        }
-       }
+       text "50%"
+       font "gui/fonts/metron-bold28"
+       "exact text" 0
       }
      }
     }
@@ -760,6 +694,99 @@ FrameWidgetClass MainRoot {
       }
      }
     }
+    PanelWidgetClass PanelYesNoMsg {
+     visible 0
+     ignorepointer 1
+     color 0.1333 0.1333 0.1333 1
+     position 0.07097 0.33885
+     size 0.85871 0.34943
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style DayZDefaultPanel
+     {
+      PanelWidgetClass PanelWidgetClan {
+       visible 1
+       ignorepointer 1
+       position 5.84531 6.80818
+       size 0.98086 0.91461
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 0
+       {
+        MultilineTextWidgetClass TextHeadline0 {
+         ignorepointer 1
+         position 0.0952 0.01239
+         size 0.82829 0.25898
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Transfer Check"
+         font "gui/fonts/metron-bold58"
+        }
+        MultilineTextWidgetClass TextMessage0 {
+         visible 1
+         disabled 0
+         clipchildren 1
+         inheritalpha 0
+         ignorepointer 1
+         position 0.00619 0.2922
+         size 0.98494 0.48997
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         scaled 1
+         text "Are you sure you want to transfer x to x ?"
+         font "gui/fonts/metron-bold58"
+         wrap 1
+        }
+        PanelWidgetClass PanelWidgetmidget0 {
+         ignorepointer 1
+         color 0.502 0 0 1
+         position 0.00606 0.79125
+         size 0.98427 0.18854
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style blank
+         {
+          ButtonWidgetClass ButtonWidget2 {
+           color 0.502 0 0 1
+           position 0 0.01561
+           size 0.3576 0.97493
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "No"
+           font "gui/fonts/metron-bold28"
+          }
+          ButtonWidgetClass ButtonWidget3 {
+           color 0.502 0 0 1
+           size 0.3576 0.97493
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "Yes"
+           font "gui/fonts/metron-bolditalic28"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
     PanelWidgetClass PanelClanSettings {
      visible 0
      ignorepointer 1
@@ -813,7 +840,7 @@ FrameWidgetClass MainRoot {
        "exact text" 0
       }
       PanelWidgetClass PanelAdmin {
-       visible 0
+       visible 1
        ignorepointer 1
        position 3.39771 478.26102
        size 865.15497 218.26199
@@ -860,7 +887,7 @@ FrameWidgetClass MainRoot {
          font "gui/fonts/metron-bold28"
         }
         PanelWidgetClass PanelPerms {
-         visible 0
+         visible 1
          ignorepointer 1
          position 0.2329 0.0033
          size 0.30597 0.98387
@@ -989,6 +1016,7 @@ FrameWidgetClass MainRoot {
        font "gui/fonts/metron-bold58"
       }
       PanelWidgetClass PanelPrice {
+       visible 1
        ignorepointer 1
        position 0 -0.34206
        size 0.237 0.068
@@ -1057,7 +1085,7 @@ FrameWidgetClass MainRoot {
          text "Clan Tag"
          font "gui/fonts/metron-bold58"
         }
-        ButtonWidgetClass ButtonWidget4 {
+        ButtonWidgetClass ButtonWidgetCreate {
          color 0 0.502 0.1255 1
          position 188.12601 233.978
          size 204.98399 62.348
