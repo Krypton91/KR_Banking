@@ -211,18 +211,12 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void SpawnClanCreatePopup()
     {
-        if(!m_PanelNewClan.IsVisible())
-        {
-            m_PanelName.Show(true);
-        }
+        m_PanelName.Show(true);
     }
 
     void HideNewClanPopup()
     {
-        if(m_PanelNewClan.IsVisible())
-        {
-            m_PanelName.Show(false);
-        }
+        m_PanelName.Show(false);
     }
 
     void HandleTransferCancel()
