@@ -1,6 +1,6 @@
 FrameWidgetClass MainRoot {
  visible 1
- position -0.00013 -0.00125
+ position 0.00023 -0.00125
  size 0.99967 1
  halign center_ref
  valign center_ref
@@ -34,21 +34,22 @@ FrameWidgetClass MainRoot {
      {
       TextWidgetClass TextWidget0 {
        ignorepointer 1
-       size 0.19426 0.99593
+       position -0.00433 0
+       size 0.31926 0.99593
        halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        text "BANKING"
-       font "gui/fonts/metron-italic28"
+       font "gui/fonts/metron-italic58"
        "text halign" center
        "text valign" center
       }
       ImageWidgetClass CloseWidget {
        ignorepointer 1
-       position 0.00234 0.04435
-       size 0.04958 0.67821
+       position 0.00846 0.08474
+       size 0.04116 0.51666
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -60,8 +61,8 @@ FrameWidgetClass MainRoot {
        stretch 1
       }
       ButtonWidgetClass CloseInvi {
-       position 0 0
-       size 0.05135 0.79802
+       position 0.00689 0.06058
+       size 0.04446 0.5456
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -111,8 +112,8 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabTransfer {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position 0.67023 0.0368
-       size 0.32868 1.0129
+       position 0.66877 0.0368
+       size 0.33013 1.0129
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -293,6 +294,54 @@ FrameWidgetClass MainRoot {
            font "gui/fonts/metron-bold22"
           }
          }
+        }
+        ProgressBarWidgetClass ProgressBarWidget0 {
+         ignorepointer 1
+         position 0 0
+         size 0.992 0.093
+         halign center_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Loading
+        }
+        TextWidgetClass TextWidgetMax {
+         ignorepointer 1
+         position 0.883 0.851
+         size 0.11 0.051
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "300k"
+         font "gui/fonts/metron-bold28"
+         "exact text" 0
+        }
+        TextWidgetClass TextWidgetCurrent {
+         ignorepointer 1
+         position 0.00634 0.85269
+         size 0.11 0.051
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "150k"
+         font "gui/fonts/metron-bold28"
+         "exact text" 0
+        }
+        TextWidgetClass TextWidgetPercentage {
+         ignorepointer 1
+         position 0.44036 0.92872
+         size 0.11 0.051
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "50%"
+         font "gui/fonts/metron-bold28"
+         "exact text" 0
         }
        }
       }
@@ -957,6 +1006,65 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          text "Price: 20.000"
          font "gui/fonts/metron-bold28"
+        }
+       }
+      }
+      PanelWidgetClass PanelWidgetName {
+       visible 0
+       ignorepointer 1
+       color 0.1804 0.1804 0.1804 1
+       size 0.642 0.471
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+       {
+        TextWidgetClass TextHeadline {
+         ignorepointer 1
+         position 0.0137 0.09453
+         size 0.85109 0.08833
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Please enter your Clan Name and Chat tag!"
+         font "gui/fonts/metron-bold28"
+        }
+        EditBoxWidgetClass EditBoxWidgetName {
+         position 0.25522 0.27545
+         size 0.48976 0.10456
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Clan Name"
+         font "gui/fonts/metron-bold58"
+        }
+        EditBoxWidgetClass EditBoxWidgetTag {
+         position 0.25522 0.44923
+         size 0.48976 0.14544
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Clan Tag"
+         font "gui/fonts/metron-bold58"
+        }
+        ButtonWidgetClass ButtonWidget4 {
+         color 0 0.502 0.1255 1
+         position 188.12601 233.978
+         size 204.98399 62.348
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         style Colorable
+         text "Create!"
+         font "gui/fonts/metron-bold48"
         }
        }
       }
