@@ -1,5 +1,5 @@
 FrameWidgetClass MainRoot {
- visible 0
+ visible 1
  position -0.00013 -0.00125
  size 0.99967 1
  halign center_ref
@@ -84,6 +84,7 @@ FrameWidgetClass MainRoot {
      style rover_sim_colorable
      {
       ButtonWidgetClass BtnTabBank {
+       visible 1
        color 0.5608 0.0706 0.0706 1
        position 0.31381 0.03434
        size 0.35528 1.0129
@@ -123,7 +124,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -133,7 +134,7 @@ FrameWidgetClass MainRoot {
      vexactsize 0
      {
       PanelWidgetClass PDABody {
-       visible 0
+       visible 1
        ignorepointer 1
        position 0 -0.02171
        size 0.5966 0.7863
@@ -295,129 +296,10 @@ FrameWidgetClass MainRoot {
         }
        }
       }
-      PanelWidgetClass PDABodyTransfer {
-       visible 0
-       ignorepointer 1
-       position 0 -0.02171
-       size 0.5966 0.7863
-       halign center_ref
-       valign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       {
-        PanelWidgetClass PanelBankAmount3 {
-         ignorepointer 1
-         position 0.00279 0.00414
-         size 0.99988 0.09612
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         {
-          TextWidgetClass BankAmountValueText0 {
-           ignorepointer 1
-           position 0.05383 0.0257
-           size 0.89606 1.00135
-           halign center_ref
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           text " [KGB] Sample Value"
-           "text valign" center
-          }
-          ImageWidgetClass ImageWidget2 {
-           ignorepointer 1
-           size 0.10169 1.00281
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           imageTexture "{7AB473DF73D521A2}KR_Banking/GUI/textures/BankLogo.edds"
-           mode blend
-           "src alpha" 1
-           stretch 1
-          }
-         }
-        }
-        PanelWidgetClass PanelInteract1 {
-         ignorepointer 1
-         position -0.00277 0.7992
-         size 0.99993 0.10913
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         {
-          EditBoxWidgetClass EditBoxWidget1 {
-           color 0.502 0 0 1
-           position 0.00147 0.12675
-           size 0.99931 0.73141
-           halign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style Editor
-           font "gui/fonts/metron-bold22"
-          }
-         }
-        }
-        PanelWidgetClass PanelBankAmount4 {
-         ignorepointer 1
-         position -0.00069 0.90936
-         size 0.99988 0.09612
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         {
-          ButtonWidgetClass btnSend {
-           color 0.502 0 0 1
-           position 0.00365 -0.02447
-           size 0.41659 0.98413
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style Colorable
-           text "Send"
-           font "gui/fonts/metron-bold22"
-          }
-          ButtonWidgetClass btnSendSteamId {
-           color 0.502 0 0 1
-           position 0.58171 -0.02447
-           size 0.41659 0.98413
-           valign center_ref
-           hexactpos 0
-           vexactpos 0
-           hexactsize 0
-           vexactsize 0
-           style Colorable
-           text "Offline Send"
-           font "gui/fonts/metron-bold22"
-          }
-         }
-        }
-        TextListboxWidgetClass TextListboxWidget0 {
-         position 0.00691 0.10116
-         size 0.99299 0.70205
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-        }
-       }
-      }
      }
     }
     PanelWidgetClass PanelClanAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -585,7 +467,8 @@ FrameWidgetClass MainRoot {
        font "gui/fonts/metron58"
        wrap 1
       }
-      ButtonWidgetClass BtnClanEdit {
+      ButtonWidgetClass BtnRob {
+       visible 1
        color 0.502 0 0 1
        position 0 0
        size 0.32635 0.08611
@@ -599,10 +482,22 @@ FrameWidgetClass MainRoot {
        text "Rob ATM"
        font "gui/fonts/metron-bold22"
       }
+      ButtonWidgetClass BtnClanSettings {
+       color 0.502 0 0 1
+       size 0.32635 0.08611
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Clan Settings"
+       font "gui/fonts/metron-bold22"
+      }
      }
     }
     PanelWidgetClass PanelYesNoMsg {
-     visible 1
+     visible 0
      ignorepointer 1
      color 0.1333 0.1333 0.1333 1
      position 0.07097 0.33885
@@ -766,6 +661,125 @@ FrameWidgetClass MainRoot {
          }
         }
        }
+      }
+     }
+    }
+    PanelWidgetClass PDABodyTransfer {
+     visible 0
+     ignorepointer 1
+     position 0.00954 0.05958
+     size 0.5966 0.7863
+     halign center_ref
+     valign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass PanelBankAmount3 {
+       ignorepointer 1
+       position 0.00279 0.00414
+       size 0.99988 0.09612
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        TextWidgetClass BankAmountValueText0 {
+         ignorepointer 1
+         position 0.05383 0.0257
+         size 0.89606 1.00135
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text " [KGB] Sample Value"
+         "text valign" center
+        }
+        ImageWidgetClass ImageWidget2 {
+         ignorepointer 1
+         size 0.10169 1.00281
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         imageTexture "{7AB473DF73D521A2}KR_Banking/GUI/textures/BankLogo.edds"
+         mode blend
+         "src alpha" 1
+         stretch 1
+        }
+       }
+      }
+      PanelWidgetClass PanelInteract1 {
+       ignorepointer 1
+       position -0.00277 0.7992
+       size 0.99993 0.10913
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        EditBoxWidgetClass EditBoxWidget1 {
+         color 0.502 0 0 1
+         position 0.00147 0.12675
+         size 0.99931 0.73141
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Editor
+         font "gui/fonts/metron-bold22"
+        }
+       }
+      }
+      PanelWidgetClass PanelBankAmount4 {
+       ignorepointer 1
+       position -0.00069 0.90936
+       size 0.99988 0.09612
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ButtonWidgetClass btnSend {
+         color 0.502 0 0 1
+         position 0.00365 -0.02447
+         size 0.41659 0.98413
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Send"
+         font "gui/fonts/metron-bold22"
+        }
+        ButtonWidgetClass btnSendSteamId {
+         color 0.502 0 0 1
+         position 0.58171 -0.02447
+         size 0.41659 0.98413
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Offline Send"
+         font "gui/fonts/metron-bold22"
+        }
+       }
+      }
+      TextListboxWidgetClass TextListboxWidget0 {
+       position 0.00691 0.10116
+       size 0.99299 0.70205
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
       }
      }
     }
