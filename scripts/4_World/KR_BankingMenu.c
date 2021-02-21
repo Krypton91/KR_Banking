@@ -175,7 +175,7 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnSendTransfer:
                 int rowIndex = m_TransferPlayerList.GetSelectedRow();
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
-                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
                 break;
             case m_BtnYesCreate:
                 SpawnClanCreatePopup();
@@ -272,8 +272,8 @@ class KR_BankingMenu extends UIScriptedMenu
         float parsedfloat = progValue.ToString().ToFloat();
         m_OwnBankAccountProgressbar.SetCurrent(parsedfloat);
         m_ProgressText.SetText(progValue.ToString() + "%");
-        m_CurrentProgressMinTxt.SetText(CurrentAmountOnBank.ToString() + "K");
-        m_CurrentMaxProgressTxt.SetText(MaxOnBank.ToString() + "K");
+        m_CurrentProgressMinTxt.SetText((CurrentAmountOnBank / 1000).ToString() + "K");
+        m_CurrentMaxProgressTxt.SetText((MaxOnBank / 1000).ToString() + "K");
     }
 
     void DrawCorrectMenu()
