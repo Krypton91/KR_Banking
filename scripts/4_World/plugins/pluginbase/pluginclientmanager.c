@@ -4,7 +4,9 @@ class PluginKrBankingClientManager extends PluginBase
     protected int                                   m_PlayersCurrency;
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
+    protected string                                m_ClanID;
     protected ref KR_BankingClientConfig            m_clientSettings
+    protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
 
     void PluginKrBankingClientManager()
     {
@@ -15,6 +17,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         GetRPCManager().AddRPC("KR_BANKING","PlayerDataResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING","ServerConfigResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
     }
 
@@ -23,9 +26,10 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param1<int> data;
+            Param2<int, string> data;
             if ( !ctx.Read( data ) ) return;
             m_PlayersCurrency = data.param1;
+            m_ClanID          = data.param2;
             if(m_BankingMenu)
             {
                 m_BankingMenu.UpdateUI();//Invoke an Update
@@ -37,12 +41,25 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param5<int, float, bool, bool, ref array<ref CurrencySettings>> data;
+            Param1<ref KR_BankingClientConfig> data;
             if ( !ctx.Read( data ) ) return;
-            m_clientSettings = new KR_BankingClientConfig(data.param1, data.param2, data.param3, data.param4, data.param5);
+            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency);
         }
     }
-    
+
+    void PlayeristResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Client)
+        {
+            Param1<ref array<ref bankingplayerlistobj>> data;
+            if ( !ctx.Read( data ) ) return;
+            m_BankingPlayers.Clear();
+            m_BankingPlayers = data.param1;
+            if(m_BankingMenu)
+                m_BankingMenu.InvokePlayerList();
+        }
+    }
+
     void OpenBankingMenu()
     {
         GetRPCManager().SendRPC("KR_BANKING", "PlayerDataRequest", null, true); //Send RPC for data.
@@ -61,6 +78,11 @@ class PluginKrBankingClientManager extends PluginBase
         }
     }
 
+    void RequestOnlinePlayers()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "PlayerListRequst", null, true);
+    }
+
     void RequestRemoteToWitdraw(int ammount, int mode)
     {
         GetRPCManager().SendRPC("KR_BANKING", "WithdrawRequest", new Param2<int, int>(ammount, mode), true);
@@ -73,15 +95,20 @@ class PluginKrBankingClientManager extends PluginBase
         Print("Sucessfully requested remote to Deposit Ammount: " + ammount);
     }
 
-    void RequestRemoteForTransfer(string TargetsSteamID, int ammount)
+    void RequestRemoteForTransfer(ref bankingplayerlistobj target, int ammount)
     {
-        if(TargetsSteamID)
-            GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<string, int>(TargetsSteamID, ammount), true);
+        GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<ref bankingplayerlistobj, int>(target, ammount), true);
+        Print("Sendet Transfer request to remote!");
     }
     
     array<ref CurrencySettings> GetServersCurrencyData()
     {
         return m_clientSettings.BankingCurrency;
+    }
+
+    ref KR_BankingClientConfig GetClientSettings()
+    {
+        return m_clientSettings;
     }
 
     int GetBankCredits()
@@ -118,6 +145,18 @@ class PluginKrBankingClientManager extends PluginBase
 		}
 		return currencyAmount;
 	}
+
+    ref array<ref bankingplayerlistobj> GetOnlinePlayers()
+    {
+        return m_BankingPlayers;
+    }
+
+    bool hasClan()
+    {
+        if(m_ClanID && m_ClanID != "NONE")
+            return true;
+        return false;
+    }
 
     int GetItemAmount(ItemBase item)
 	{

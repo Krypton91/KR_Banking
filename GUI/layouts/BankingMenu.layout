@@ -309,8 +309,8 @@ FrameWidgetClass MainRoot {
         }
         TextWidgetClass TextWidgetMax {
          ignorepointer 1
-         position 0.883 0.851
-         size 0.11 0.051
+         position 0.51085 0.8528
+         size 0.4816 0.051
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -318,11 +318,13 @@ FrameWidgetClass MainRoot {
          text "300k"
          font "gui/fonts/metron-bold28"
          "exact text" 0
+         "text halign" right
+         "text valign" center
         }
         TextWidgetClass TextWidgetCurrent {
          ignorepointer 1
          position 0.00634 0.85269
-         size 0.11 0.051
+         size 0.50282 0.051
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -330,6 +332,7 @@ FrameWidgetClass MainRoot {
          text "150k"
          font "gui/fonts/metron-bold28"
          "exact text" 0
+         "text valign" center
         }
         TextWidgetClass TextWidgetPercentage {
          ignorepointer 1
@@ -938,7 +941,7 @@ FrameWidgetClass MainRoot {
       }
       ButtonWidgetClass ButtonBack {
        color 0.502 0 0 1
-       position 0 -0
+       position 0 0
        size 0.16259 0.07665
        valign bottom_ref
        hexactpos 0

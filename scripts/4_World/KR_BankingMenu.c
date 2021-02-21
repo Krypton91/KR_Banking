@@ -27,14 +27,23 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnEdit;
     protected ButtonWidget              m_BtnBack;
     protected ButtonWidget              m_BtnSave;
+    protected ButtonWidget              m_BtnSendTransfer;
 
     protected EditBoxWidget             m_OwnAccInputBox;
+    protected EditBoxWidget             m_TransferInputBox;
     protected TextWidget                m_OwnedCurrencyLabel;
     protected TextWidget                m_OnPlayerCurrencyLabel;
     protected TextWidget                m_PriceToCreate;
+    protected TextWidget                m_OnPlayerCurrencyLabel2;
+    protected TextWidget                m_CurrentValueOnBank;
+    protected TextWidget                m_CurrentMaxOnBank;
+    protected TextWidget                m_ProgressText;
+    protected TextWidget                m_CurrentProgressMinTxt;
+    protected TextWidget                m_CurrentMaxProgressTxt;
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
+    protected TextListboxWidget         m_TransferPlayerList;
 
     protected MultilineTextWidget       m_YesNoMsgHeadline;
     protected MultilineTextWidget       m_YesNoMsgBody;
@@ -45,7 +54,10 @@ class KR_BankingMenu extends UIScriptedMenu
     protected CheckBoxWidget            m_CheckBoxAdd;
     protected CheckBoxWidget            m_CheckBoxPermissions;
 
+    protected ProgressBarWidget         m_OwnBankAccountProgressbar;
 
+
+    protected ref bankingplayerlistobj  m_target
     void KR_BankingMenu()
     {
        
@@ -72,31 +84,40 @@ class KR_BankingMenu extends UIScriptedMenu
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
-            m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
-            m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_YesConfirmBtn                 = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_NoConfirmBtn                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
             m_BtnClanSettings               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClanSettings"));
             m_BtnKick                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonKick"));
             m_BtnAdd                        = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit0"));
             m_BtnEdit                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit"));
             m_BtnBack                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonBack"));
             m_BtnSave                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
+            m_BtnSendTransfer               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnSend"));
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
+            m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
             m_OnPlayerCurrencyLabel         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer"));
             m_PriceToCreate                 = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPrice"));
+            m_OnPlayerCurrencyLabel2        = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText0"));
+            m_ProgressText                  = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage"));
+            m_CurrentProgressMinTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetCurrent"));
+            m_CurrentMaxProgressTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetMax"));
 
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
 
             m_ListboxMember                 = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxMember"));
             m_ListboxPlayers                = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
+            m_TransferPlayerList            = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidget0"));
 
             m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
             m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit"));                  
             m_CheckBoxKick                  = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxKick"));
             m_CheckBoxAdd                   = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxInvite"));
             m_CheckBoxPermissions           = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxPermission"));
+
+            m_OwnBankAccountProgressbar     = ProgressBarWidget.Cast(layoutRoot.FindAnyWidget("ProgressBarWidget0"));
 
 
             m_IsBankingMenuInitialized = true;
@@ -129,10 +150,17 @@ class KR_BankingMenu extends UIScriptedMenu
                 break;
             case m_YesConfirmBtn:
                 HandleTransferConfirm();
+                Print("Yes button clicked!");
                 break;
             case m_NoConfirmBtn:
                 HandleTransferCancel();
                 break;
+            case m_BtnSendTransfer:
+                int rowIndex = m_TransferPlayerList.GetSelectedRow();
+                m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to" + m_target.name + " ?");
+                break;
+            
         }
 
         return super.OnClick(w, x, y, button);
@@ -154,7 +182,9 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleTransferConfirm()
     {
-        GetBankingClientManager().RequestRemoteForTransfer("", 1);
+        Print("HandleConfirmTransfer");
+        GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
+        m_IsYesNoVisible = false;
     }
 
     void HandleTransferCancel()
@@ -174,16 +204,19 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_OwnBankAccountTab.Show(true);
                 m_ClanBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
+                m_PanelNewClan.Show(false);
                 break;
             case 2:
-                m_ClanBankAccountTab.Show(true);
+                DrawCorrectMenu();
                 m_OwnBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
                 break;
             case 3:
+                GetBankingClientManager().RequestOnlinePlayers();
                 m_TransferTab.Show(true);
                 m_OwnBankAccountTab.Show(false);
                 m_ClanBankAccountTab.Show(false);
+                m_PanelNewClan.Show(false);
                 break;
         }
     }
@@ -192,6 +225,43 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+        m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+
+        /* Set progressbar */
+        int CurrentAmountOnBank = GetBankingClientManager().GetBankCredits();
+        int MaxOnBank = GetBankingClientManager().GetClientSettings().MaxCurrency;
+    	int progValue = 100 * CurrentAmountOnBank / MaxOnBank;
+        float parsedfloat = progValue.ToString().ToFloat();
+        m_OwnBankAccountProgressbar.SetCurrent(parsedfloat);
+        m_ProgressText.SetText(progValue.ToString() + "%");
+        m_CurrentProgressMinTxt.SetText(CurrentAmountOnBank.ToString() + "K");
+        m_CurrentMaxProgressTxt.SetText(MaxOnBank.ToString() + "K");
+    }
+
+    void DrawCorrectMenu()
+    {
+        if(GetBankingClientManager().hasClan())
+        {
+            m_ClanBankAccountTab.Show(true);
+            m_PanelNewClan.Show(false);
+        } 
+        else
+        {
+            m_PanelNewClan.Show(true);
+            m_ClanBankAccountTab.Show(false);
+        }
+    }
+
+    //!This Updates the Playerlists from remote!
+    void InvokePlayerList()
+    {
+        m_TransferPlayerList.ClearItems();
+        m_ListboxPlayers.ClearItems();
+        for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
+        {
+            m_TransferPlayerList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+            m_ListboxPlayers.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+        }
     }
 
     //!Creates a yes no Message.
