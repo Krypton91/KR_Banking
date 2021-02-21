@@ -1,6 +1,5 @@
 FrameWidgetClass MainRoot {
  visible 1
- position -0.27529 -0.08273
  size 0.99967 1
  halign center_ref
  valign center_ref
