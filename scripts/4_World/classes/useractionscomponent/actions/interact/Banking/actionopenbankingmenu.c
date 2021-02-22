@@ -36,11 +36,32 @@ class ActionOpenBankingMenu: ActionInteractBase
 		if(Class.CastTo(atmbase, target_object))
 		{
 			if(distancetobank && distancetobank < 1.5)
-				return true;
+			{
+				if(GetBankingClientManager().GetClientSettings().isBankCardNeeded)
+					return CanOpenBankingMenu(player);
+				else
+					return true;
+			}
 		}
 		return false;
 	}
 	
+	bool CanOpenBankingMenu(PlayerBase player)
+	{
+		if(!player) return false;
+
+		EntityAI item = player.GetHumanInventory().GetEntityInHands();
+
+		if(!item)
+			return false;
+		
+		KeyCard_Base atmcard;
+		if(Class.CastTo(atmcard, item))
+		{
+			return true;
+		}
+		return false;
+	}
 	override void OnStartClient( ActionData action_data )
 	{
 		GetBankingClientManager().OpenBankingMenu();

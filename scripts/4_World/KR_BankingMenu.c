@@ -368,6 +368,12 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleEditPermission(int rowIndex)
     {
+        if(rowIndex == -1)
+        {
+            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            return;
+        }
+
         if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
         string SteamID = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex).GetPlainID();
         PermissionObject newPerms = PermissionObject(m_CheckBoxWithdraw.IsChecked(), m_CheckBoxDeposit.IsChecked(), m_CheckBoxAdd.IsChecked(), m_CheckBoxKick.IsChecked(), m_CheckBoxPermissions.IsChecked());
@@ -377,10 +383,16 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleRemoveMemberFromClan(int rowIndex)
     {
+        if(rowIndex == -1)
+        {
+            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            return;
+        }
+        
         ref bankingplayerlistobj member;
         if(!GetBankingClientManager().GetOnlinePlayers()) return;
         member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
-        GetBankingClientManager().AddMemberToClan(member.plainid);
+        GetBankingClientManager().RemoveMember(member.plainid);
     }
 
     void LoadClanMemberList()

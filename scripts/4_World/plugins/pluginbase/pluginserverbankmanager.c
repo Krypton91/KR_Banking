@@ -329,7 +329,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				return;
 			}
 			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
-			KR_JsonDatabaseHandler SendersData = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
+			KR_JsonDatabaseHandler SendersData = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 			if(targetPlayer && SendersData)
 			{
 				if(targetPlayer.GetClanID() != SendersData.GetClanID())
@@ -338,7 +338,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					return;
 				}
 
-				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(SendersData.GetClanID());
 				if(clandata)
 				{
 					PermissionObject perms;
