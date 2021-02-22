@@ -16,7 +16,8 @@ class KR_BankingMenu extends UIScriptedMenu
     protected Widget                    m_PanelPerms;
     protected Widget                    m_PanelNewClan;
     protected Widget                    m_PanelNewClanPrice;
-    protected Widget                    m_PanelName;                
+    protected Widget                    m_PanelName;   
+    protected Widget                    m_LeaveConfirm;             
 
     protected ButtonWidget              m_CloseUiBtn;
     protected ButtonWidget              m_BankAccBtn;
@@ -38,6 +39,9 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnFinallyCreate;
     protected ButtonWidget              m_BtnYesCreate;
     protected ButtonWidget              m_RobATMBtn;
+    protected ButtonWidget              m_BtnLeaveClan;
+    protected ButtonWidget              m_BtnLeaveYes;
+    protected ButtonWidget              m_BtnLeaveNo;
 
     protected EditBoxWidget             m_OwnAccInputBox;
     protected EditBoxWidget             m_ClanAccInputBox;
@@ -99,6 +103,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_PanelNewClan                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelNewClan"));
             m_PanelNewClanPrice             = Widget.Cast(layoutRoot.FindAnyWidget("PanelNewClanPrice"));
             m_PanelName                     = Widget.Cast(layoutRoot.FindAnyWidget("PanelWidgetName"));
+            m_LeaveConfirm                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelLeaveConfirm"));
 
             m_CloseUiBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("CloseInvi"));
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
@@ -120,6 +125,9 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BtnFinallyCreate              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidgetCreate"));
             m_BtnYesCreate                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget1"));
             m_RobATMBtn                     = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnRob"));
+            m_BtnLeaveClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeave"));
+            m_BtnLeaveYes                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeaveYes"));
+            m_BtnLeaveNo                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeaveNo"));
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));

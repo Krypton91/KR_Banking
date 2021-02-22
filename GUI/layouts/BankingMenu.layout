@@ -352,7 +352,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -774,7 +774,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanSettings {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.003 0.14508
      size 0.99727 0.85316
@@ -957,19 +957,6 @@ FrameWidgetClass MainRoot {
           }
          }
         }
-        ButtonWidgetClass ButtonLeave {
-         visible 1
-         color 0.502 0 0 1
-         position 0 0.5221
-         size 0.20555 0.18673
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style Colorable
-         text "Leave"
-         font "gui/fonts/metron-bold28"
-        }
        }
       }
       ButtonWidgetClass ButtonBack {
@@ -986,7 +973,7 @@ FrameWidgetClass MainRoot {
        font "gui/fonts/metron-bold48"
       }
       PanelWidgetClass PanelLeaveConfirm {
-       visible 0
+       visible 1
        ignorepointer 1
        color 0.2118 0.2118 0.2118 1
        size 0.67026 0.47519
@@ -1052,6 +1039,19 @@ FrameWidgetClass MainRoot {
          font "gui/fonts/metron-bold48"
         }
        }
+      }
+      ButtonWidgetClass ButtonLeave {
+       visible 1
+       color 0.502 0 0 1
+       position 0.00366 0.82099
+       size 0.19536 0.059
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Leave"
+       font "gui/fonts/metron-bold28"
       }
      }
     }
