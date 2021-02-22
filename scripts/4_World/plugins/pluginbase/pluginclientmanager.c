@@ -229,9 +229,9 @@ class PluginKrBankingClientManager extends PluginBase
 			NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5);
 		#else
 			if(IsError)
-				NotificationSystem.SendNotificationToPlayerExtended(5, "Banking ERROR", Message, "KR_Banking/data/Logos/notificationbanking.edds");
+				NotificationSystem.AddNotificationExtended(5, "Banking ERROR", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 			else
-				NotificationSystem.SendNotificationToPlayerExtended( 5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
+				NotificationSystem.AddNotificationExtended(5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 		#endif
 	}
 };
