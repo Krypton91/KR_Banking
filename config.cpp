@@ -58,6 +58,8 @@ class CfgMods
 class CfgVehicles
 {
 	class HouseNoDestruct;
+	class Inventory_Base;
+	class KeyCard_Base: Inventory_Base{};
 	class KR_BankingATM: HouseNoDestruct
 	{
 		scope=1;
@@ -78,6 +80,17 @@ class CfgVehicles
 		hiddenSelectionsTextures[] = 
 		{
 			"\KR_Banking\data\ATM\data\ATM_co.paa"
+		};
+	};
+	class KR_BankingCard: KeyCard_Base
+	{
+		scope=2;
+		displayName="Banking Card";
+		descriptionShort="For Logging in into ATM";
+		model="\KR_Banking\data\ATMCard\KR_BankingCard.p3d";
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATMCard\data\ATMCard_co.paa"
 		};
 	};
 };
