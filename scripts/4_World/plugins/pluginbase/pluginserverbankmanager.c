@@ -231,7 +231,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					Print("Sucesfully created clan with name: " + usersNewClan.GetName());
 					// 2RPCS needs to be here for correct update!
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( usersNewClan ), true, sender);
-					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
 					SendNotification("Sucesfully created clan with name: " + usersNewClan.GetName(), sender);
 				}
 			}
