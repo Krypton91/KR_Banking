@@ -103,7 +103,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
-            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWithdrawClan"));
+            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdrawClan"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));

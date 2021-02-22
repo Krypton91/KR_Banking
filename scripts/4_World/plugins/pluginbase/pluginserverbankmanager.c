@@ -364,7 +364,6 @@ class PluginKRBankingManagerServer extends PluginBase
 					if(CurrencyOnPlayer >= SumToInsert)
 					{
 						clanDB.DepositMoney(SumToInsert);
-						int addedMoney = RemoveCurrencyFromPlayer(player, SumToInsert);
 						clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
 						RemoveCurrencyFromPlayer(player, SumToInsert);
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
@@ -385,6 +384,10 @@ class PluginKRBankingManagerServer extends PluginBase
 				Error("Cant Load Clan Data of Player: " + identity.GetName());
 			}
         }
+		else
+		{
+			Error("Cant Load Player Data of Player: " + identity.GetName());
+		}
     }
 	void UpdatePlayerList()
 	{
