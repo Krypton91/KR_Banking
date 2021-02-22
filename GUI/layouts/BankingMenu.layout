@@ -123,7 +123,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -354,7 +354,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -1021,8 +1021,8 @@ FrameWidgetClass MainRoot {
       PanelWidgetClass PanelPrice {
        visible 1
        ignorepointer 1
-       position 0 -0.34206
-       size 0.237 0.068
+       position 0.00467 -0.34206
+       size 0.33976 0.068
        halign center_ref
        valign center_ref
        hexactpos 0
@@ -1032,8 +1032,8 @@ FrameWidgetClass MainRoot {
        {
         TextWidgetClass TextWidgetPrice {
          ignorepointer 1
-         position 0.132 0.34582
-         size 0.72264 0.58251
+         position 0.00552 0.34582
+         size 0.98659 0.58251
          hexactpos 0
          vexactpos 0
          hexactsize 0
