@@ -274,6 +274,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		{	
 			Param1<string> data;
 			if(!ctx.Read(data)) return;
+			
 			Print("SteamID From load: " + data.param1);
 			PlayerBase t_player = RemoteFindPlayer(data.param1);
 			if(!t_player) return;
@@ -553,7 +554,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			Error("Cant Load Player Data of Player: " + identity.GetName());
 		}
     }
-	
+
 	void UpdatePlayerList()
 	{
 		m_BankingPlayers.Clear();

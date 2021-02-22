@@ -272,7 +272,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_ClanBankAccountTab.Show(true);
                 break;
             case m_BtnAdd:
-                HandleAddMemberToClan(m_ListboxMember.GetSelectedRow());
+                HandleAddMemberToClan(m_ListboxPlayers.GetSelectedRow());
                 break;
             case m_BtnKick:
                 HandleRemoveMemberFromClan(m_ListboxMember.GetSelectedRow());
@@ -356,8 +356,11 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
+        ref bankingplayerlistobj member;
+        if(!GetBankingClientManager().GetOnlinePlayers()) return;
+        member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
 
-        GetBankingClientManager().AddMemberToClan(rowIndex);
+        GetBankingClientManager().AddMemberToClan(member.plainid);
     }
 
     void HandleEditPermission(int rowIndex)
@@ -371,13 +374,10 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleRemoveMemberFromClan(int rowIndex)
     {
-        if(!rowIndex)
-        {
-            GetBankingClientManager().SendNotification("No Player Selected in List!");
-            return;
-        }
-        
-        GetBankingClientManager().RemoveMember(rowIndex);
+        ref bankingplayerlistobj member;
+        if(!GetBankingClientManager().GetOnlinePlayers()) return;
+        member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
+        GetBankingClientManager().AddMemberToClan(member.plainid);
     }
 
     void LoadClanMemberList()
