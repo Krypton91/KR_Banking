@@ -365,18 +365,18 @@ class KR_BankingMenu extends UIScriptedMenu
         m_LeaveConfirm.Show(true);
     }
 
-    void HandleLeaveYes()
+    /*void HandleLeaveYes()
     {
         ref bankingplayerlistobj member;
         if(!GetBankingClientManager().GetOnlinePlayers()) return;
         member = GetBankingClientManager().GetOnlinePlayers().Get(Player.plainid);
         GetBankingClientManager().RemoveMember(member.plainid);
         m_LeaveConfirm.show(false);
-    }
+    } */
 
     void HandleLeaveNo()
     {
-        m_LeaveConfirm.show(false);
+        m_LeaveConfirm.Show(false);
     }
 
     void HandleAddMemberToClan()
