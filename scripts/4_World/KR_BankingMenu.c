@@ -277,6 +277,8 @@ class KR_BankingMenu extends UIScriptedMenu
     
     void OpenClanSettings()
     {
+        GetBankingClientManager().RequestOnlinePlayers();
+        
         m_ClanBankAccountTab.Show(false);
         m_ClanSettings.Show(true);
 
@@ -440,11 +442,13 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_ClanBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
                 m_PanelNewClan.Show(false);
+                m_ClanSettings.Show(false);
                 break;
             case 2:
                 DrawCorrectMenu();
                 m_OwnBankAccountTab.Show(false);
                 m_TransferTab.Show(false);
+                m_ClanSettings.Show(false);
                 break;
             case 3:
                 GetBankingClientManager().RequestOnlinePlayers();
@@ -452,6 +456,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_OwnBankAccountTab.Show(false);
                 m_ClanBankAccountTab.Show(false);
                 m_PanelNewClan.Show(false);
+                m_ClanSettings.Show(false);
                 break;
         }
     }
