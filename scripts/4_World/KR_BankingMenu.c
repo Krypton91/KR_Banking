@@ -353,9 +353,7 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
-        ref ClanMemberObject newMember;
-        newMember = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
-        GetBankingClientManager().AddMemberToClan(newMember);
+        GetBankingClientManager().AddMemberToClan(GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex));
     }
 
     void HandleRemoveMemberFromClan(int rowIndex)
