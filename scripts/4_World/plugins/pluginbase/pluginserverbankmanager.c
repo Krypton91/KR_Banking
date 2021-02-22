@@ -131,10 +131,13 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void TransferRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
+		Print("[KR Banking]-> Sucesfully Recived transfer reqwuest from Player: " + sender.GetName());
 		if(type == CallType.Server)
         {
+			Print("Calltype was server..");
             Param2<ref bankingplayerlistobj, int> data;
             if(!ctx.Read(data)) return;
+			Print("Params was coreect!");
             KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 			if(ownpldata)
 			{
@@ -154,6 +157,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 						SendNotification(" You received " + data.param2 + " from: " + targetIdentity.GetName(), targetIdentity);
 						SendNotification(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), sender);
+						Print("Done!");
 					}
 					else
 					{

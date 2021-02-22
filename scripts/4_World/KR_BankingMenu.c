@@ -192,7 +192,9 @@ class KR_BankingMenu extends UIScriptedMenu
                 CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
                 break;
             case m_BtnYesCreate:
-                SpawnClanCreatePopup();
+                int PriceToCreateClan = GetBankingClientManager().GetClientSettings().CostsToCreateClan;
+                if(PriceToCreateClan < GetBankingClientManager().GetPlayerCurrencyAmount());
+                    SpawnClanCreatePopup();
                 break;
             case m_BtnFinallyCreate:
                 HandleClanCreate();
@@ -257,6 +259,7 @@ class KR_BankingMenu extends UIScriptedMenu
         string ClanTag      = m_EditBoxClanTag.GetText();
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
+        m_PanelNewClan.Show(false);
     }
 
     void SwitchTab(int TabIndex)
@@ -315,6 +318,25 @@ class KR_BankingMenu extends UIScriptedMenu
         } 
         else
         {
+            int PriceToCreateClan = GetBankingClientManager().GetClientSettings().CostsToCreateClan;
+            if(PriceToCreateClan == 0)
+            {
+                m_PriceToCreate.Show(false);
+            }
+            else
+            {
+                if(PriceToCreateClan < GetBankingClientManager().GetPlayerCurrencyAmount())
+                {
+                    //Green
+                    m_PriceToCreate.SetColor(ARGB(255, 0, 255, 0));
+                }
+                else
+                {   
+                    //red
+                    m_PriceToCreate.SetColor(ARGB(255, 255, 0, 0));
+                }
+            }
+            m_PriceToCreate.SetText(PriceToCreateClan.ToString());
             m_PanelNewClan.Show(true);
             m_ClanBankAccountTab.Show(false);
         }
