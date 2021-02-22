@@ -373,6 +373,50 @@ class PluginKRBankingManagerServer extends PluginBase
 		}
 	}
 
+	void ClanUpdateMember(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{	
+			Param2<string, ref PermissionObject> data;
+			if(!ctx.Read(data)) return;
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
+			KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
+			if(targetPlayer && playerdata)
+			{
+				if(targetPlayer.GetClanID() != playerdata.GetClanID())
+				{
+					SendNotification("This player is not in your clan.", sender, true);
+					return;
+				}
+
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				if(clandata)
+				{
+					for(int i = 0; i < clandata.GetClanMembers(); i++)
+					{
+						if(clandata.GetClanMembers().Get(i).GetPlainID() == data.param1)
+						{
+							clandata.GetClanMembers().Get(i).SetPermission(data.param2);
+						}
+					}
+					PlayerBase t_player = RemoteFindPlayer(data.param1);
+					if(!t_player) return;
+					//Sync new clan data to both players!
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+
+					//Update the player data!
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+					SendNotification("Sucesfully Updated Permissions from: " + t_player.GetIdentity().GetName(), sender);
+					SendNotification("You Permissions from Banking has ben changed!", t_player.GetIdentity());
+				}
+			}
+			else
+			{
+				Error("Error cant load Internal Playerdata");
+			}
+		}
+	}
 
     void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Ammount)
     {
@@ -554,7 +598,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		if(!clan || !permissions) return;
 
 		clan.AddMember(SteamID, MemberName, permissions);
-	} 
+	}
 
 	string GenerateRandomClanID()
 	{

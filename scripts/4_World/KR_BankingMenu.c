@@ -277,6 +277,9 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnKick:
                 HandleRemoveMemberFromClan(m_ListboxMember.GetSelectedRow());
                 break;
+            case m_BtnSave:
+                HandleEditPermission(m_ListboxMember.GetSelectedRow());
+                break;
         }
         return super.OnClick(w, x, y, button);
     }
@@ -358,6 +361,15 @@ class KR_BankingMenu extends UIScriptedMenu
         member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
 
         GetBankingClientManager().AddMemberToClan(member.GetPlainID());
+    }
+
+    void HandleEditPermission(int rowIndex)
+    {
+        if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
+        string SteamID = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex).GetPlainID();
+        PermissionObject newPerms = PermissionObject(m_CheckBoxWithdraw.IsChecked(), m_CheckBoxDeposit.IsChecked(), m_CheckBoxAdd.IsChecked(), m_CheckBoxKick.IsChecked(), m_CheckBoxPermissions.IsChecked());
+        GetBankingClientManager().RequestEditPermission(newPerms, SteamID);
+
     }
 
     void HandleRemoveMemberFromClan(int rowIndex)

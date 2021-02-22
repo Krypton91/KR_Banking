@@ -130,13 +130,14 @@ class PluginKrBankingClientManager extends PluginBase
         Print("Requested remote to insert new clan!");
     }
 
+    void RequestEditPermission(ref PermissionObject newPermission, string TargetsSteamID)
+    {
+        if(!newPermission || !TargetsSteamID) return;
+        GetRPCManager().SendRPC("KR_BANKING", "ClanCreateRequest", new Param2<PermissionObject, string>(newPermission, TargetsSteamID), true);
+    }
+
     ref ClanDataBaseManager GetClientsClanData()
     {
-        Print("Members in array: " + m_OwnClan.GetClanMembers().Count().ToString());
-        for(int i = 0; i < m_OwnClan.GetClanMembers().Count(); i++)
-        {
-            Print(m_OwnClan.GetClanMembers().Get(i).GetPlayerName());
-        }
         return m_OwnClan;
     }
 
