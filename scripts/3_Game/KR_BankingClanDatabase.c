@@ -51,6 +51,11 @@ class ClanDataBaseManager
         SaveClanData(this);
     }
 
+    void RemoveMember(int index)
+    {
+        m_Members.Remove(index);
+        SaveClanData(this);
+    }
     void SetPrefix(string Prefix)
     {
         m_Prefix = Prefix;
@@ -112,6 +117,11 @@ class ClanDataBaseManager
     string GetClanID()
     {
         return m_ClanID;
+    }
+
+    string GetOwnersID()
+    {
+        return m_OwnersPlainID;
     }
 
     ref array<ref ClanMemberObject> GetClanMembers()

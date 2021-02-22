@@ -124,6 +124,11 @@ class KR_JsonDatabaseHandler
         m_PlayerName = username;
     }
 
+    string GetName()
+    {
+        return m_PlayerName;
+    }
+
     string GetSteamID()
     {
         return m_Steam64ID;

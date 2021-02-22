@@ -196,6 +196,16 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRequest", null, true);
     }
 
+    void AddMemberToClan(ref ClanMemberObject player)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<ref ClanMemberObject>(player), true);
+    }
+
+    void RemoveMember(ref ClanMemberObject player)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanRemoveMember", new Param1<ref ClanMemberObject>(player), true);
+    }
+
     int GetItemAmount(ItemBase item)
 	{
 		Magazine mgzn = Magazine.Cast(item);

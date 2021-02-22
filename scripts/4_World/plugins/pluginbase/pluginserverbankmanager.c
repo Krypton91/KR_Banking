@@ -28,6 +28,9 @@ class PluginKRBankingManagerServer extends PluginBase
 		GetRPCManager().AddRPC("KR_BANKING", "TransferRequest", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "ClanCreateRequest", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRequest", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanAddMember", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanRemoveMember", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanUpdateMember", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -261,6 +264,114 @@ class PluginKRBankingManagerServer extends PluginBase
 			Error("Failed to create clan please report this to the dev team!");
 		}
 	}
+
+	void ClanAddMember(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{	
+			Param1<ref ClanMemberObject> data;
+			if(!ctx.Read(data)) return;
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1.GetPlainID());
+			if(targetPlayer)
+			{
+				if(targetPlayer.GetClanID() != "NONE")
+				{
+					SendNotification("This player has already an Clan!", sender, true);
+					return;
+				}
+
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				if(clandata)
+				{
+					targetPlayer.SetClan(clandata.GetClanID());
+					PermissionObject perms = new PermissionObject();
+					AddClanMember(clandata, perms, data.param1.GetPlainID(), targetPlayer.GetName());
+					PlayerBase t_player = RemoteFindPlayer(data.param1.GetPlainID());
+					if(!t_player) return;
+					//Sync new clan data to both players!
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+
+					//Update the player data!
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+					SendNotification("Sucesfully invited: " + t_player.GetIdentity().GetName(), sender);
+					SendNotification("You got an invite from clan: " + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+				}
+			}
+			else
+			{
+				Error("Error cant load Internal Playerdata");
+			}
+		}
+	}
+
+	void ClanRemoveMember(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{	
+			Param1<ref ClanMemberObject> data;
+			if(!ctx.Read(data)) return;
+			if(sender.GetPlainId() == data.param1.GetPlainID())
+			{
+				SendNotification("You can not kick you self use the leave function!", sender, true);
+				return;
+			}
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1.GetPlainID());
+			KR_JsonDatabaseHandler SendersData = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
+			if(targetPlayer && SendersData)
+			{
+				if(targetPlayer.GetClanID() != SendersData.GetClanID())
+				{
+					SendNotification("This Player is not in your Clan!!", sender, true);
+					return;
+				}
+
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				if(clandata)
+				{
+					PermissionObject perms;
+					for(int i = 0; i < clandata.GetClanMembers().Count(); i++)
+					{
+						if(clandata.GetClanMembers().Get(i).GetPlainID())
+						{
+							perms = clandata.GetClanMembers().Get(i).GetPermission();
+							break;
+						}
+					}
+					if(perms.m_CanKick)
+					{
+						if(data.param1.GetPlainID() == clandata.GetOwnersID())
+						{
+							SendNotification("You can not kick the clan Owner! Leave the clan if you dont like him!", sender, true);
+							return;
+						}
+						else
+						{
+							for(int n = 0; n < clandata.GetClanMembers().Count(); n++)
+							{
+								if(clandata.GetClanMembers().Get(n).GetPlainID() == data.param1.GetPlainID())
+								{
+									clandata.RemoveMember(n);
+									targetPlayer.SetClan("NONE");
+									PlayerBase t_player = RemoteFindPlayer(data.param1.GetPlainID());
+									GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+
+									SendNotification("Sucesfully kicked: " + t_player.GetIdentity().GetName(), sender);
+									SendNotification("You have been kicked from" + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				Error("Error cant load Internal Playerdata");
+			}
+		}
+	}
+
 
     void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Ammount)
     {
