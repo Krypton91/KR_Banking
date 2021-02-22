@@ -272,7 +272,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_ClanBankAccountTab.Show(true);
                 break;
             case m_BtnAdd:
-                HandleAddMemberToClan(m_ListboxPlayers.GetSelectedRow());
+                HandleAddMemberToClan();
                 break;
             case m_BtnKick:
                 HandleRemoveMemberFromClan(m_ListboxMember.GetSelectedRow());
@@ -349,13 +349,15 @@ class KR_BankingMenu extends UIScriptedMenu
         }
     }
 
-    void HandleAddMemberToClan(int rowIndex)
+    void HandleAddMemberToClan()
     {
+        int rowIndex = m_ListboxPlayers.GetSelectedRow()
         if(!rowIndex)
         {
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
+        
         ref bankingplayerlistobj member;
         if(!GetBankingClientManager().GetOnlinePlayers()) return;
         member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
