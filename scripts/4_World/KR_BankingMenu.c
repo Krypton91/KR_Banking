@@ -351,13 +351,14 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleAddMemberToClan()
     {
-        int rowIndex = m_ListboxPlayers.GetSelectedRow()
+        int rowIndex = m_ListboxPlayers.GetSelectedRow();
+        
         if(!rowIndex)
         {
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
-        
+
         ref bankingplayerlistobj member;
         if(!GetBankingClientManager().GetOnlinePlayers()) return;
         member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);

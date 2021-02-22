@@ -274,12 +274,13 @@ class PluginKRBankingManagerServer extends PluginBase
 		{	
 			Param1<string> data;
 			if(!ctx.Read(data)) return;
-			
+
 			Print("SteamID From load: " + data.param1);
 			PlayerBase t_player = RemoteFindPlayer(data.param1);
 			if(!t_player) return;
 			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(t_player.GetIdentity().GetPlainId(), t_player.GetIdentity().GetName());
-			if(targetPlayer)
+			KR_JsonDatabaseHandler currentPlayer = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+			if(targetPlayer && currentPlayer)
 			{
 				if(targetPlayer.GetClanID() != "NONE")
 				{
@@ -289,7 +290,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					return;
 				}
 
-				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(currentPlayer.GetClanID());
 				if(clandata)
 				{
 					targetPlayer.SetClan(clandata.GetClanID());
