@@ -2,6 +2,7 @@ class PluginKRBankingManagerServer extends PluginBase
 {
     protected ref KR_BankingConfigManager m_krserverconfig;
 	protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
+	autoptr TStringArray m_chars = new TStringArray();
     void PluginKRBankingManagerServer()
     {
         if(!m_krserverconfig)
@@ -15,6 +16,7 @@ class PluginKRBankingManagerServer extends PluginBase
         RegisterServersideRPCs();
         SpawnATMs();
         InitPayCheck();
+		m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
 		//RegisterNewClan("RB Server is Gay", "76561198796326626");
     }
 
@@ -279,6 +281,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(targetPlayer.GetClanID() != "NONE")
 				{
+					Print("SteamID From load: " + data.param1);
 					Print("ERROR WEIL ID WAR: " + targetPlayer.GetClanID());
 					SendNotification("This player has already an Clan!", sender, true);
 					return;
@@ -603,7 +606,6 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	string GenerateRandomClanID()
 	{
-		const autoptr TStringArray m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
 		string rndf = "";
 		for(int i = 0; i < 16; i++)
 			rndf += m_chars.GetRandomElement();
