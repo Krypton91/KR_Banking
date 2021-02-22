@@ -321,7 +321,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
 			
 			int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
-			int SumToInsert = Ammount + playerdata.GetBankCredit();
+			int SumToInsert = Ammount;
 			if(SumToInsert > MaxPlaceAbleAmount)
 				SumToInsert = MaxPlaceAbleAmount;
 			
@@ -815,7 +815,14 @@ class PluginKRBankingManagerServer extends PluginBase
 				NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 0, 0), 5, Identity);
 			else
 			NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
+		#else
+			if(IsError)
+				NotificationSystem.Create("Banking", Message + "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 0, 0), 5, Identity);
+			else
+				NotificationSystem.Create("Banking", Message + "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
 		#endif
+
+
 	}
 
     protected void SpawnATMs()

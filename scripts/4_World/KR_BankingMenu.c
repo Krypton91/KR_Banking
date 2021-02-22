@@ -260,6 +260,7 @@ class KR_BankingMenu extends UIScriptedMenu
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
         m_PanelNewClan.Show(false);
+        SwitchTab(2);
     }
 
     void SwitchTab(int TabIndex)
@@ -296,7 +297,7 @@ class KR_BankingMenu extends UIScriptedMenu
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
         m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
-
+        
         /* Set progressbar */
         int CurrentAmountOnBank = GetBankingClientManager().GetBankCredits();
         int MaxOnBank = GetBankingClientManager().GetClientSettings().MaxCurrency;
@@ -336,7 +337,7 @@ class KR_BankingMenu extends UIScriptedMenu
                     m_PriceToCreate.SetColor(ARGB(255, 255, 0, 0));
                 }
             }
-            m_PriceToCreate.SetText(PriceToCreateClan.ToString());
+            m_PriceToCreate.SetText("Price: " + PriceToCreateClan.ToString());
             m_PanelNewClan.Show(true);
             m_ClanBankAccountTab.Show(false);
         }
