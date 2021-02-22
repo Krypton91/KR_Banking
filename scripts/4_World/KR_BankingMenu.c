@@ -288,6 +288,9 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnSave:
                 HandleEditPermission(m_ListboxMember.GetSelectedRow());
                 break;
+            case m_BtnLeaveClan:
+                HandleLeaveClan(); // by andrx line 363 following - delete if wrong
+                break;
         }
         return super.OnClick(w, x, y, button);
     }
@@ -355,6 +358,25 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             Error("Permission error cant find clients permission.");
         }
+    }
+//ANDRXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX - DELETE IF WRONG
+    void HandleLeaveClan()
+    {
+        m_LeaveConfirm.show(true);
+    }
+
+    void HandleLeaveYes()
+    {
+        ref bankingplayerlistobj member;
+        if(!GetBankingClientManager().GetOnlinePlayers()) return;
+        member = GetBankingClientManager().GetOnlinePlayers().Get(Player.plainid);
+        GetBankingClientManager().RemoveMember(member.plainid);
+        m_LeaveConfirm.show(false);
+    }
+
+    void HandleLeaveNo()
+    {
+        m_LeaveConfirm.show(false);
     }
 
     void HandleAddMemberToClan()
