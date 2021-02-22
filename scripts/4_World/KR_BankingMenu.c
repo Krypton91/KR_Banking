@@ -289,7 +289,13 @@ class KR_BankingMenu extends UIScriptedMenu
                 HandleEditPermission(m_ListboxMember.GetSelectedRow());
                 break;
             case m_BtnLeaveClan:
-                HandleLeaveClan(); // by andrx line 363 following - delete if wrong
+                HandleLeaveClan();  // by andrx line 363 following - delete if wrong
+                break;
+            case m_BtnLeaveNo:
+                HandleLeaveNo();    // by andrx line 363 following - delete if wrong
+                break;
+            case m_BtnLeaveYes:
+                HandleLeaveYes();   // by andrx line 363 following - delete if wrong
                 break;
         }
         return super.OnClick(w, x, y, button);
