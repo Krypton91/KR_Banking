@@ -185,7 +185,7 @@ class PluginKRBankingManagerServer extends PluginBase
             {
                 WitdrawMoneyFromBankAccount(sender, data.param1);
             }
-			else if(data.param2 == 2)
+			else
 			{
 				WitdrawMoneyFromClanBankAccount(sender, data.param1);
 			}
@@ -229,7 +229,9 @@ class PluginKRBankingManagerServer extends PluginBase
 				{
 					playerdata.SetClan(ClanID);
 					Print("Sucesfully created clan with name: " + usersNewClan.GetName());
+					// 2RPCS needs to be here for correct update!
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( usersNewClan ), true, sender);
+					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
 					SendNotification("Sucesfully created clan with name: " + usersNewClan.GetName(), sender);
 				}
 			}
@@ -348,10 +350,11 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
-				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
+				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForClanBank(clanDB);
 				int SumToInsert = Ammount;
 				if(SumToInsert > MaxPlaceAbleAmount)
 					SumToInsert = MaxPlaceAbleAmount;
+
 				PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
 				if(!player) return;
 				int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
@@ -383,7 +386,6 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
         }
     }
-
 	void UpdatePlayerList()
 	{
 		m_BankingPlayers.Clear();
@@ -449,6 +451,15 @@ class PluginKRBankingManagerServer extends PluginBase
 		return rndf;
 	}
 
+	int GetMaxPlaceAbleAmmountForClanBank(ClanDataBaseManager clandata)
+	{
+		int currentBankAmount = clandata.GetBankCredit();
+		int maxConfigAmount = m_krserverconfig.MaxClanAccountLimit;
+
+		int sum = maxConfigAmount - currentBankAmount;
+		
+		return sum;
+	}
     /* THANKS TO DAEMON FORGE! <3 */
     int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
 	{

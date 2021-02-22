@@ -2,8 +2,6 @@ class KR_BankingMenu extends UIScriptedMenu
 {
     protected bool                      m_IsBankingMenuInitialized = false;
     protected bool                      m_IsBankingMenuOpen = false;
-    protected bool                      m_IsYesNoVisible = false;
-    protected bool                      m_IsClanAccountFreshGenerated = false;
 
     protected float                     m_UIUpdateTimer = 0;
     protected float                     m_UICooldownTimer = 0;
@@ -23,6 +21,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BankAccBtn;
     protected ButtonWidget              m_ClanAccBtn;
     protected ButtonWidget              m_WithdrawOwnAccBtn;
+    protected ButtonWidget              m_WithdrawClan;
     protected ButtonWidget              m_DepositOwnAccBtn;
     protected ButtonWidget              m_DepositClanAccbtn;
     protected ButtonWidget              m_TransferBtn;
@@ -37,7 +36,6 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnSendTransfer;
     protected ButtonWidget              m_BtnFinallyCreate;
     protected ButtonWidget              m_BtnYesCreate;
-    protected ButtonWidget              m_WithdrawClan;
     protected ButtonWidget              m_RobATMBtn;
 
     protected EditBoxWidget             m_OwnAccInputBox;
@@ -58,8 +56,6 @@ class KR_BankingMenu extends UIScriptedMenu
     protected TextWidget                m_ProgressTextClan;
     protected TextWidget                m_ClanAmount;
     protected TextWidget                m_CashOnPlayer;
-
-
 
     protected TextListboxWidget         m_ListboxPlayers;
     protected TextListboxWidget         m_ListboxMember;
@@ -107,7 +103,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
             m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
-            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btinWithdrawClan"));
+            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWithdrawClan"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
@@ -174,7 +170,6 @@ class KR_BankingMenu extends UIScriptedMenu
                 GetGame().GetUIManager().Back();
                 break;
             case m_BankAccBtn:
-                UpdateUI();
                 SwitchTab(1);
                 break;
             case m_ClanAccBtn:
@@ -187,6 +182,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
 
@@ -197,6 +193,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
 
@@ -207,10 +204,10 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
-
                 HandleTransferConfirm();
                 break;
             case m_NoConfirmBtn:
@@ -220,6 +217,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -247,6 +245,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -285,7 +284,6 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             m_UIUpdateTimer += timeslice;
         }
-
     }
 
     void HandleWitdrawMoneyFromBank(int mode)
@@ -322,7 +320,6 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
         m_YesNoMessage.Show(false);
-        m_IsYesNoVisible = false;
     }
 
     void SpawnClanCreatePopup()
@@ -347,7 +344,6 @@ class KR_BankingMenu extends UIScriptedMenu
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
         m_PanelNewClan.Show(false);
-        m_IsClanAccountFreshGenerated = true;
     }
 
     void SwitchTab(int TabIndex)
@@ -460,13 +456,10 @@ class KR_BankingMenu extends UIScriptedMenu
     //!Creates a yes no Message.
     void CreateYesNoMessage(string Headline, string BodyMessage)
     {
-        if(!m_IsYesNoVisible)
-        {
-            m_YesNoMsgHeadline.SetText(" " + Headline);
-            m_YesNoMsgBody.SetText(" " + BodyMessage);
-            m_YesNoMessage.Show(true);
-            m_IsYesNoVisible = true;
-        }
+
+        m_YesNoMsgHeadline.SetText(" " + Headline);
+        m_YesNoMsgBody.SetText(" " + BodyMessage);
+        m_YesNoMessage.Show(true);
     }
 
     override void OnShow()
