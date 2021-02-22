@@ -98,8 +98,8 @@ FrameWidgetClass MainRoot {
       }
       ButtonWidgetClass BtnTabClanBank {
        color 0.5608 0.0706 0.0706 1
-       position 0 0
        size 0.32171 1.0129
+       halign right_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -110,9 +110,7 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabTransfer {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position 0 0
        size 0.32303 1.02316
-       halign right_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -973,13 +971,13 @@ FrameWidgetClass MainRoot {
      {
       TextWidgetClass TextWidget3 {
        ignorepointer 1
-       position 0.11862 0.06861
-       size 0.79736 0.04874
+       position 0.12983 0.01681
+       size 0.75438 0.05737
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "You don't have a Clan Account yet, do you want to create one?"
+       text "You don't have a Clan Account yet!"
        font "gui/fonts/metron-bold28"
       }
       ButtonWidgetClass ButtonWidget1 {
@@ -998,7 +996,7 @@ FrameWidgetClass MainRoot {
       PanelWidgetClass PanelPrice {
        visible 1
        ignorepointer 1
-       position 0.00467 -0.34206
+       position 0.01775 -0.34206
        size 0.33976 0.068
        halign center_ref
        valign center_ref
@@ -1009,7 +1007,7 @@ FrameWidgetClass MainRoot {
        {
         TextWidgetClass TextWidgetPrice {
          ignorepointer 1
-         position 0.00552 0.34582
+         position 0.00002 0.32043
          size 0.98659 0.58251
          hexactpos 0
          vexactpos 0
@@ -1078,6 +1076,17 @@ FrameWidgetClass MainRoot {
          font "gui/fonts/metron-bold48"
         }
        }
+      }
+      TextWidgetClass TextWidget4 {
+       ignorepointer 1
+       position 0.16159 0.07552
+       size 0.70767 0.05737
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Do you want to create one now?"
+       font "gui/fonts/metron-bold28"
       }
      }
     }
