@@ -46,7 +46,7 @@ class PluginKrBankingClientManager extends PluginBase
         {
             Param1<ref KR_BankingClientConfig> data;
             if ( !ctx.Read( data ) ) return;
-            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan, data.param1.MaxClanAccountLimit);
+            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan, data.param1.MaxClanAccountLimit, data.param1.IsClanAccountActive);
             
         }
     }

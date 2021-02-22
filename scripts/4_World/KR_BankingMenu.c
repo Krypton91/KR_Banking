@@ -3,6 +3,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected bool                      m_IsBankingMenuInitialized = false;
     protected bool                      m_IsBankingMenuOpen = false;
     protected bool                      m_IsYesNoVisible = false;
+    protected bool                      m_IsClanAccountFreshGenerated = false;
     protected Widget                    m_OwnBankAccountTab;
     protected Widget                    m_ClanBankAccountTab;
     protected Widget                    m_YesNoMessage;
@@ -222,7 +223,7 @@ class KR_BankingMenu extends UIScriptedMenu
         }
         else if(mode == 2)
         {
-            parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+            parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
         if(parsedMoney)
             GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
@@ -272,7 +273,7 @@ class KR_BankingMenu extends UIScriptedMenu
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
         m_PanelNewClan.Show(false);
-        SwitchTab(2);
+        m_IsClanAccountFreshGenerated = true;
     }
 
     void SwitchTab(int TabIndex)
@@ -308,6 +309,8 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         if(!GetBankingClientManager().GetClientSettings().isRobActive)
             m_RobATMBtn.Show(false);
+        if(!GetBankingClientManager().GetClientSettings().IsClanAccountActive)
+            m_ClanAccBtn.Show(false);
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
         m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
@@ -359,6 +362,11 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void UpdateUIClanData()
     {
+        if(m_IsClanAccountFreshGenerated)
+        {
+            SwitchTab(2);
+            m_IsClanAccountFreshGenerated = false;
+        }
         m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
         m_CashOnPlayer.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount());
 

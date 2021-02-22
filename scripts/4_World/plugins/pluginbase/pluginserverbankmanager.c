@@ -103,7 +103,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(type == CallType.Server)
         {
 			//we just save this in a new class in memory because they can read the memory & find out the positions.
-			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit);
+			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
             GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param1< ref KR_BankingClientConfig >( clientsettings ), true, sender);
         }
     }
@@ -229,6 +229,8 @@ class PluginKRBankingManagerServer extends PluginBase
 				{
 					playerdata.SetClan(ClanID);
 					Print("Sucesfully created clan with name: " + usersNewClan.GetName());
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( usersNewClan ), true, sender);
+					SendNotification("Sucesfully created clan with name: " + usersNewClan.GetName(), sender);
 				}
 			}
 			else
@@ -272,7 +274,6 @@ class PluginKRBankingManagerServer extends PluginBase
             playerdata.WitdrawMoney(CorrectAmountToWitdraw);
 
             AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
-
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
             //Todo add here logs.
         }
@@ -280,6 +281,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Ammount)
 	{
+		Print("RPC Recived!!! to witdraw from bank!");
 		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
@@ -288,9 +290,10 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(Ammount <= clanDB.GetBankCredit())
 				{
-					playerdata.DepositMoney(Ammount);
+
 					clanDB.WitdrawMoney(Ammount);
 					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
+					AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 				}
 				else
@@ -346,17 +349,22 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
+				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
+				int SumToInsert = Ammount;
+				if(SumToInsert > MaxPlaceAbleAmount)
+					SumToInsert = MaxPlaceAbleAmount;
 				PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
-				int MaxPlaceAbleAmount = m_krserverconfig.MaxClanAccountLimit;
-				int SumToInsert = Ammount + clanDB.GetBankCredit();
+				if(!player) return;
+				int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 				
 				if( SumToInsert <= MaxPlaceAbleAmount)
 				{
-					if(GetPlayerCurrencyAmount(player) >= SumToInsert)
+					if(CurrencyOnPlayer >= SumToInsert)
 					{
 						clanDB.DepositMoney(SumToInsert);
 						int addedMoney = RemoveCurrencyFromPlayer(player, SumToInsert);
 						clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
+						RemoveCurrencyFromPlayer(player, SumToInsert);
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 					}
 					else
