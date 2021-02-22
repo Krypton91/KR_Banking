@@ -121,7 +121,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -774,7 +774,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanSettings {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.003 0.14508
      size 0.99727 0.85316
@@ -973,7 +973,7 @@ FrameWidgetClass MainRoot {
        font "gui/fonts/metron-bold48"
       }
       PanelWidgetClass PanelLeaveConfirm {
-       visible 1
+       visible 0
        ignorepointer 1
        color 0.2118 0.2118 0.2118 1
        size 0.67026 0.47519
