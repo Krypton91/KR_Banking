@@ -69,17 +69,16 @@ class PluginKRBankingManagerServer extends PluginBase
                        }
 					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser)
 					   {
-						   #ifdef NOTIFICATIONS
-						   NotificationSystem.SimpleNoticiation("Error with adding Paycheck Bank is already full!", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, identity);
-						   #endif
+						   //#ifdef NOTIFICATIONS
+						   //NotificationSystem.SimpleNoticiation("Error with adding Paycheck Bank is already full!", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, identity);
+						   //void SendNotification(string Message, PlayerIdentity Identity, bool IsError = false)
+						   SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
+						   //#endif
 						   continue;
 					   }
-
                        playerdata.DepositMoney(ammountTOAddForSpecialUser);
                        Print("Sucessfully added to players: " + identity.GetPlainId() + " bank " + ammountTOAddForSpecialUser.ToString() + " $");
-                       #ifdef NOTIFICATIONS
-                       NotificationSystem.SimpleNoticiation(ammountTOAddForSpecialUser.ToString() + " Added to your Bank Account! Stay active to get more paychecks!", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 0, 175, 163), 10, identity);
-                       #endif
+					   SendNotification(ammountTOAddForSpecialUser.ToString() + " Added to your Bank Account! Stay active to get more paychecks!", identity);
                    }
                }
             }
@@ -817,9 +816,9 @@ class PluginKRBankingManagerServer extends PluginBase
 			NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
 		#else
 			if(IsError)
-				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId(), 5, "Banking ERROR", Message, "KR_Banking/data/Logos/notificationbanking.edds");
+				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId()), 5, "Banking ERROR", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 			else
-				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId(), 5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
+				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId()), 5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 		#endif
 
 
