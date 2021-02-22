@@ -23,6 +23,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRespose", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
+        m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
     }
 
     //!Gets called when client opens the Banking Menu
