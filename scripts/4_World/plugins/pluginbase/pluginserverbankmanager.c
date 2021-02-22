@@ -272,11 +272,14 @@ class PluginKRBankingManagerServer extends PluginBase
 		{	
 			Param1<string> data;
 			if(!ctx.Read(data)) return;
-			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
+			PlayerBase t_player = RemoteFindPlayer(data.param1);
+			if(!t_player) return;
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(t_player.GetIdentity().GetPlainId(), t_player.GetIdentity().GetName());
 			if(targetPlayer)
 			{
 				if(targetPlayer.GetClanID() != "NONE")
 				{
+					Print("ERROR WEIL ID WAR: " + targetPlayer.GetClanID());
 					SendNotification("This player has already an Clan!", sender, true);
 					return;
 				}
@@ -287,8 +290,6 @@ class PluginKRBankingManagerServer extends PluginBase
 					targetPlayer.SetClan(clandata.GetClanID());
 					PermissionObject perms = new PermissionObject();
 					AddClanMember(clandata, perms, data.param1, targetPlayer.GetName());
-					PlayerBase t_player = RemoteFindPlayer(data.param1);
-					if(!t_player) return;
 					//Sync new clan data to both players!
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
@@ -602,7 +603,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	string GenerateRandomClanID()
 	{
-		const ref array<string> m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
+		const autoptr TStringArray m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
 		string rndf = "";
 		for(int i = 0; i < 16; i++)
 			rndf += m_chars.GetRandomElement();
