@@ -33,6 +33,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnFinallyCreate;
     protected ButtonWidget              m_BtnYesCreate;
     protected ButtonWidget              m_WithdrawClan;
+    protected ButtonWidget              m_RobATMBtn;
 
     protected EditBoxWidget             m_OwnAccInputBox;
     protected EditBoxWidget             m_ClanAccInputBox;
@@ -114,6 +115,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BtnSendTransfer               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnSend"));
             m_BtnFinallyCreate              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidgetCreate"));
             m_BtnYesCreate                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget1"));
+            m_RobATMBtn                     = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnRob"));
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
@@ -213,8 +215,17 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleWitdrawMoneyFromBank(int mode)
     {
-        int parsedMoney = m_OwnAccInputBox.GetText().ToInt();
-        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+        int parsedMoney;
+        if(mode == 1)
+        {
+            parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        }
+        else if(mode == 2)
+        {
+            parsedMoney = m_OwnAccInputBox.GetText().ToInt();
+        }
+        if(parsedMoney)
+            GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
     }
     
     void HandleDepositMoney(int mode)
@@ -295,6 +306,8 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void UpdateUI()//If you add UI stuff what needs to be updated from remote you can just add this here!
     {
+        if(!GetBankingClientManager().GetClientSettings().isRobActive)
+            m_RobATMBtn.Show(false);
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
         m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());

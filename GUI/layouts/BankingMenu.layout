@@ -123,7 +123,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -354,7 +354,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -541,21 +541,6 @@ FrameWidgetClass MainRoot {
         }
        }
       }
-      ButtonWidgetClass BtnRob {
-       visible 1
-       color 0.502 0 0 1
-       position 0 0
-       size 0.32635 0.08611
-       halign right_ref
-       valign bottom_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Colorable
-       text "Rob ATM"
-       font "gui/fonts/metron-bold22"
-      }
       ButtonWidgetClass BtnClanSettings {
        color 0.502 0 0 1
        size 0.32635 0.08611
@@ -567,14 +552,6 @@ FrameWidgetClass MainRoot {
        style Colorable
        text "Clan Settings"
        font "gui/fonts/metron-bold22"
-      }
-      TextListboxWidgetClass TextListboxWidgetLogs {
-       position 193.907 421.42398
-       size 527.336 189.856
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
       }
      }
     }
@@ -1103,6 +1080,20 @@ FrameWidgetClass MainRoot {
        }
       }
      }
+    }
+    ButtonWidgetClass BtnRob {
+     visible 1
+     color 0.502 0 0 1
+     size 0.32635 0.08611
+     halign right_ref
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Colorable
+     text "Rob ATM"
+     font "gui/fonts/metron-bold22"
     }
    }
   }
