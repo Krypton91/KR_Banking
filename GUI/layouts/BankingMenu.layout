@@ -121,7 +121,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -352,7 +352,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelClanAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -971,8 +971,8 @@ FrameWidgetClass MainRoot {
      {
       TextWidgetClass TextWidget3 {
        ignorepointer 1
-       position 0.12983 0.01681
-       size 0.75438 0.05737
+       position 0.27754 0.00743
+       size 0.44936 0.05737
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1015,6 +1015,8 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          text "Price: 20.000"
          font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
         }
        }
       }
@@ -1079,8 +1081,8 @@ FrameWidgetClass MainRoot {
       }
       TextWidgetClass TextWidget4 {
        ignorepointer 1
-       position 0.16159 0.07552
-       size 0.70767 0.05737
+       position 0.28889 0.0677
+       size 0.43507 0.05737
        hexactpos 0
        vexactpos 0
        hexactsize 0
