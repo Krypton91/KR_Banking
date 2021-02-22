@@ -270,9 +270,9 @@ class PluginKRBankingManagerServer extends PluginBase
 		Print("Clan Add Member rpc recived!");
 		if(type == CallType.Server)
 		{	
-			Param1<ref ClanMemberObject> data;
+			Param1<string> data;
 			if(!ctx.Read(data)) return;
-			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1.GetPlainID());
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
 			if(targetPlayer)
 			{
 				if(targetPlayer.GetClanID() != "NONE")
@@ -286,8 +286,8 @@ class PluginKRBankingManagerServer extends PluginBase
 				{
 					targetPlayer.SetClan(clandata.GetClanID());
 					PermissionObject perms = new PermissionObject();
-					AddClanMember(clandata, perms, data.param1.GetPlainID(), targetPlayer.GetName());
-					PlayerBase t_player = RemoteFindPlayer(data.param1.GetPlainID());
+					AddClanMember(clandata, perms, data.param1, targetPlayer.GetName());
+					PlayerBase t_player = RemoteFindPlayer(data.param1);
 					if(!t_player) return;
 					//Sync new clan data to both players!
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());

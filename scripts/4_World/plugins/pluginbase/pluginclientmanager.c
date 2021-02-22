@@ -71,7 +71,7 @@ class PluginKrBankingClientManager extends PluginBase
             if (!ctx.Read(data)) return;
 
             m_OwnClan = data.param1;
-
+            m_OwnClan.SetMembers(data.param1.GetClanMembers());
             if(m_BankingMenu && m_BankingMenu.m_IsClanAccountFresh)
             {
                 m_BankingMenu.SwitchTab(2);
@@ -132,6 +132,11 @@ class PluginKrBankingClientManager extends PluginBase
 
     ref ClanDataBaseManager GetClientsClanData()
     {
+        Print("Members in array: " + m_OwnClan.GetClanMembers().Count().ToString());
+        for(int i = 0; i < m_OwnClan.GetClanMembers().Count(); i++)
+        {
+            Print(m_OwnClan.GetClanMembers().Get(i).GetPlayerName());
+        }
         return m_OwnClan;
     }
 
@@ -197,10 +202,10 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRequest", null, true);
     }
 
-    void AddMemberToClan(ref ClanMemberObject player)
+    void AddMemberToClan(string SteamID)
     {
-        Print("Player name to add is: " + player.GetPlayerName());
-        GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<ref ClanMemberObject>(player), true);
+        Print("Player name to add is: " + SteamID);
+        GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<string>(SteamID), true);
     }
 
     void RemoveMember(ref ClanMemberObject player)

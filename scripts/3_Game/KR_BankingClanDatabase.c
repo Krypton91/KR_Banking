@@ -52,6 +52,13 @@ class ClanDataBaseManager
         SaveClanData(this);
     }
 
+    void SetMembers(ref array<ref ClanMemberObject> members)
+    {
+        if(!m_Members)
+            new ref array<ref ClanMemberObject>;
+        m_Members = members;
+    }
+
     void RemoveMember(int index)
     {
         m_Members.Remove(index);

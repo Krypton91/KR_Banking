@@ -353,15 +353,19 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
-        GetBankingClientManager().AddMemberToClan(GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex));
+        ref ClanMemberObject member = new ClanMemberObject();
+        member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
+
+        GetBankingClientManager().AddMemberToClan(member.GetPlainID());
     }
 
     void HandleRemoveMemberFromClan(int rowIndex)
     {
-        ref ClanMemberObject member;
+        ref ClanMemberObject member = new ClanMemberObject();
         member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
         GetBankingClientManager().RemoveMember(member);
     }
+
     void LoadClanMemberList()
     {
         m_ListboxMember.ClearItems();
@@ -370,6 +374,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ListboxMember.AddItem(" " + GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(i).GetPlayerName(), NULL, 0);
         }
     }
+
     override void Update(float timeslice)
     {
         super.Update(timeslice);
@@ -540,10 +545,11 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void UpdateUIClanData()
     {
-        if(GetBankingClientManager().GetClientsClanData().GetBankCredit())
+        if(!GetBankingClientManager().GetClientsClanData()) return;
+        if(GetBankingClientManager().GetClientsClanData() &&  GetBankingClientManager().GetClientsClanData().GetBankCredit())
             m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
         else
-        m_ClanAmount.SetText("0");
+            m_ClanAmount.SetText(" 0");
         m_CashOnPlayer.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount());
 
         int progValue = 100 * GetBankingClientManager().GetClientsClanData().GetBankCredit() / GetBankingClientManager().GetClientSettings().MaxClanAccountLimit;
