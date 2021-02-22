@@ -121,7 +121,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -960,7 +960,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelNewClan {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.002 0.144
      size 0.997 0.851
@@ -979,6 +979,8 @@ FrameWidgetClass MainRoot {
        vexactsize 0
        text "You don't have a Clan Account yet!"
        font "gui/fonts/metron-bold28"
+       "size to text h" 1
+       "size to text v" 0
       }
       ButtonWidgetClass ButtonWidget1 {
        color 0 0.502 0.1255 1
@@ -1089,6 +1091,7 @@ FrameWidgetClass MainRoot {
        vexactsize 0
        text "Do you want to create one now?"
        font "gui/fonts/metron-bold28"
+       "size to text h" 1
       }
      }
     }
