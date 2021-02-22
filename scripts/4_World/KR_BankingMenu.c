@@ -357,9 +357,7 @@ class KR_BankingMenu extends UIScriptedMenu
             return;
         }
 
-       if(!GetBankingClientManager().GetOnlinePlayers()) return;
-        Print("Players in fucking array: " + GetBankingClientManager().GetOnlinePlayers().Count().ToString());
-        GetBankingClientManager().AddMemberToClan(GetBankingClientManager().GetOnlinePlayers().Get(rowIndex).plainid);
+        GetBankingClientManager().AddMemberToClan(rowIndex);
     }
 
     void HandleEditPermission(int rowIndex)
@@ -373,9 +371,13 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleRemoveMemberFromClan(int rowIndex)
     {
-        if(!GetBankingClientManager().GetOnlinePlayers()) return;
-        Print("Players in fucking array: " + GetBankingClientManager().GetOnlinePlayers().Count().ToString());
-        GetBankingClientManager().RemoveMember(GetBankingClientManager().GetOnlinePlayers().Get(rowIndex).plainid);
+        if(!rowIndex)
+        {
+            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            return;
+        }
+        
+        GetBankingClientManager().RemoveMember(rowIndex);
     }
 
     void LoadClanMemberList()

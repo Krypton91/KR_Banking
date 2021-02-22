@@ -553,6 +553,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			Error("Cant Load Player Data of Player: " + identity.GetName());
 		}
     }
+	
 	void UpdatePlayerList()
 	{
 		m_BankingPlayers.Clear();

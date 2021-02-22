@@ -9,6 +9,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected ref KR_BankingClientConfig            m_clientSettings;
     protected ref array<ref bankingplayerlistobj>   m_BankingPlayers;
     protected ref ClanDataBaseManager               m_OwnClan;
+    protected ref TStringArray                      m_PlayerIDList;
     
 
     void PluginKrBankingClientManager()
@@ -23,7 +24,8 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRespose", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
-        m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
+        m_BankingPlayers = new ref array<ref bankingplayerlistobj>();
+        m_PlayerIDList = new ref TStringArray();
     }
 
     //!Gets called when client opens the Banking Menu
@@ -59,6 +61,13 @@ class PluginKrBankingClientManager extends PluginBase
             if(m_BankingPlayers)
                 m_BankingPlayers.Clear();
             m_BankingPlayers = data.param1;
+            m_PlayerIDList.Clear();
+
+            for(int i = 0; i < m_BankingPlayers.Count(); i++)
+            {
+                m_PlayerIDList.Insert(m_BankingPlayers.Get(i).plainid);
+            }
+
             if(m_BankingMenu)
                 m_BankingMenu.InvokePlayerList();
         }
@@ -204,15 +213,14 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRequest", null, true);
     }
 
-    void AddMemberToClan(string SteamID)
+    void AddMemberToClan(int index)
     {
-        Print("Player name to add is: " + SteamID);
-        GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<string>(SteamID), true);
+        GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<string>(FindSteamID(index)), true);
     }
 
-    void RemoveMember(string SteamID)
+    void RemoveMember(int index)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "ClanRemoveMember", new Param1<string>(SteamID), true);
+        GetRPCManager().SendRPC("KR_BANKING", "ClanRemoveMember", new Param1<string>(FindSteamID(index)), true);
     }
 
     int GetItemAmount(ItemBase item)
@@ -264,7 +272,10 @@ class PluginKrBankingClientManager extends PluginBase
 				NotificationSystem.AddNotificationExtended(5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 		#endif
 	}
-
+    string FindSteamID(int index)
+    {
+        return m_PlayerIDList.Get(index);
+    }
     //!returns local players Steamid....
     string GetSteamID()
     {
