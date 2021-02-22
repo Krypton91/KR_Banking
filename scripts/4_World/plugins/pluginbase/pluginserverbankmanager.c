@@ -341,7 +341,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
-				PlayerBase player = PlayerBase.Cast(RemoteFindPlayer(identity.GetPlainId()));
+				PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
 				int MaxPlaceAbleAmount = m_krserverconfig.MaxClanAccountLimit;
 				int SumToInsert = Ammount + clanDB.GetBankCredit();
 				
@@ -817,9 +817,9 @@ class PluginKRBankingManagerServer extends PluginBase
 			NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
 		#else
 			if(IsError)
-				NotificationSystem.Create("Banking", Message + "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 0, 0), 5, Identity);
+				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId(), 5, "Banking ERROR", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 			else
-				NotificationSystem.Create("Banking", Message + "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
+				NotificationSystem.SendNotificationToPlayerExtended(RemoteFindPlayer(Identity.GetPlainId(), 5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 		#endif
 
 
