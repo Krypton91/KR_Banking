@@ -27,6 +27,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		GetRPCManager().AddRPC("KR_BANKING", "PlayerListRequst", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "TransferRequest", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "ClanCreateRequest", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRequest", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -103,7 +104,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(type == CallType.Server)
         {
 			//we just save this in a new class in memory because they can read the memory & find out the positions.
-			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan);
+			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit);
             GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param1< ref KR_BankingClientConfig >( clientsettings ), true, sender);
         }
     }
@@ -130,46 +131,49 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void TransferRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		Print("RPC to transfer recvied!");
 		if(type == CallType.Server)
         {
             Param2<ref bankingplayerlistobj, int> data;
             if(!ctx.Read(data)) return;
-            if(type == CallType.Server)
-            {
-               	KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
-				if(ownpldata)
+            KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+			if(ownpldata)
+			{
+				if(ownpldata.GetBankCredit() >= data.param2)
 				{
-					if(ownpldata.GetBankCredit() >= data.param2)
-					{
-						//has enough
-						PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
-						if(!targetPlayer) return;
+					//has enough
+					PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
+					if(!targetPlayer) return;
 
-						PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
+					PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
 						
-						KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
-						if(targetpl && targetIdentity != sender)
-						{
-							targetpl.DepositMoney(data.param2);
-							ownpldata.WitdrawMoney(data.param2);
+					KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
+					if(targetpl && targetIdentity != sender)
+					{
+						targetpl.DepositMoney(data.param2);
+						ownpldata.WitdrawMoney(data.param2);
 
-							#ifdef NOTIFICATIONS
-							NotificationSystem.SimpleNoticiation(" You received " + data.param2 + " from: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, targetIdentity);
-							NotificationSystem.SimpleNoticiation(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, sender);
-							#endif
-						}
-						else
-						{
-							#ifdef NOTIFICATIONS
-							NotificationSystem.SimpleNoticiation(" You cannot transfer yourself money.", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, targetIdentity);
-							#endif
-						}
+						SendNotification(" You received " + data.param2 + " from: " + targetIdentity.GetName(), targetIdentity);
+						SendNotification(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), sender);
 					}
-					//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string>( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
+					else
+					{
+						SendNotification(" You cannot transfer yourself money ", sender, true);
+					}
 				}
-            }
+				else
+				{
+					SendNotification(" You dont have enough money on your account! ", sender, true);
+				}
+			}
+			else
+			{
+				Error("Playerdata from Player: " + sender.GetName() + " was not found! please report this to the dev team!");
+			}
         }
+		else
+		{
+			Error("FATAL RPC ERROR CLIENT TRYED TO CALL SERVERSIDE CODE!");
+		}
 	}
 
     void WithdrawRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -178,18 +182,19 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<int, int> data;
             if(!ctx.Read(data)) return;
-            if(type == CallType.Server)
+            if(data.param2 == 1)
             {
-                if(data.param2 == 1)
-                {
-                    WitdrawMoneyFromBankAccount(sender, data.param1);
-                }
-				else if(data.param2 == 2)
-				{
-					WitdrawMoneyFromClanBankAccount(sender, data.param1);
-				}
+                WitdrawMoneyFromBankAccount(sender, data.param1);
             }
+			else if(data.param2 == 2)
+			{
+				WitdrawMoneyFromClanBankAccount(sender, data.param1);
+			}
         }
+		else
+		{
+			Error("FATAL RPC ERROR CLIENT TRYED TO CALL SERVERSIDE CODE!");
+		}
     }
 
 	void PlayerListRequst(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -199,6 +204,10 @@ class PluginKRBankingManagerServer extends PluginBase
             UpdatePlayerList();
 			GetRPCManager().SendRPC("KR_BANKING", "PlayeristResponse", new Param1< ref array<ref bankingplayerlistobj> >( m_BankingPlayers ), true, sender);
         }
+		else
+		{
+			Error("FATAL RPC ERROR CLIENT TRYED TO CALL SERVERSIDE CODE!");
+		}
 	}
 
 	void ClanCreateRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -215,9 +224,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				PermissionObject perms = new PermissionObject();
 				perms.GiveClanOwner();
 				AddClanMember(usersNewClan, perms, sender.GetPlainId(), sender.GetName());
-
 				string ClanID = usersNewClan.GetClanID();
-
 				KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 				if(playerdata && ClanID)
 				{
@@ -229,6 +236,26 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				Error("Failed to create clan please report this to the dev team!");
 			}
+		}
+	}
+
+	void ClanSyncRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{
+			KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+			if(playerdata)
+			{
+				ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
+				if(clanDB)
+				{
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, sender);
+				}
+			}
+		}
+		else
+		{
+			Error("Failed to create clan please report this to the dev team!");
 		}
 	}
 
@@ -265,7 +292,11 @@ class PluginKRBankingManagerServer extends PluginBase
 					playerdata.DepositMoney(Ammount);
 					clanDB.WitdrawMoney(Ammount);
 					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
-					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
+				}
+				else
+				{
+					SendNotification("Sorry but you dont have enough money on clan account!", identity, true);
 				}
 			}
 			else
@@ -273,6 +304,10 @@ class PluginKRBankingManagerServer extends PluginBase
 				Error("Cant Load Clan Data of Player: " + identity.GetName());
 			}
         }
+		else
+		{
+			Error("Cant Load Player Data of Player: " + identity.GetName());
+		}
 	}
 
     void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
@@ -302,22 +337,28 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
+				PlayerBase player = PlayerBase.Cast(RemoteFindPlayer(identity.GetPlainId()));
 				int MaxPlaceAbleAmount = m_krserverconfig.MaxClanAccountLimit;
 				int SumToInsert = Ammount + clanDB.GetBankCredit();
-				if(SumToInsert > MaxPlaceAbleAmount)
-					SumToInsert = MaxPlaceAbleAmount;
 				
-				if(playerdata.GetBankCredit() >= SumToInsert )
+				if( SumToInsert <= MaxPlaceAbleAmount)
 				{
-					playerdata.WitdrawMoney(SumToInsert);
-					clanDB.DepositMoney(SumToInsert);
-					clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
-					Print("Sucessfully added: " + SumToInsert.ToString() + " to clan account: " + clanDB.GetName());
-					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+					if(GetPlayerCurrencyAmount(player) >= SumToInsert)
+					{
+						clanDB.DepositMoney(SumToInsert);
+						int addedMoney = RemoveCurrencyFromPlayer(player, SumToInsert);
+						clanDB.WriteLog(identity.GetName() + " Deposited: " + SumToInsert);
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
+					}
+					else
+					{
+						SendNotification("Not enought money in inventory!", identity, true);
+					}
 				}
 				else
 				{
-
+					//Todo: Add Notify Module here....
+					SendNotification("Max Clan Limit reached", identity, true);
 				}
 			}
 			else
@@ -332,7 +373,6 @@ class PluginKRBankingManagerServer extends PluginBase
 		m_BankingPlayers.Clear();
 		array<Man> olpl = new array<Man>;
 		GetGame().GetPlayers(olpl);
-		
 		for(int i = 0; i < olpl.Count(); i++)
 		{
 			PlayerBase player = PlayerBase.Cast(olpl.Get(i));
@@ -718,6 +758,61 @@ class PluginKRBankingManagerServer extends PluginBase
         }
         return -1;
     }
+
+	//!Returns the currency Ammount in Players Invenory
+    int GetPlayerCurrencyAmount(PlayerBase player)
+	{
+		int currencyAmount = 0;
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+
+		ItemBase item;
+		
+		for (int i = 0; i < itemsArray.Count(); i++)
+		{
+			Class.CastTo(item, itemsArray.Get(i));
+
+			if (!item)
+				continue;
+
+			for (int j = 0; j < m_krserverconfig.BankingCurrency.Count(); j++)
+			{
+				if(item.GetType() == m_krserverconfig.BankingCurrency.Get(j).CurrencyName)
+				{
+					currencyAmount += GetItemAmount(item) * m_krserverconfig.BankingCurrency.Get(j).CurrencyValue;
+				}
+			}
+		}
+		return currencyAmount;
+	}
+
+	int GetItemAmount(ItemBase item)
+	{
+		Magazine mgzn = Magazine.Cast(item);
+				
+		int itemAmount = 0;
+		if( item.IsMagazine() )
+		{
+			itemAmount = mgzn.GetAmmoCount();
+		}
+		else
+		{
+			itemAmount = QuantityConversions.GetItemQuantity(item);
+		}
+		
+		return itemAmount;
+	}
+
+	void SendNotification(string Message, PlayerIdentity Identity, bool IsError = false)
+	{
+		#ifdef NOTIFICATIONS
+			if(IsError)
+				NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 0, 0), 5, Identity);
+			else
+			NotificationSystem.SimpleNoticiation(" " + Message, "Banking", "KR_Banking/data/Logos/notificationbanking.edds", ARGB(240, 255, 13, 55), 5, Identity);
+		#endif
+	}
 
     protected void SpawnATMs()
     {

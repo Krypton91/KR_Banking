@@ -6,7 +6,9 @@ class PluginKrBankingClientManager extends PluginBase
     protected bool                                  m_IsWaitingForServersResponse;
     protected string                                m_ClanID;
     protected ref KR_BankingClientConfig            m_clientSettings
-    protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
+    protected ref array<ref bankingplayerlistobj>   m_BankingPlayers;
+    protected ref ClanDataBaseManager               m_OwnClan;
+    
 
     void PluginKrBankingClientManager()
     {
@@ -18,6 +20,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","PlayerDataResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING","ServerConfigResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRespose", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
     }
 
@@ -43,7 +46,8 @@ class PluginKrBankingClientManager extends PluginBase
         {
             Param1<ref KR_BankingClientConfig> data;
             if ( !ctx.Read( data ) ) return;
-            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan);
+            m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan, data.param1.MaxClanAccountLimit);
+            
         }
     }
 
@@ -57,6 +61,23 @@ class PluginKrBankingClientManager extends PluginBase
             m_BankingPlayers = data.param1;
             if(m_BankingMenu)
                 m_BankingMenu.InvokePlayerList();
+        }
+    }
+
+    void ClanSyncRespose(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        Print("Sucesfully recived rpc from remote!");
+        if(type == CallType.Client)
+        {
+            Param1<ref ClanDataBaseManager> data;
+            if (!ctx.Read(data)) return;
+
+            m_OwnClan = data.param1;
+
+            if(m_BankingMenu)
+            {
+                m_BankingMenu.UpdateUIClanData();
+            }
         }
     }
 
@@ -109,6 +130,12 @@ class PluginKrBankingClientManager extends PluginBase
 
         Print("Requested remote to insert new clan!");
     }
+
+    ref ClanDataBaseManager GetClientsClanData()
+    {
+        return m_OwnClan;
+    }
+
     array<ref CurrencySettings> GetServersCurrencyData()
     {
         return m_clientSettings.BankingCurrency;
@@ -164,6 +191,11 @@ class PluginKrBankingClientManager extends PluginBase
         if(m_ClanID && m_ClanID != "NONE")
             return true;
         return false;
+    }
+
+    void RequestClanData()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRequest", null, true);
     }
 
     int GetItemAmount(ItemBase item)

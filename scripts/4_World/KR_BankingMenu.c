@@ -131,7 +131,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_CurrentMaxProgressTxt         = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetMax"));
             m_ProgressTextClan              = TextWidget.Cast(layoutRoot.FindAnyWidget("TextWidgetPercentage0"));
             m_CashOnPlayer                  = TextWidget.Cast(layoutRoot.FindAnyWidget("TextCashOnPlayer0"));
-            m_ClanAmount                    = TextWidget.Cast(layoutRoot.FindAnyWidget("BankClanAmount"));
+            m_ClanAmount                    = TextWidget.Cast(layoutRoot.FindAnyWidget("BankClanAmmount"));
 
             m_YesNoMsgHeadline              = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextHeadline0"));
             m_YesNoMsgBody                  = MultilineTextWidget.Cast(layoutRoot.FindAnyWidget("TextMessage0"));
@@ -165,6 +165,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 GetGame().GetUIManager().Back();
                 break;
             case m_BankAccBtn:
+                UpdateUI();
                 SwitchTab(1);
                 break;
             case m_ClanAccBtn:
@@ -198,6 +199,9 @@ class KR_BankingMenu extends UIScriptedMenu
                 break;
             case m_DepositClanAccbtn:
                 HandleDepositMoney(2);
+                break;
+            case m_WithdrawClan:
+                HandleWitdrawMoneyFromBank(2);
                 break;
             
         }
@@ -305,6 +309,7 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         if(GetBankingClientManager().hasClan())
         {
+            GetBankingClientManager().RequestClanData();
             m_ClanBankAccountTab.Show(true);
             m_PanelNewClan.Show(false);
         } 
@@ -313,6 +318,17 @@ class KR_BankingMenu extends UIScriptedMenu
             m_PanelNewClan.Show(true);
             m_ClanBankAccountTab.Show(false);
         }
+    }
+
+    void UpdateUIClanData()
+    {
+        m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
+        m_CashOnPlayer.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount());
+
+        int progValue = 100 * GetBankingClientManager().GetClientsClanData().GetBankCredit() / GetBankingClientManager().GetClientSettings().MaxClanAccountLimit;
+        float parsedfloat = progValue.ToString().ToFloat();
+        m_ClanBankAccountProgressbar.SetCurrent(parsedfloat);
+        m_ProgressTextClan.SetText(parsedfloat.ToString() + "%");
     }
 
     //!This Updates the Playerlists from remote!
@@ -382,7 +398,9 @@ class KR_BankingMenu extends UIScriptedMenu
 		GetGame().GetMission().PlayerControlEnable(false);
 
         GetGame().GetUIManager().ShowUICursor( false );
+
         SetIsBankingMenuOpen( false );
+
 		Close();
 	}
 };
