@@ -352,8 +352,8 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleAddMemberToClan()
     {
         int rowIndex = m_ListboxPlayers.GetSelectedRow();
-        
-        if(!rowIndex)
+
+        if(rowIndex == -1)
         {
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;

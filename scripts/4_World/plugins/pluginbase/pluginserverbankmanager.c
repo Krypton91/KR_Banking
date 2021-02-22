@@ -307,7 +307,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				}
 				else
 				{
-					Error("Cant load clan data!");
+					Error("Cant load clan data! with clan id: " + currentPlayer.GetClanID());
 				}
 			}
 			else
