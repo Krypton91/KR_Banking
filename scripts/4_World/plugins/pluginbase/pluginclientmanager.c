@@ -5,7 +5,8 @@ class PluginKrBankingClientManager extends PluginBase
     protected bool                                  m_IsFirstRequest = true;
     protected bool                                  m_IsWaitingForServersResponse;
     protected string                                m_ClanID;
-    protected ref KR_BankingClientConfig            m_clientSettings
+    protected string                                m_PlainID;
+    protected ref KR_BankingClientConfig            m_clientSettings;
     protected ref array<ref bankingplayerlistobj>   m_BankingPlayers;
     protected ref ClanDataBaseManager               m_OwnClan;
     
@@ -40,9 +41,10 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param1<ref KR_BankingClientConfig> data;
+            Param2<ref KR_BankingClientConfig, string> data;
             if ( !ctx.Read( data ) ) return;
             m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan, data.param1.MaxClanAccountLimit, data.param1.IsClanAccountActive);
+            m_PlainID = data.param2;
             
         }
     }
@@ -216,6 +218,19 @@ class PluginKrBankingClientManager extends PluginBase
         return m_IsWaitingForServersResponse;
     }
 
+    ref PermissionObject GetClanPermission()
+    {
+        if(m_OwnClan)
+        {
+            for(int i = 0; i < m_OwnClan.GetClanMembers().Count(); i++)
+            {
+                if(m_OwnClan.GetClanMembers().Get(i).GetPlainID() == GetSteamID())
+                    return m_OwnClan.GetClanMembers().Get(i).GetPermission();
+            }
+        }
+
+        return null;
+    }
     void SendNotification(string Message, bool IsError = false)
 	{
 		#ifdef NOTIFICATIONS
@@ -230,6 +245,12 @@ class PluginKrBankingClientManager extends PluginBase
 				NotificationSystem.AddNotificationExtended(5, "Banking", Message, "KR_Banking/data/Logos/notificationbanking.edds");
 		#endif
 	}
+
+    //!returns local players Steamid....
+    string GetSteamID()
+    {
+        return m_PlainID;
+    }
 };
 
 PluginKrBankingClientManager GetBankingClientManager()

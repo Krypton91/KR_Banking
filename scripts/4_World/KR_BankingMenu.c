@@ -148,7 +148,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ClanLogs                      = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidgetLogs"));
 
             m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
-            m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit"));                  
+            m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit")); 
             m_CheckBoxKick                  = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxKick"));
             m_CheckBoxAdd                   = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxInvite"));
             m_CheckBoxPermissions           = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxPermission"));
@@ -264,10 +264,87 @@ class KR_BankingMenu extends UIScriptedMenu
 
                 HandleWitdrawMoneyFromBank(2);
                 break;
+            case m_BtnClanSettings:
+                OpenClanSettings();
+                break;
+            case m_BtnBack:
+                m_ClanSettings.Show(false);
+                m_ClanBankAccountTab.Show(true);
+                break;
         }
         return super.OnClick(w, x, y, button);
     }
+    
+    void OpenClanSettings()
+    {
+        m_ClanBankAccountTab.Show(false);
+        m_ClanSettings.Show(true);
 
+        PermissionObject perms = new PermissionObject();
+        perms = GetBankingClientManager().GetClanPermission();
+        if(perms)
+        {
+            if(perms.m_CanEdit)
+            {
+                m_PanelPerms.Show(true);
+                if(perms.m_CanWithdraw)
+                    m_CheckBoxWithdraw.Show(true);
+                if(perms.m_CanDeposit)
+                    m_CheckBoxDeposit.Show(true);
+                if(perms.m_CanInvite)
+                    m_CheckBoxAdd.Show(true);
+                if(perms.m_CanKick)
+                    m_CheckBoxKick.Show(true);
+                if(perms.m_CanEdit)
+                    m_CheckBoxPermissions.Show(true);
+            }
+            else
+            {
+                m_PanelPerms.Show(false);
+            }
+
+            if(perms.m_CanKick)
+            {
+                m_BtnKick.Show(true);
+            }
+            else
+            {
+                m_BtnKick.Show(false);
+            }
+
+            if(perms.m_CanEdit)
+            {
+               m_BtnEdit.Show(true);
+            }
+            else
+            {
+                m_BtnEdit.Show(false);
+            }
+
+            if(perms.m_CanInvite)
+            {
+                m_BtnAdd.Show(true);
+            }
+            else
+            {
+                m_BtnAdd.Show(false);
+            }
+            
+        }
+        else
+        {
+            Error("Permission error cant find clients permission.");
+        }
+    }
+
+    void LoadClanMemberList()
+    {
+        m_ListboxMember.ClearItems();
+        for(int i = 0; i < GetBankingClientManager().GetClientsClanData().GetClanMembers().Count(); i++)
+        {
+            m_ListboxMember.AddItem(" " + GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(i).GetPlayerName(), NULL, 0);
+        }
+    }
     override void Update(float timeslice)
     {
         super.Update(timeslice);
@@ -459,7 +536,6 @@ class KR_BankingMenu extends UIScriptedMenu
     //!Creates a yes no Message.
     void CreateYesNoMessage(string Headline, string BodyMessage)
     {
-
         m_YesNoMsgHeadline.SetText(" " + Headline);
         m_YesNoMsgBody.SetText(" " + BodyMessage);
         m_YesNoMessage.Show(true);

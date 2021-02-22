@@ -104,7 +104,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
 			//we just save this in a new class in memory because they can read the memory & find out the positions.
 			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
-            GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param1< ref KR_BankingClientConfig >( clientsettings ), true, sender);
+            GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2< ref KR_BankingClientConfig, string >( clientsettings, sender.GetPlainId() ), true, sender);
         }
     }
 

@@ -61,7 +61,7 @@ class ClanDataBaseManager
     {
         m_BankAmount += Money;
     }
-    
+
     //BE SURE CLANDATA GETS SAVED FROM LOGS!
     void WitdrawMoney(int Money)
     {
@@ -112,5 +112,10 @@ class ClanDataBaseManager
     string GetClanID()
     {
         return m_ClanID;
+    }
+
+    ref array<ref ClanMemberObject> GetClanMembers()
+    {
+        return m_Members;
     }
 }
