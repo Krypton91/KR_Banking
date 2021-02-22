@@ -274,6 +274,13 @@ class PluginKrBankingClientManager extends PluginBase
 	}
     string FindSteamID(int index)
     {
+        Print("SteamID for action: " + m_PlayerIDList.Get(index));
+        Print("Array debug start.....");
+        Print(m_PlayerIDList.Count().ToString());
+        for(int i = 0; i < m_PlayerIDList.Count(); i++)
+        {
+            Print("Found steamID: " + m_PlayerIDList.Get(i));
+        }
         return m_PlayerIDList.Get(index);
     }
     //!returns local players Steamid....
