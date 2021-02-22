@@ -362,7 +362,7 @@ class KR_BankingMenu extends UIScriptedMenu
 //ANDRXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX - DELETE IF WRONG
     void HandleLeaveClan()
     {
-        m_LeaveConfirm.show(true);
+        m_LeaveConfirm.Show(true);
     }
 
     void HandleLeaveYes()
