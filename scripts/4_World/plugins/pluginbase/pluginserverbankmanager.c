@@ -274,6 +274,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		{	
 			Param1<string> data;
 			if(!ctx.Read(data)) return;
+			Print("SteamID From load: " + data.param1);
 			PlayerBase t_player = RemoteFindPlayer(data.param1);
 			if(!t_player) return;
 			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(t_player.GetIdentity().GetPlainId(), t_player.GetIdentity().GetName());
@@ -301,6 +302,10 @@ class PluginKRBankingManagerServer extends PluginBase
 					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
 					SendNotification("Sucesfully invited: " + t_player.GetIdentity().GetName(), sender);
 					SendNotification("You got an invite from clan: " + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+				}
+				else
+				{
+					Error("Cant load clan data!");
 				}
 			}
 			else
