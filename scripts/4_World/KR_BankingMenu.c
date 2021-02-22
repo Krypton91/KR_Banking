@@ -235,6 +235,7 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleTransferConfirm()
     {
         GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
+        m_YesNoMessage.Show(false);
         m_IsYesNoVisible = false;
     }
 
@@ -297,7 +298,7 @@ class KR_BankingMenu extends UIScriptedMenu
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
         m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
-        
+
         /* Set progressbar */
         int CurrentAmountOnBank = GetBankingClientManager().GetBankCredits();
         int MaxOnBank = GetBankingClientManager().GetClientSettings().MaxCurrency;

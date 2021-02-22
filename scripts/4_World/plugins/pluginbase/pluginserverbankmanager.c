@@ -130,13 +130,10 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void TransferRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
-		Print("[KR Banking]-> Sucesfully Recived transfer reqwuest from Player: " + sender.GetName());
 		if(type == CallType.Server)
         {
-			Print("Calltype was server..");
             Param2<ref bankingplayerlistobj, int> data;
             if(!ctx.Read(data)) return;
-			Print("Params was coreect!");
             KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 			if(ownpldata)
 			{
@@ -154,9 +151,8 @@ class PluginKRBankingManagerServer extends PluginBase
 						targetpl.DepositMoney(data.param2);
 						ownpldata.WitdrawMoney(data.param2);
 
-						SendNotification(" You received " + data.param2 + " from: " + targetIdentity.GetName(), targetIdentity);
+						SendNotification(" You received " + data.param2 + " from: " + sender.GetName(), targetIdentity);
 						SendNotification(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), sender);
-						Print("Done!");
 					}
 					else
 					{
@@ -318,18 +314,28 @@ class PluginKRBankingManagerServer extends PluginBase
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
-			
 			int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
 			int SumToInsert = Ammount;
 			if(SumToInsert > MaxPlaceAbleAmount)
 				SumToInsert = MaxPlaceAbleAmount;
-			
-			Print("Player try to insert: " + Ammount + " number was parsed to: " + MaxPlaceAbleAmount);
-            playerdata.DepositMoney(SumToInsert);
-            Print("Sucessfully added: " + SumToInsert.ToString() + " to bank account!");
-            RemoveCurrencyFromPlayer(RemoteFindPlayer(identity.GetPlainId()), SumToInsert);
-            GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+			PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
+			if(!player) return;
+			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+			if(CurrencyOnPlayer >= SumToInsert)
+			{
+				playerdata.DepositMoney(SumToInsert);
+				RemoveCurrencyFromPlayer(RemoteFindPlayer(identity.GetPlainId()), SumToInsert);
+				GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
+			}
+			else
+			{
+				SendNotification("You dont have enought money in your inventory!", identity, true);
+			}
         }
+		else
+		{
+			Error("Cant Load playerdata of player: " + identity.GetName() + " please report this to the dev team! @KR_Banking.");
+		}
     }
 
 	void DepositMoneyOnClanBank(PlayerIdentity identity, int Ammount)
