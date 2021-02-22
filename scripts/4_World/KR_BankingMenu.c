@@ -147,7 +147,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_TransferPlayerList            = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidget0"));
             m_ClanLogs                      = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidgetLogs"));
 
-            m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxWithdraw"));
+            m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckBoxWithdraw"));
             m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxDeposit")); 
             m_CheckBoxKick                  = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxKick"));
             m_CheckBoxAdd                   = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckboxInvite"));
@@ -329,6 +329,7 @@ class KR_BankingMenu extends UIScriptedMenu
             {
                 m_BtnAdd.Show(false);
             }
+            LoadClanMemberList();
             
         }
         else
@@ -512,7 +513,10 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void UpdateUIClanData()
     {
-        m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
+        if(GetBankingClientManager().GetClientsClanData().GetBankCredit())
+            m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
+        else
+        m_ClanAmount.SetText("0");
         m_CashOnPlayer.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount());
 
         int progValue = 100 * GetBankingClientManager().GetClientsClanData().GetBankCredit() / GetBankingClientManager().GetClientSettings().MaxClanAccountLimit;
