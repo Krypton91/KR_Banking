@@ -272,7 +272,6 @@ class PluginKRBankingManagerServer extends PluginBase
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
             
             playerdata.WitdrawMoney(CorrectAmountToWitdraw);
-
             AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
             //Todo add here logs.
