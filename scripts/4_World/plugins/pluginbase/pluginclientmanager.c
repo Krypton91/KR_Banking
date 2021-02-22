@@ -55,7 +55,8 @@ class PluginKrBankingClientManager extends PluginBase
         {
             Param1<ref array<ref bankingplayerlistobj>> data;
             if ( !ctx.Read( data ) ) return;
-            m_BankingPlayers.Clear();
+            if(m_BankingPlayers)
+                m_BankingPlayers.Clear();
             m_BankingPlayers = data.param1;
             if(m_BankingMenu)
                 m_BankingMenu.InvokePlayerList();
@@ -198,6 +199,7 @@ class PluginKrBankingClientManager extends PluginBase
 
     void AddMemberToClan(ref ClanMemberObject player)
     {
+        Print("Player name to add is: " + player.GetPlayerName());
         GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<ref ClanMemberObject>(player), true);
     }
 

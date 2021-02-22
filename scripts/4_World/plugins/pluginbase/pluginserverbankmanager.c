@@ -267,6 +267,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void ClanAddMember(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
+		Print("Clan Add Member rpc recived!");
 		if(type == CallType.Server)
 		{	
 			Param1<ref ClanMemberObject> data;

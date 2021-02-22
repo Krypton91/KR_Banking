@@ -20,6 +20,7 @@ class ClanDataBaseManager
         m_ClanName = ClanName;
         m_Members = new ref array<ref ClanMemberObject>;
         m_ClanLogs = new ref TStringArray();
+        m_BankAmount = 0;
     }
 
     static ClanDataBaseManager LoadClanData(string ClanID, string username = "")
