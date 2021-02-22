@@ -4,6 +4,10 @@ class KR_BankingMenu extends UIScriptedMenu
     protected bool                      m_IsBankingMenuOpen = false;
     protected bool                      m_IsYesNoVisible = false;
     protected bool                      m_IsClanAccountFreshGenerated = false;
+
+    protected float                     m_UIUpdateTimer = 0;
+    protected float                     m_UICooldownTimer = 0;
+
     protected Widget                    m_OwnBankAccountTab;
     protected Widget                    m_ClanBankAccountTab;
     protected Widget                    m_YesNoMessage;
@@ -76,6 +80,8 @@ class KR_BankingMenu extends UIScriptedMenu
 
 
     protected ref bankingplayerlistobj  m_target
+
+
     void KR_BankingMenu()
     {
        
@@ -178,18 +184,46 @@ class KR_BankingMenu extends UIScriptedMenu
                 SwitchTab(3);
                 break;
             case m_WithdrawOwnAccBtn:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
                 HandleWitdrawMoneyFromBank(1);
                 break;
             case m_DepositOwnAccBtn:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
                 HandleDepositMoney(1);
                 break;
             case m_YesConfirmBtn:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
+
                 HandleTransferConfirm();
                 break;
             case m_NoConfirmBtn:
                 HandleTransferCancel();
                 break;
             case m_BtnSendTransfer:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
+
                 int rowIndex = m_TransferPlayerList.GetSelectedRow();
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
                 CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
@@ -200,19 +234,59 @@ class KR_BankingMenu extends UIScriptedMenu
                     SpawnClanCreatePopup();
                 break;
             case m_BtnFinallyCreate:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
+
                 HandleClanCreate();
                 break;
             case m_DepositClanAccbtn:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
+
                 HandleDepositMoney(2);
                 break;
             case m_WithdrawClan:
+                if(m_UICooldownTimer > 0)
+                {
+                    //not that fast Todo: send Notify...
+                    break;
+                }
+                m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
+
                 HandleWitdrawMoneyFromBank(2);
                 break;
-            
         }
         return super.OnClick(w, x, y, button);
     }
 
+    override void Update(float timeslice)
+    {
+        super.Update(timeslice);
+
+        if(m_UICooldownTimer > 0)
+            m_UICooldownTimer -= timeslice;
+        
+        if(m_UIUpdateTimer >= 0.05)
+        {
+            //Update all in UI
+            UpdateUI();
+            UpdateUIClanData();
+            m_UIUpdateTimer = 0;
+        }
+        else
+        {
+            m_UIUpdateTimer += timeslice;
+        }
+
+    }
 
     void HandleWitdrawMoneyFromBank(int mode)
     {
@@ -362,11 +436,6 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void UpdateUIClanData()
     {
-        if(m_IsClanAccountFreshGenerated)
-        {
-            SwitchTab(2);
-            m_IsClanAccountFreshGenerated = false;
-        }
         m_ClanAmount.SetText(" " + GetBankingClientManager().GetClientsClanData().GetBankCredit());
         m_CashOnPlayer.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount());
 
