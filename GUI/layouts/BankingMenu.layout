@@ -86,8 +86,8 @@ FrameWidgetClass MainRoot {
       ButtonWidgetClass BtnTabBank {
        visible 1
        color 0.5608 0.0706 0.0706 1
-       position -0.00101 0
-       size 0.3573 1.0129
+       position 0.00063 0
+       size 0.36058 1.0129
        halign center_ref
        hexactpos 0
        vexactpos 0
