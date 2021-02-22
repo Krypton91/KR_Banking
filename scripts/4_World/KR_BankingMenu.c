@@ -2,6 +2,7 @@ class KR_BankingMenu extends UIScriptedMenu
 {
     protected bool                      m_IsBankingMenuInitialized = false;
     protected bool                      m_IsBankingMenuOpen = false;
+    bool                                m_IsClanAccountFresh = false;
 
     protected float                     m_UIUpdateTimer = 0;
     protected float                     m_UICooldownTimer = 0;
@@ -256,6 +257,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -344,6 +346,7 @@ class KR_BankingMenu extends UIScriptedMenu
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
         m_PanelNewClan.Show(false);
+        m_IsClanAccountFresh = true;
     }
 
     void SwitchTab(int TabIndex)

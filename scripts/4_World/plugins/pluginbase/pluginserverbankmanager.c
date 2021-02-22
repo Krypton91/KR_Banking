@@ -282,7 +282,6 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Ammount)
 	{
-		Print("RPC Recived!!! to witdraw from bank!");
 		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {

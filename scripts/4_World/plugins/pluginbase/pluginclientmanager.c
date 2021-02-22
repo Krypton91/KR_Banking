@@ -33,10 +33,6 @@ class PluginKrBankingClientManager extends PluginBase
             if ( !ctx.Read( data ) ) return;
             m_PlayersCurrency = data.param1;
             m_ClanID          = data.param2;
-            if(m_BankingMenu)
-            {
-                m_BankingMenu.UpdateUI();//Invoke an Update
-            }
         }
     }
 
@@ -66,7 +62,6 @@ class PluginKrBankingClientManager extends PluginBase
 
     void ClanSyncRespose(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        Print("Sucesfully recived rpc from remote!");
         if(type == CallType.Client)
         {
             Param1<ref ClanDataBaseManager> data;
@@ -74,9 +69,10 @@ class PluginKrBankingClientManager extends PluginBase
 
             m_OwnClan = data.param1;
 
-            if(m_BankingMenu)
+            if(m_BankingMenu && m_BankingMenu.m_IsClanAccountFresh)
             {
-                m_BankingMenu.UpdateUIClanData();
+                m_BankingMenu.SwitchTab(2);
+                m_BankingMenu.m_IsClanAccountFresh = false;
             }
         }
     }
