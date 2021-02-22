@@ -354,6 +354,7 @@ class KR_BankingMenu extends UIScriptedMenu
             return;
         }
         ref ClanMemberObject member = new ClanMemberObject();
+        if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
         member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
 
         GetBankingClientManager().AddMemberToClan(member.GetPlainID());
@@ -362,8 +363,9 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleRemoveMemberFromClan(int rowIndex)
     {
         ref ClanMemberObject member = new ClanMemberObject();
+        if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
         member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
-        GetBankingClientManager().RemoveMember(member);
+        GetBankingClientManager().RemoveMember(member.GetPlainID());
     }
 
     void LoadClanMemberList()

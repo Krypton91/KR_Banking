@@ -208,9 +208,9 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<string>(SteamID), true);
     }
 
-    void RemoveMember(ref ClanMemberObject player)
+    void RemoveMember(string SteamID)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "ClanRemoveMember", new Param1<ref ClanMemberObject>(player), true);
+        GetRPCManager().SendRPC("KR_BANKING", "ClanRemoveMember", new Param1<string>(SteamID), true);
     }
 
     int GetItemAmount(ItemBase item)

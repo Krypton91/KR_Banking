@@ -310,14 +310,14 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		if(type == CallType.Server)
 		{	
-			Param1<ref ClanMemberObject> data;
+			Param1<string> data;
 			if(!ctx.Read(data)) return;
-			if(sender.GetPlainId() == data.param1.GetPlainID())
+			if(sender.GetPlainId() == data.param1)
 			{
 				SendNotification("You can not kick you self use the leave function!", sender, true);
 				return;
 			}
-			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1.GetPlainID());
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
 			KR_JsonDatabaseHandler SendersData = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
 			if(targetPlayer && SendersData)
 			{
@@ -341,7 +341,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					}
 					if(perms.m_CanKick)
 					{
-						if(data.param1.GetPlainID() == clandata.GetOwnersID())
+						if(data.param1 == clandata.GetOwnersID())
 						{
 							SendNotification("You can not kick the clan Owner! Leave the clan if you dont like him!", sender, true);
 							return;
@@ -350,11 +350,11 @@ class PluginKRBankingManagerServer extends PluginBase
 						{
 							for(int n = 0; n < clandata.GetClanMembers().Count(); n++)
 							{
-								if(clandata.GetClanMembers().Get(n).GetPlainID() == data.param1.GetPlainID())
+								if(clandata.GetClanMembers().Get(n).GetPlainID() == data.param1)
 								{
 									clandata.RemoveMember(n);
 									targetPlayer.SetClan("NONE");
-									PlayerBase t_player = RemoteFindPlayer(data.param1.GetPlainID());
+									PlayerBase t_player = RemoteFindPlayer(data.param1);
 									GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
 
 									SendNotification("Sucesfully kicked: " + t_player.GetIdentity().GetName(), sender);
