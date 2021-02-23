@@ -153,7 +153,8 @@ FrameWidgetClass MainRoot {
          {
           ImageWidgetClass ImageWidget0 {
            ignorepointer 1
-           size 0.10169 1.00281
+           position 0.00946 0.05052
+           size 0.08899 0.73512
            valign center_ref
            hexactpos 0
            vexactpos 0
@@ -190,8 +191,8 @@ FrameWidgetClass MainRoot {
          {
           ImageWidgetClass ImageCashIcon {
            ignorepointer 1
-           position -0.00065 0
-           size 0.10234 1.00281
+           position 0.00881 0.08695
+           size 0.08907 0.63594
            valign center_ref
            hexactpos 0
            vexactpos 0
@@ -383,7 +384,8 @@ FrameWidgetClass MainRoot {
          {
           ImageWidgetClass ImageWidget1 {
            ignorepointer 1
-           size 0.10169 1.00281
+           position 0.00964 -0
+           size 0.08393 0.82461
            valign center_ref
            hexactpos 0
            vexactpos 0
@@ -420,8 +422,8 @@ FrameWidgetClass MainRoot {
          {
           ImageWidgetClass ImageCashIcon0 {
            ignorepointer 1
-           position -0.00065 0
-           size 0.10234 1.00281
+           position 0.00848 0.04826
+           size 0.08762 0.77263
            valign center_ref
            hexactpos 0
            vexactpos 0
@@ -598,7 +600,8 @@ FrameWidgetClass MainRoot {
         }
         ImageWidgetClass ImageWidget2 {
          ignorepointer 1
-         size 0.10169 1.00281
+         position 0.00479 0.04201
+         size 0.0969 0.65274
          valign center_ref
          hexactpos 0
          vexactpos 0
@@ -622,8 +625,8 @@ FrameWidgetClass MainRoot {
        {
         EditBoxWidgetClass EditBoxWidget1 {
          color 0.502 0 0 1
-         position 0.00147 0.12675
-         size 0.99931 0.73141
+         position 0.14711 0.12675
+         size 0.70804 0.73141
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -660,12 +663,23 @@ FrameWidgetClass MainRoot {
       }
       TextListboxWidgetClass TextListboxWidget0 {
        position 0.00691 0.10116
-       size 0.99299 0.70205
+       size 0.99299 0.657
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        lines 10
+      }
+      TextWidgetClass TextWidget7 {
+       ignorepointer 1
+       position 0.03371 0.81533
+       size 0.992 0.074
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Value:"
+       font "gui/fonts/metron-bold48"
       }
      }
     }
