@@ -15,6 +15,7 @@ modded class PluginManager
 		if(GetGame().IsServer() && !GetGame().IsClient() && GetGame().IsMultiplayer())
 		{
 			RegisterPlugin( "PluginKRBankingManagerServer",			false, 	true );
+			RegisterPlugin( "PluginBankingLogManagerServer",		false, 	true );
 		}
 		else
 		{

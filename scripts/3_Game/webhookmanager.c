@@ -28,7 +28,7 @@ class WebhookManager
 		data.m_body = dataBody;
 		data.m_thumbnail = dataThumb;
 		
-		RestCallback cbx1 = new SilentCallBack;
+		RestCallback cbx1 = new WebhookRestCB;
 		RestApi clCore = GetRestApi();
 
 		if (m_alias.Contains(alias))
@@ -56,7 +56,7 @@ class WebhookManager
 	}
 };
 
-class SilentCallBack : RestCallback
+class WebhookRestCB : RestCallback
 {
 	override void OnError(int errorCode) {};
 	override void OnTimeout() {};

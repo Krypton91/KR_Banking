@@ -1,6 +1,3 @@
-const protected static string m_ProfileDIR = "$profile:";
-const protected static string m_ConfigDIR = "KR_BANKING";
-const protected static string m_ConfigPath = m_ProfileDIR + m_ConfigDIR + "/" + "server-config.json";
 class KR_BankingConfigManager
 {
 
@@ -74,21 +71,21 @@ class KR_BankingConfigManager
 
     void Save()
     {
-       if (!FileExist(m_ProfileDIR + m_ConfigDIR + "/"))
-			MakeDirectory(m_ProfileDIR + m_ConfigDIR + "/");
+       if (!FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/"))
+			MakeDirectory(m_BankingProfileDIR + m_BankingConfigDIR + "/");
 
-        JsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_ConfigPath, this);
+        JsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_BankingConfigPath, this);
     }
 
     static ref KR_BankingConfigManager Load()
     {
         ref KR_BankingConfigManager settings = new KR_BankingConfigManager();
-        if(!FileExist(m_ConfigDIR))
-            MakeDirectory(m_ConfigDIR);
-        if(FileExist(m_ConfigPath))
+        if(!FileExist(m_BankingConfigDIR))
+            MakeDirectory(m_BankingConfigDIR);
+        if(FileExist(m_BankingConfigPath))
         {
             Print("[Advanced Banking] -> Found Config Loading existing config...");
-            JsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_ConfigPath, settings);
+            JsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
         }
         else
         {
