@@ -123,4 +123,9 @@ class ActionRobATM: ActionContinuousBase
             GetBankingClientManager().SendNotification("You are now banned from Robbing this ATM because spamming!");
         }
     }
+
+    override void OnEndClient( ActionData action_data )
+	{
+        m_ClientSideTry = 0;
+    }
 }

@@ -11,7 +11,6 @@ class KR_BankingConfigManager
     int     CostsToCreateClan;
     int     CostsToInviteAnPlayer;
     int     MaxClanAccountLimit;
-    bool    MakeLogs;
     bool    IsRobEventActive;
     int     MinPlayersForRob;
     int     MinMoneyForRob;
@@ -20,18 +19,20 @@ class KR_BankingConfigManager
     bool    RobMessagesActive;
     int     PayCheckValue;
     float   PayCheckTickTime;
+    bool    PayCheckMessage;
     int     MinPlayersForPayCheck;
     bool    CanAddToFullAcc;
     bool    NeedsBankCardToOpenMenu;
-    bool    UseWebhook;
-    string  DiscordWebhookUrl;
-
+    ref LogSettings m_LoggingSettings;
+    ref Webhookservice m_DiscordWebhook;
     ref array<ref ATMPosition> ATM;
     ref array<ref CurrencySettings> BankingCurrency;
     void KR_BankingConfigManager()
     {
         ATM = new ref array<ref ATMPosition>();
         BankingCurrency = new ref array<ref CurrencySettings>();
+        m_LoggingSettings = new ref LogSettings();
+        m_DiscordWebhook = new ref Webhookservice();
     }
 
     void LoadDefaultSettings()
@@ -43,7 +44,6 @@ class KR_BankingConfigManager
         CostsToCreateClan = 5000;
         CostsToInviteAnPlayer = 1000;
         MaxClanAccountLimit = 200000;
-        MakeLogs = true;
         IsRobEventActive = true;
         MinPlayersForRob = 5;
         MinMoneyForRob = 1000;
@@ -52,11 +52,10 @@ class KR_BankingConfigManager
         RobMessagesActive = true;
         PayCheckValue = 500;
         PayCheckTickTime = 1;
+        PayCheckMessage = true;
         MinPlayersForPayCheck = 1;
         CanAddToFullAcc = true;
         NeedsBankCardToOpenMenu = false;
-        UseWebhook = false;
-        DiscordWebhookUrl = "EXAMPLE WEBHOOK URL";
 
         ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
         ATM.Insert(new ref ATMPosition("KR_ATM", "11475.6 342.984 11320", "210 0 0"));

@@ -17,7 +17,6 @@ class PluginKRBankingManagerServer extends PluginBase
         SpawnATMs();
         InitPayCheck();
 		m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
-		//RegisterNewClan("RB Server is Gay", "76561198796326626");
 
 		GetWebhookManager().POST("Advanced Banking", "SomeTest Message.....");
     }
@@ -43,7 +42,7 @@ class PluginKRBankingManagerServer extends PluginBase
     {
         float TickTime = m_krserverconfig.GetCorrectPayCheckTime();
 
-        if(TickTime && TickTime != -1)
+        if(TickTime && m_krserverconfig.PayCheckTickTime != -1)
         {
             //we sure he want to make paychecks.
             GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.TickPayCheck, TickTime, true);
@@ -52,7 +51,6 @@ class PluginKRBankingManagerServer extends PluginBase
 
     void TickPayCheck()
     {
-        Print("[Advanced Banking] -> START GIVE PAYCHECKS!");
         array<Man> onlinePlayers = new array<Man>();
         GetGame().GetPlayers(onlinePlayers);
 		if(m_krserverconfig.MinPlayersForPayCheck > onlinePlayers.Count())
@@ -65,12 +63,9 @@ class PluginKRBankingManagerServer extends PluginBase
                PlayerIdentity identity = tempPlayer.GetIdentity();
                if(tempPlayer && identity)
                {
-                   //Player & Identity is valid
                    KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
                    if(playerdata)
                    {
-
-                       //Json Loadet we can now add him the Money.
                        int ammountTOAddForSpecialUser = m_krserverconfig.PayCheckValue;
                        if(playerdata.GetPayCheckBonus() != 0)
                        {
@@ -78,21 +73,17 @@ class PluginKRBankingManagerServer extends PluginBase
                        }
 					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser)
 					   {
-						   //#ifdef NOTIFICATIONS
-						   //NotificationSystem.SimpleNoticiation("Error with adding Paycheck Bank is already full!", "Banking", "Notifications/gui/data/notifications.edds", ARGB(240, 255, 13, 55), 5, identity);
-						   //void SendNotification(string Message, PlayerIdentity Identity, bool IsError = false)
-						   SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
-						   //#endif
+						   if(m_krserverconfig.PayCheckMessage)
+						   		SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
 						   continue;
 					   }
                        playerdata.DepositMoney(ammountTOAddForSpecialUser);
-                       Print("[Advanced Banking] -> Sucessfully added to players: " + identity.GetPlainId() + " bank " + ammountTOAddForSpecialUser.ToString() + " $");
-					   SendNotification(ammountTOAddForSpecialUser.ToString() + " Added to your Bank Account! Stay active to get more paychecks!", identity);
+					   if(m_krserverconfig.PayCheckMessage)
+					   		SendNotification(ammountTOAddForSpecialUser.ToString() + " Added to your Bank Account! Stay active to get more paychecks!", identity);
                    }
                }
             }
         }
-        Print("[Advanced Banking] -> END GIVE PAYCHECKS!");
     }
 
     void PlayerDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)

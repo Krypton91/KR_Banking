@@ -6,20 +6,19 @@ class WebhookManager
 	ref DiscordObject_Thumbnail dataThumb;
 	void WebhookManager()
 	{
-		if(GetKR_BankingServerConfig().UseWebhook)
+		if(GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 		{
 			m_alias = new map<string, string>;
 			data = new DiscordJSON();
 			dataBody = new DiscordObject_Body(5019904);
 			dataThumb = new DiscordObject_Thumbnail(64, 64);
-			if(GetKR_BankingServerConfig().UseWebhook)
-			m_alias.Set("Advanced Banking", GetKR_BankingServerConfig().DiscordWebhookUrl);
+			m_alias.Set("Advanced Banking", GetKR_BankingServerConfig().m_DiscordWebhook.m_WebhookURL);
 		}
 	}
 	
 	bool POST(string alias, string Message)
 	{
-		if(!GetKR_BankingServerConfig().UseWebhook)
+		if(!GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 		{
 			return false;
 		}
