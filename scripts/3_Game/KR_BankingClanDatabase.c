@@ -100,6 +100,10 @@ class ClanDataBaseManager
         return m_BankAmount;
     }
 
+    TStringArray GetClanLogs()
+    {
+        return m_ClanLogs;
+    }
     void WriteLog(string LogLine)
     {
         if(m_ClanLogs.Count() > 20)

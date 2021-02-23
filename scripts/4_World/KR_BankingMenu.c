@@ -153,7 +153,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ListboxMember                 = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxMember"));
             m_ListboxPlayers                = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
             m_TransferPlayerList            = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidget0"));
-            m_ClanLogs                      = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxWidgetLogs"));
+            m_ClanLogs                      = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxLogs"));
 
             m_CheckBoxWithdraw              = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckBoxWithdraw"));
             m_CheckBoxDeposit               = CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CheckBoxDeposit")); 
@@ -574,6 +574,7 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().RequestClanData();
             m_ClanBankAccountTab.Show(true);
             m_PanelNewClan.Show(false);
+            LoadClanLogs();
         } 
         else
         {
@@ -625,6 +626,22 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             m_TransferPlayerList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
             m_ListboxPlayers.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+        }
+    }
+
+    void LoadClanLogs()
+    {
+        m_ClanLogs.ClearItems();
+        if(GetBankingClientManager().GetClientsClanData().GetClanLogs())
+        {
+            for(int i = 0; i < GetBankingClientManager().GetClientsClanData().GetClanLogs().Count(); i++)
+            {
+                m_ClanLogs.AddItem(GetBankingClientManager().GetClientsClanData().GetClanLogs().Get(i), NULL, 0);
+            }
+        }
+        else
+        {
+            m_ClanLogs.AddItem("NO LOGS FOUND!!", NULL, 0);
         }
     }
 

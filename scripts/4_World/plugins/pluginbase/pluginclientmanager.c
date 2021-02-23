@@ -22,6 +22,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","ServerConfigResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRespose", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "UIQuitRequest", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
     }
 
@@ -72,11 +73,6 @@ class PluginKrBankingClientManager extends PluginBase
 
             m_OwnClan = data.param1;
             m_OwnClan.SetMembers(data.param1.GetClanMembers());
-            if(m_BankingMenu && m_BankingMenu.m_IsClanAccountFresh)
-            {
-                m_BankingMenu.SwitchTab(2);
-                m_BankingMenu.m_IsClanAccountFresh = false;
-            }
         }
     }
 
@@ -126,6 +122,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanMemberLeave", new Param1<string>(GetSteamID()), true);
         Print("Remote requested to leave clan!");
     }
+
     void RequestRemoteClanCreate(string Clanname, string ClanTag)
     {
         if(!Clanname || !ClanTag)
