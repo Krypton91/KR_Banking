@@ -67,7 +67,7 @@ class ActionRobATM: ActionContinuousBase
 
         array<Man> onlinePlayers = new array<Man>;
         GetGame().GetPlayers(onlinePlayers);
-        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForPayCheck)
+        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForRob)
         {
             GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
             return;
@@ -97,7 +97,7 @@ class ActionRobATM: ActionContinuousBase
 	{	
         array<Man> onlinePlayers = new array<Man>;
         GetGame().GetPlayers(onlinePlayers);
-        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForPayCheck)
+        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForRob)
         {
             GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
             return;
@@ -105,7 +105,7 @@ class ActionRobATM: ActionContinuousBase
         
         int Money = Math.RandomInt(GetKR_BankingServerConfig().MinMoneyForRob, GetKR_BankingServerConfig().MaxMoneyForRob);
         GetBankingServerManager().AddCurrencyToPlayer(action_data.m_Player, Money);
-        GetBankingServerManager().SendNotification("You sucessfully robbbed this atm you recived: " + Money + " money!", action_data.m_Player.GetIdentity());
+        GetBankingServerManager().SendNotification("You sucessfully robbbed this atm you received: " + Money + " money!", action_data.m_Player.GetIdentity());
 
         KR_BankingATM AdvATM;
         if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))
@@ -120,6 +120,16 @@ class ActionRobATM: ActionContinuousBase
             float max = item_in_Hands.GetMaxHealth("","");
 			item_in_Hands.SetHealth( "", "", max * GameConstants.DAMAGE_RUINED_VALUE );
         }
+	}
+
+    override bool ActionConditionContinue( ActionData action_data )
+	{	
+		 KR_BankingATM AdvATM;
+        if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))
+        {
+            return AdvATM.m_Banking_CanBeRobbed;
+        }
+        return false;
 	}
 
     override void OnStartClient( ActionData action_data )
