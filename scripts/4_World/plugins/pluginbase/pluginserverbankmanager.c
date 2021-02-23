@@ -148,6 +148,11 @@ class PluginKRBankingManagerServer extends PluginBase
 					KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
 					if(targetpl && targetIdentity != sender)
 					{
+						if(targetpl.GetBankCredits() >= m_krserverconfig.maxCurrency)
+						{
+							SendNotification(" ERROR CANT TRANSFER MONEY!");
+							return;
+						}
 						targetpl.DepositMoney(data.param2);
 						ownpldata.WitdrawMoney(data.param2);
 
