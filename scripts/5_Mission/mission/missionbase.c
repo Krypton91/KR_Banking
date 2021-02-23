@@ -19,4 +19,4 @@ modded class MissionBase
         }
         return menu;
     }
-}
+};

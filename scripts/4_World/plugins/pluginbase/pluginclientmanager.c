@@ -113,25 +113,21 @@ class PluginKrBankingClientManager extends PluginBase
     void RequestRemoteToWitdraw(int ammount, int mode)
     {
         GetRPCManager().SendRPC("KR_BANKING", "WithdrawRequest", new Param2<int, int>(ammount, mode), true);
-        Print("Sucessfully requested remote to Witdraw Ammount: " + ammount);
     }
 
     void RequestRemoteToDeposit(int ammount, int mode)
     {
         GetRPCManager().SendRPC("KR_BANKING", "DepositRequest", new Param2<int, int>(ammount, mode), true);
-        Print("Sucessfully requested remote to Deposit Ammount: " + ammount);
     }
 
     void RequestRemoteForTransfer(ref bankingplayerlistobj target, int ammount)
     {
         GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<ref bankingplayerlistobj, int>(target, ammount), true);
-        Print("Sendet Transfer request to remote!");
     }
 
     void RequestRemoteLeaveClan()
     {
         GetRPCManager().SendRPC("KR_BANKING", "ClanMemberLeave", new Param1<string>(GetSteamID()), true);
-        Print("Remote requested to leave clan!");
     }
 
     void RequestRemoteClanCreate(string Clanname, string ClanTag)
@@ -139,8 +135,6 @@ class PluginKrBankingClientManager extends PluginBase
         if(!Clanname || !ClanTag)
             return;
         GetRPCManager().SendRPC("KR_BANKING", "ClanCreateRequest", new Param2<string, string>(Clanname, ClanTag), true);
-
-        Print("Requested remote to insert new clan!");
     }
 
     void RequestEditPermission(ref PermissionObject newPermission, string TargetsSteamID)
@@ -148,6 +142,11 @@ class PluginKrBankingClientManager extends PluginBase
         if(!newPermission || !TargetsSteamID) return;
 
         GetRPCManager().SendRPC("KR_BANKING", "ClanUpdateMember", new Param2<PermissionObject, string>(newPermission, TargetsSteamID), true);
+    }
+
+    void RequestRemoteEditClan(string Name, string Tag)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanUpdate", new Param2<string, string>(Name, Tag), true);
     }
 
     ref ClanDataBaseManager GetClientsClanData()
@@ -219,7 +218,6 @@ class PluginKrBankingClientManager extends PluginBase
 
     void AddMemberToClan(string SteamID)
     {
-        Print("Player name to add is: " + SteamID);
         GetRPCManager().SendRPC("KR_BANKING", "ClanAddMember", new Param1<string>(SteamID), true);
     }
 
@@ -288,4 +286,4 @@ class PluginKrBankingClientManager extends PluginBase
 PluginKrBankingClientManager GetBankingClientManager()
 {
 	return PluginKrBankingClientManager.Cast(GetPluginManager().GetPluginByType(PluginKrBankingClientManager));
-}
+};

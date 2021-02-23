@@ -85,6 +85,11 @@ class ClanDataBaseManager
         SaveClanData(this);
     }
 
+    string GetClanTag()
+    {
+        return m_Prefix;
+    }
+
     //BE SURE CLANDATA GETS SAVED FROM LOGS!
     void DepositMoney(int Money)
     {
@@ -138,6 +143,10 @@ class ClanDataBaseManager
         JsonFileLoader<ClanDataBaseManager>.JsonSaveFile(m_ProfilesDIR + m_ClansFolder + "/" + database.GetClanID() + ".json", database);
     }
 
+    void SetName(string newName)
+    {
+        m_ClanName = newName;
+    }
     string GetName()
     {
         return m_ClanName;

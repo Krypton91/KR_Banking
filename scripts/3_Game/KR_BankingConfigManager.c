@@ -76,12 +76,12 @@ class KR_BankingConfigManager
             MakeDirectory(m_ConfigDIR);
         if(FileExist(m_ConfigPath))
         {
-            Print("[KR Banking] -> Found Config Loading existing config...");
+            Print("[Advanced Banking] -> Found Config Loading existing config...");
             JsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_ConfigPath, settings);
         }
         else
         {
-            Print("[KR Banking] -> No Config Found Try to write default config...");
+            Print("[Advanced Banking] -> No Config Found Try to write default config...");
             settings.LoadDefaultSettings();
         }
         return settings;
