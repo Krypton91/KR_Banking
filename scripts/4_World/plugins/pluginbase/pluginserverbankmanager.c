@@ -33,6 +33,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		GetRPCManager().AddRPC("KR_BANKING", "ClanAddMember", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "ClanRemoveMember", this, SingleplayerExecutionType.Server);
 		GetRPCManager().AddRPC("KR_BANKING", "ClanUpdateMember", this, SingleplayerExecutionType.Server);
+		GetRPCManager().AddRPC("KR_BANKING", "ClanMemberLeave", this, SingleplayerExecutionType.Server);
     }
 
     protected void InitPayCheck()
@@ -367,7 +368,6 @@ class PluginKRBankingManagerServer extends PluginBase
 									targetPlayer.SetClan("NONE");
 									PlayerBase t_player = RemoteFindPlayer(data.param1);
 									GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-
 									SendNotification("Sucesfully kicked: " + t_player.GetIdentity().GetName(), sender);
 									SendNotification("You have been kicked from" + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
 									break;
@@ -375,10 +375,20 @@ class PluginKRBankingManagerServer extends PluginBase
 							}
 						}
 					}
+					else
+					{
+						SendNotification("Sorry but you dont have permission to kick!", sender);
+					}
+				}
+				else
+				{
+					SendNotification("Remote Error, Cant Load Clan data!", sender, true);
+					Error("Cant Load Clan data of player: " + sender.GetName() + " please report this to the Banking Dev Team!");
 				}
 			}
 			else
 			{
+				SendNotification("Something went wrong with playerdata load!", sender, true);
 				Error("Error cant load Internal Playerdata");
 			}
 		}
@@ -425,6 +435,46 @@ class PluginKRBankingManagerServer extends PluginBase
 			else
 			{
 				Error("Error cant load Internal Playerdata");
+			}
+		}
+	}
+
+	void ClanMemberLeave(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+	{
+		if(type == CallType.Server)
+		{	
+			Param1<string> data;
+			if(!ctx.Read(data)) return;
+			KR_JsonDatabaseHandler senderdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+			if(!senderdata) return;
+			ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(senderdata.GetClanID());
+			if(clandata)
+			{
+				if(clandata.GetOwnersID() == data.param1)
+				{
+					//Handle leader leave
+						bool wasDeleted = RemoteHandleLeaderLeave(clandata, sender.GetPlainId());
+
+						if(wasDeleted)
+							SendNotification("Sucessfully deleted your clan!", sender);
+						else
+							SendNotification("Something went wrong!", sender);
+				}
+				else
+				{
+					//Handle member leave.
+					bool memberLeaved = RemoteHandleMemberLeave(clandata, sender.GetPlainId());
+					senderdata.SetClan("NONE");
+
+					if(memberLeaved)
+							SendNotification("Sucessfully leaved clan: " + clandata.GetName(), sender);
+						else
+							SendNotification("Something went wrong!", sender);
+				}
+			}
+			else
+			{
+				Error("Cant load clandata from player: " + sender.GetPlainId());
 			}
 		}
 	}
@@ -612,6 +662,62 @@ class PluginKRBankingManagerServer extends PluginBase
 		clan.AddMember(SteamID, MemberName, permissions);
 	}
 
+	bool RemoteHandleLeaderLeave(ref ClanDataBaseManager clan, string LeaderID)
+	{
+		Print("Called method to remove clan!");
+		if(!clan || !LeaderID) return false;
+
+		if(clan.GetOwnersID() == LeaderID)
+		{
+			//100 % sure its the leader.
+
+			//Loop all Members & set clan id to NONE
+			for(int i = 0; i < clan.GetClanMembers().Count(); i++)
+			{
+				string targetsPlainID = clan.GetClanMembers().Get(i).GetPlainID();
+				KR_JsonDatabaseHandler currentClanMembersData = KR_JsonDatabaseHandler.LoadPlayerData(clan.GetClanMembers().Get(i).GetPlainID());
+				if(currentClanMembersData)
+				{
+					currentClanMembersData.SetClan("NONE");
+					Print("Removed clan member: " + targetsPlainID);
+				}
+				else
+				{
+					Error("Cant clean ClanID from: " + targetsPlainID);
+				}
+			}
+			Print("Loop done!");
+			return clan.DeleteClan();
+		}
+		else
+		{
+			Print("Leader id was not the same.");
+		}
+		return false;
+	}
+
+	bool RemoteHandleMemberLeave(ref ClanDataBaseManager clan, string MemberID)
+	{
+		if(!clan || !MemberID) return false;
+		Print("ID TO SEARCH: " + MemberID);
+		for(int i = 0; i < clan.GetClanMembers().Count(); i++)
+		{
+			Print("Looping Memberlist...");
+			if(clan.GetClanMembers().Get(i).GetPlainID() == MemberID)
+			{
+				//found
+				clan.RemoveMember(i);
+				return true;
+			}
+			else
+			{
+				Print("Member: " + clan.GetClanMembers().Get(i).GetPlainID() + " found!");
+			}
+		}
+		return false;
+	}
+
+	//!Generates a random ID to store & Load clan data!
 	string GenerateRandomClanID()
 	{
 		string rndf = "";

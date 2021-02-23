@@ -46,6 +46,20 @@ class ClanDataBaseManager
         return database;
     }
 
+    bool DeleteClan()
+    {
+        if(FileExist(m_ProfilesDIR + m_ClansFolder + "/" + GetClanID() + ".json"))
+        {
+            DeleteFile(m_ProfilesDIR + m_ClansFolder + "/" + GetClanID() + ".json");
+            return true;
+        }
+        else
+        {
+            Error("Cant find Clan data error on Delete()");
+            return false;
+        }
+    }
+
     void AddMember(string PlainID, string PlayerName, PermissionObject Permission)
     {
         m_Members.Insert(new ref ClanMemberObject(PlainID, PlayerName, Permission));

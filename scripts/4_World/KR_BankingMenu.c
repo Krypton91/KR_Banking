@@ -190,7 +190,6 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_WithdrawOwnAccBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    //not that fast Todo: send Notify...
                     GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
@@ -201,7 +200,6 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_DepositOwnAccBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    //not that fast Todo: send Notify...
                     GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
@@ -212,7 +210,6 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_YesConfirmBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    //not that fast Todo: send Notify...
                     GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
@@ -225,7 +222,6 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnSendTransfer:
                 if(m_UICooldownTimer > 0)
                 {
-                    //not that fast Todo: send Notify...
                     GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
@@ -243,7 +239,7 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnFinallyCreate:
                 if(m_UICooldownTimer > 0)
                 {
-                    //not that fast Todo: send Notify...
+                    GetBankingClientManager().SendNotification("Not that fast bro!");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -373,12 +369,8 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleLeaveYes()
     {
-       /* ref bankingplayerlistobj member;
-        if(!GetBankingClientManager().GetOnlinePlayers()) return;
-        member = GetBankingClientManager().GetOnlinePlayers().Get(Player.plainid);
-        GetBankingClientManager().RemoveMember(member.plainid);
-        m_LeaveConfirm.show(false);
-        */
+        GetBankingClientManager().RequestRemoteLeaveClan();
+        m_LeaveConfirm.Show(false);
     } 
 
     void HandleLeaveNo()
@@ -425,7 +417,7 @@ class KR_BankingMenu extends UIScriptedMenu
             GetBankingClientManager().SendNotification("No Player Selected in List!");
             return;
         }
-        
+
         ref bankingplayerlistobj member;
         if(!GetBankingClientManager().GetOnlinePlayers()) return;
         member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);

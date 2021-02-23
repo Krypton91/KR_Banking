@@ -121,6 +121,11 @@ class PluginKrBankingClientManager extends PluginBase
         Print("Sendet Transfer request to remote!");
     }
 
+    void RequestRemoteLeaveClan()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanMemberLeave", new Param1<string>(GetSteamID()), true);
+        Print("Remote requested to leave clan!");
+    }
     void RequestRemoteClanCreate(string Clanname, string ClanTag)
     {
         if(!Clanname || !ClanTag)
