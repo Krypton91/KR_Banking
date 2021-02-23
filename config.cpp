@@ -87,11 +87,83 @@ class CfgVehicles
 		scope=1;
 		hiddenSelections[]=
 		{
-			"zybtek"
+			"zbytek"
 		};
 		hiddenSelectionsTextures[] = 
 		{
 			"\KR_Banking\data\ATM\data\ATM_co1.paa"
+		};
+	};
+	class KR_ATMRed: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_cored.paa"
+		};
+	};
+	class KR_ATMBlue: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_coblue.paa"
+		};
+	};
+	class KR_ATMGreen: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_cogreen.paa"
+		};
+	};
+	class KR_ATMYellow: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_coyellow.paa"
+		};
+	};
+	class KR_ATMOrange: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_coorange.paa"
+		};
+	};
+	class KR_ATMBlackWhite: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_cobw.paa"
 		};
 	};
 	class KR_BankingCard: KeyCard_Base
