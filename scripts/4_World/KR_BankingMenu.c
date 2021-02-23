@@ -176,7 +176,7 @@ class KR_BankingMenu extends UIScriptedMenu
         switch(w)
         {
             case m_CloseUiBtn:
-                GetGame().GetUIManager().Back();
+                CloseBankingMenu();
                 break;
             case m_BankAccBtn:
                 SwitchTab(1);
@@ -683,6 +683,11 @@ class KR_BankingMenu extends UIScriptedMenu
     void SetIsBankingMenuOpen(bool visible)
     {
         m_IsBankingMenuOpen = visible;
+    }
+
+    void CloseBankingMenu()
+    {
+        GetGame().GetUIManager().Back();
     }
 
     override void OnHide()

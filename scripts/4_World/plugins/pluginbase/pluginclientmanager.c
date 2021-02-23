@@ -76,6 +76,17 @@ class PluginKrBankingClientManager extends PluginBase
         }
     }
 
+    void UIQuitRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Client)
+        {
+            if(m_BankingMenu && m_BankingMenu.IsVisible())
+            {
+                m_BankingMenu.CloseBankingMenu();
+            }
+        }
+    }
+
     void OpenBankingMenu()
     {
         GetRPCManager().SendRPC("KR_BANKING", "PlayerDataRequest", null, true); //Send RPC for data.
