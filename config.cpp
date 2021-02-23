@@ -166,6 +166,18 @@ class CfgVehicles
 			"\KR_Banking\data\ATM\data\ATM_cobw.paa"
 		};
 	};
+	class KR_ATMBlack: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_coblack.paa"
+		};
+	};
 	class KR_BankingCard: KeyCard_Base
 	{
 		scope=2;
