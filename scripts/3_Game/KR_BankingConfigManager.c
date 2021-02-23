@@ -90,6 +90,8 @@ class KR_BankingConfigManager
         {
             Print("[Advanced Banking] -> Found Config Loading existing config...");
             JsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
+            if(settings && settings.IsConfigOutdated())
+                Error("Your Config is Outdated! Please Read AdvancedBanking Changelog!");
         }
         else
         {
@@ -104,9 +106,19 @@ class KR_BankingConfigManager
         return PayCheckTickTime * 60000;
     }
 
-    string GetModVersion()
+    bool IsConfigOutdated() 
     {
-        return "1.0";
+		if(this.ModVersion != GetModVersion())
+			return true;
+		return false;
+	}
+
+    protected string GetModVersion()
+    {
+        string cfgversion = "CfgMods KR_Banking version";
+        string mdversion;
+        GetGame().ConfigGetText(cfgversion, mdversion);
+        return mdversion;
     }
 };
 
