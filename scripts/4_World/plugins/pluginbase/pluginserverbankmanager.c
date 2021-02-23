@@ -583,16 +583,17 @@ class PluginKRBankingManagerServer extends PluginBase
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
             
-            playerdata.WitdrawMoney(CorrectAmountToWitdraw);
-            AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
+            int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
+			int finalAmount = CorrectAmountToWitdraw - sillNeeded; 
+			playerdata.WitdrawMoney(finalAmount);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
             //Todo add here logs.
 
 			if(m_krserverconfig.m_DiscordWebhook.m_LogWithdrawToDiscord)
-				GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Witdrawed " + CorrectAmountToWitdraw + " from own account.");
+				GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Witdrawed " + finalAmount + " from own account.");
 
 			if(m_krserverconfig.m_LoggingSettings.m_LogWithdraw)
-				GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Witdrawed " + CorrectAmountToWitdraw + " from own account.");
+				GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Witdrawed " + finalAmount + " from own account.");
         }
     }
 
@@ -612,16 +613,17 @@ class PluginKRBankingManagerServer extends PluginBase
 						SendNotification("Sorry but you dont can do that!", identity, true);
 						return;
 					}
-					clanDB.WitdrawMoney(Ammount);
-					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
-					AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
+					int stillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
+					int FinallyAmount = Ammount - stillNeeded;
+					clanDB.WitdrawMoney(FinallyAmount);
+					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + FinallyAmount);
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 
 					if(m_krserverconfig.m_DiscordWebhook.m_LogClanWithdrawToDiscord)
-						GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Witdrawed " + Ammount + " from clan account.");
+						GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Witdrawed " + FinallyAmount + " from clan account.");
 
 					if(m_krserverconfig.m_LoggingSettings.m_LogClanWithdraw)
-						GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Witdrawed " + Ammount + " from clan account.");
+						GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Witdrawed " + FinallyAmount + " from clan account.");
 				}
 				else
 				{
