@@ -588,7 +588,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_ClanAccBtn.Show(false);
         m_OwnedCurrencyLabel.SetText(" " + GetBankingClientManager().GetBankCredits());
         m_OnPlayerCurrencyLabel.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
-        m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetPlayerCurrencyAmount().ToString());
+        m_OnPlayerCurrencyLabel2.SetText(" " + GetBankingClientManager().GetBankCredits().ToString());
 
         /* Set progressbar */
         int CurrentAmountOnBank = GetBankingClientManager().GetBankCredits();
