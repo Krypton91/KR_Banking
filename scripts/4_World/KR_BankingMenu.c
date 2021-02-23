@@ -664,7 +664,6 @@ class KR_BankingMenu extends UIScriptedMenu
                     m_CheckBoxAdd.SetChecked(perms.m_CanInvite);
                     m_CheckBoxKick.SetChecked(perms.m_CanKick);
                     m_CheckBoxPermissions.SetChecked(perms.m_CanEdit);
-                    Print("Permissions Loadet!");
                 }
                 else
                 {
