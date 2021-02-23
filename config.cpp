@@ -87,7 +87,7 @@ class CfgVehicles
 		scope=1;
 		hiddenSelections[]=
 		{
-			"zybtek"
+			"zbytek"
 		};
 		hiddenSelectionsTextures[] = 
 		{

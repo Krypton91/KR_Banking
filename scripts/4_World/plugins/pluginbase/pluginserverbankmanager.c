@@ -22,7 +22,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
     protected void RegisterServersideRPCs()
     {
-        GetRPCManager().AddRPC("KR_BANKING","PlayerDataRequest", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "PlayerDataRequest", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "ServerConfigRequest", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "WithdrawRequest", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "DepositRequest", 		this, SingleplayerExecutionType.Server);
@@ -223,10 +223,18 @@ class PluginKRBankingManagerServer extends PluginBase
 			Param2<string, string> data;
 			if(!ctx.Read(data)) return;
 
+			PlayerBase player = RemoteFindPlayer(sender.GetPlainId());
+			if(!player) return;
+			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+			if(CurrencyOnPlayer < m_krserverconfig.CostsToCreateClan)
+			{
+				SendNotification("You dont have " + m_krserverconfig.CostsToCreateClan + " in your Inventory!", sender, true);
+				return;
+			}
+
 			ref ClanDataBaseManager usersNewClan = RegisterNewClan(data.param1, sender.GetPlainId());
 			if(usersNewClan)
 			{
-				//void AddClanMember(ref ClanDataBaseManager clan, ref PermissionObject permissions, string SteamID, string MemberName)
 				PermissionObject perms = new PermissionObject();
 				perms.GiveClanOwner();
 				AddClanMember(usersNewClan, perms, sender.GetPlainId(), sender.GetName());
@@ -234,12 +242,9 @@ class PluginKRBankingManagerServer extends PluginBase
 				KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 				if(playerdata && ClanID)
 				{
+					RemoveCurrencyFromPlayer(player, m_krserverconfig.CostsToCreateClan);
 					playerdata.SetClan(ClanID);
-					Print("[Advanced Banking] -> Sucesfully created clan with name: " + usersNewClan.GetName());
-					// 2RPCS needs to be here for correct update!
-					//GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( usersNewClan ), true, sender);
 					GetRPCManager().SendRPC("KR_BANKING","UIQuitRequest", null, true, sender);
-					//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
 					usersNewClan.SetPrefix(data.param2);
 					SendNotification("Sucesfully created clan with name: " + usersNewClan.GetName(), sender);
 				}
