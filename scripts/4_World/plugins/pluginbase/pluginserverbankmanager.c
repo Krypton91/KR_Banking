@@ -18,6 +18,8 @@ class PluginKRBankingManagerServer extends PluginBase
         InitPayCheck();
 		m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
 		//RegisterNewClan("RB Server is Gay", "76561198796326626");
+
+		GetWebhookManager().POST("Advanced Banking", "SomeTest Message.....");
     }
 
     protected void RegisterServersideRPCs()
@@ -111,6 +113,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
 			//we just save this in a new class in memory because they can read the memory & find out the positions.
 			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
+			clientsettings.TimeInSecToRobATM = m_krserverconfig.TimeInSecToRobATM;
             GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2< ref KR_BankingClientConfig, string >( clientsettings, sender.GetPlainId() ), true, sender);
         }
     }
@@ -1207,6 +1210,13 @@ class PluginKRBankingManagerServer extends PluginBase
             EntityAI SpawnedATM = EntityAI.Cast(GetGame().CreateObject(ObjectName, tempPos));
             SpawnedATM.SetPosition(tempPos);
             SpawnedATM.SetOrientation(tempDirection);
+			KR_BankingATM AdvATMS;
+			if(Class.CastTo(AdvATMS, SpawnedATM))
+			{
+				if(m_krserverconfig.ATM.Get(i).GetCanRobbed())
+					AdvATMS.m_Banking_CanBeRobbed = true;
+				Print("[Advanced Banking] -> ATM Was an Correct ATM!");
+			}
             Print("[Advanced Banking] -> Sucesfully spawned ATM: " + ObjectName + " on: " + tempPos);
         }
     }

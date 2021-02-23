@@ -13,19 +13,24 @@ class KR_BankingConfigManager
     int     MaxClanAccountLimit;
     bool    MakeLogs;
     bool    IsRobEventActive;
+    int     MinPlayersForRob;
+    int     MinMoneyForRob;
+    int     MaxMoneyForRob;
+    int     TimeInSecToRobATM;
     bool    RobMessagesActive;
     int     PayCheckValue;
     float   PayCheckTickTime;
     int     MinPlayersForPayCheck;
     bool    CanAddToFullAcc;
     bool    NeedsBankCardToOpenMenu;
+    bool    UseWebhook;
+    string  DiscordWebhookUrl;
+
     ref array<ref ATMPosition> ATM;
-    ref array<ref RobAtmSpawns> ATMRobSpots;
     ref array<ref CurrencySettings> BankingCurrency;
     void KR_BankingConfigManager()
     {
         ATM = new ref array<ref ATMPosition>();
-        ATMRobSpots = new ref array<ref RobAtmSpawns>();
         BankingCurrency = new ref array<ref CurrencySettings>();
     }
 
@@ -40,24 +45,31 @@ class KR_BankingConfigManager
         MaxClanAccountLimit = 200000;
         MakeLogs = true;
         IsRobEventActive = true;
+        MinPlayersForRob = 5;
+        MinMoneyForRob = 1000;
+        MaxMoneyForRob = 5000;
+        TimeInSecToRobATM = 60;
         RobMessagesActive = true;
         PayCheckValue = 500;
         PayCheckTickTime = 1;
         MinPlayersForPayCheck = 1;
         CanAddToFullAcc = true;
         NeedsBankCardToOpenMenu = false;
+        UseWebhook = false;
+        DiscordWebhookUrl = "EXAMPLE WEBHOOK URL";
 
         ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
         ATM.Insert(new ref ATMPosition("KR_ATM", "11475.6 342.984 11320", "210 0 0"));
-        ATMRobSpots.Insert(new ref RobAtmSpawns("7541.557 213.997 5137.169", "100 0 0", "An Atm gets robbed in Mogilevka!"));
+        ATM.Insert(new ref ATMPosition("KR_ATMRusty", "3016.820 369.563 6735.6098", "95.01 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName% on Position: %id%"));
 
-        //Importent to start with the highest Value of money because math.Floor.
+        //Importent to start with the highest Value of money!!! Todo: Make a sort function.
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100));
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble50", 50));
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble25", 25));
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble10", 10));
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble5", 5));
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble1", 1));
+
         Save();
     }
 
@@ -66,7 +78,7 @@ class KR_BankingConfigManager
        if (!FileExist(m_ProfileDIR + m_ConfigDIR + "/"))
 			MakeDirectory(m_ProfileDIR + m_ConfigDIR + "/");
 
-         JsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_ConfigPath, this);
+        JsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_ConfigPath, this);
     }
 
     static ref KR_BankingConfigManager Load()

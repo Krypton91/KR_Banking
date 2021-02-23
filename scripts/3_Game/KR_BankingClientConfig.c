@@ -9,8 +9,9 @@ class KR_BankingClientConfig
     protected bool ConfigRecvied;
     int     CostsToCreateClan;
     int     MaxClanAccountLimit;
+    int     TimeInSecToRobATM;
 
-    void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, ref array<ref CurrencySettings> ServersCurrency, int coststocreateclan, int MaxClanAmount, bool clanAcc )
+    void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, ref array<ref CurrencySettings> ServersCurrency, int coststocreateclan, int MaxClanAmount, bool clanAcc)
     {
         MaxCurrency = mxcur;
         InteractDelay = interdelay;
