@@ -399,43 +399,66 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		if(type == CallType.Server)
 		{	
-			Param2<string, ref PermissionObject> data;
+			Param2<ref PermissionObject, string> data;
 			if(!ctx.Read(data)) return;
-			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
+			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param2);
 			KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
 			if(targetPlayer && playerdata)
 			{
+				Print("RPC recioved & context was correct and readed!");
 				if(targetPlayer.GetClanID() != playerdata.GetClanID())
 				{
 					SendNotification("This player is not in your clan.", sender, true);
 					return;
 				}
 
-				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(sender.GetPlainId());
+				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 				if(clandata)
 				{
-					for(int i = 0; i < clandata.GetClanMembers(); i++)
+					PermissionObject sendersPermissions = GetMemberPermission(clandata, sender.GetPlainId());
+					if(sendersPermissions)
 					{
-						if(clandata.GetClanMembers().Get(i).GetPlainID() == data.param1)
+						if(!sendersPermissions.m_CanEdit)
 						{
-							clandata.GetClanMembers().Get(i).SetPermission(data.param2);
+							SendNotification("Error following permissions are missing: CanEdit", sender, true);
+							return;
 						}
-					}
-					PlayerBase t_player = RemoteFindPlayer(data.param1);
-					if(!t_player) return;
-					//Sync new clan data to both players!
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
 
-					//Update the player data!
-					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-					SendNotification("Sucesfully Updated Permissions from: " + t_player.GetIdentity().GetName(), sender);
-					SendNotification("You Permissions from Banking has ben changed!", t_player.GetIdentity());
+						for(int i = 0; i < clandata.GetClanMembers().Count(); i++)
+						{
+							if(clandata.GetClanMembers().Get(i).GetPlainID() == data.param2)
+							{
+								clandata.GetClanMembers().Get(i).SetPermission(data.param1);
+								clandata.SaveClanData(clandata);
+								break;
+							}
+						}
+						PlayerBase t_player = RemoteFindPlayer(data.param2);
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+						SendNotification("Sucesfully Updated Permissions from: " + data.param2, sender);
+						if(!t_player) return;
+						//Sync new clan data to both players!
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
+
+						//Update the player data!
+						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+						SendNotification("You Permissions from Banking has ben changed!", t_player.GetIdentity());
+					}
+					else
+					{
+						SendNotification("Permission ERROR CANT FIND Your Permissions!", sender);
+						Error("[Advanced Banking] -> Cant find Permission from: " + sender.GetPlainId());
+					}
+				}
+				else
+				{
+					SendNotification("It Looks like you have no clan lol!", sender, true);
+					Error("[Advanced Banking] -> Internal Clan data can not be loadet! Please report this to the Dev Team!");
 				}
 			}
 			else
 			{
-				Error("Error cant load Internal Playerdata");
+				Error("[Advanced Banking] -> Error cant load Internal Playerdata");
 			}
 		}
 	}
@@ -717,6 +740,22 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
 		}
 		return false;
+	}
+
+	/*!Returns the permission from an Member @Params
+		@PARAM 1 (ClanDataBaseManager ref clandata)
+		@PARAM 2 (Plain ID Member to search)
+	*/	
+	ref PermissionObject GetMemberPermission(ref ClanDataBaseManager clan, string MemberID)
+	{
+		for(int i = 0; i < clan.GetClanMembers().Count(); i++)
+		{
+			if(clan.GetClanMembers().Get(i).GetPlainID() == MemberID)
+			{
+				return clan.GetClanMembers().Get(i).GetPermission();
+			}
+		}
+		return null;
 	}
 
 	//!Generates a random ID to store & Load clan data!

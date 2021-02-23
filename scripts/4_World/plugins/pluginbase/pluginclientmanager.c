@@ -147,7 +147,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(!newPermission || !TargetsSteamID) return;
 
-        GetRPCManager().SendRPC("KR_BANKING", "ClanCreateRequest", new Param2<PermissionObject, string>(newPermission, TargetsSteamID), true);
+        GetRPCManager().SendRPC("KR_BANKING", "ClanUpdateMember", new Param2<PermissionObject, string>(newPermission, TargetsSteamID), true);
     }
 
     ref ClanDataBaseManager GetClientsClanData()

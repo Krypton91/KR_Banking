@@ -78,11 +78,13 @@ class ClanDataBaseManager
         m_Members.Remove(index);
         SaveClanData(this);
     }
+
     void SetPrefix(string Prefix)
     {
         m_Prefix = Prefix;
         SaveClanData(this);
     }
+
     //BE SURE CLANDATA GETS SAVED FROM LOGS!
     void DepositMoney(int Money)
     {
@@ -104,6 +106,7 @@ class ClanDataBaseManager
     {
         return m_ClanLogs;
     }
+
     void WriteLog(string LogLine)
     {
         if(m_ClanLogs.Count() > 20)

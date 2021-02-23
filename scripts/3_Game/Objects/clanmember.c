@@ -4,7 +4,7 @@ class ClanMemberObject
     protected string m_playername;
     ref PermissionObject m_permissions;
 
-    void ClanMemberObject(string PlainID = "", string PlayerName = "", PermissionObject Permission = null)
+    void ClanMemberObject(string PlainID, string PlayerName, PermissionObject Permission)
     {
         m_plainID = PlainID;
         m_playername = PlayerName;
