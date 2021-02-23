@@ -2,7 +2,6 @@ class KR_BankingMenu extends UIScriptedMenu
 {
     protected bool                      m_IsBankingMenuInitialized = false;
     protected bool                      m_IsBankingMenuOpen = false;
-    bool                                m_IsClanAccountFresh = false;
 
     protected float                     m_UIUpdateTimer = 0;
     protected float                     m_UICooldownTimer = 0;
@@ -18,7 +17,8 @@ class KR_BankingMenu extends UIScriptedMenu
     protected Widget                    m_PanelNewClan;
     protected Widget                    m_PanelNewClanPrice;
     protected Widget                    m_PanelName;   
-    protected Widget                    m_LeaveConfirm;             
+    protected Widget                    m_LeaveConfirm;
+    protected Widget                    m_OwnersPanel;             
 
     protected ButtonWidget              m_CloseUiBtn;
     protected ButtonWidget              m_BankAccBtn;
@@ -38,17 +38,20 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ButtonWidget              m_BtnSave;
     protected ButtonWidget              m_BtnSendTransfer;
     protected ButtonWidget              m_BtnFinallyCreate;
-    protected ButtonWidget              m_BtnYesCreate;
     protected ButtonWidget              m_RobATMBtn;
     protected ButtonWidget              m_BtnLeaveClan;
     protected ButtonWidget              m_BtnLeaveYes;
     protected ButtonWidget              m_BtnLeaveNo;
+    protected ButtonWidget              m_BtnOwnerSafeBtn;
+    protected ButtonWidget              m_BtnYesCreate;
 
     protected EditBoxWidget             m_OwnAccInputBox;
     protected EditBoxWidget             m_ClanAccInputBox;
     protected EditBoxWidget             m_TransferInputBox;
     protected EditBoxWidget             m_EditBoxClanName;
     protected EditBoxWidget             m_EditBoxClanTag;
+    protected EditBoxWidget             m_EditBoxClanNameOwner;
+    protected EditBoxWidget             m_EditBoxClanTagOwner;
 
     protected TextWidget                m_OwnedCurrencyLabel;
     protected TextWidget                m_OnPlayerCurrencyLabel;
@@ -105,6 +108,7 @@ class KR_BankingMenu extends UIScriptedMenu
             m_PanelNewClanPrice             = Widget.Cast(layoutRoot.FindAnyWidget("PanelNewClanPrice"));
             m_PanelName                     = Widget.Cast(layoutRoot.FindAnyWidget("PanelWidgetName"));
             m_LeaveConfirm                  = Widget.Cast(layoutRoot.FindAnyWidget("PanelLeaveConfirm"));
+            m_OwnersPanel                   = Widget.Cast(layoutRoot.FindAnyWidget("PanelOwner"));
 
             m_CloseUiBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("CloseInvi"));
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
@@ -119,22 +123,23 @@ class KR_BankingMenu extends UIScriptedMenu
             m_BtnClanSettings               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClanSettings"));
             m_BtnKick                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonKick"));
             m_BtnAdd                        = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit0"));
-            m_BtnEdit                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonEdit"));
             m_BtnBack                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonBack"));
             m_BtnSave                       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
             m_BtnSendTransfer               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnSend"));
             m_BtnFinallyCreate              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidgetCreate"));
             m_BtnYesCreate                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget1"));
-            m_RobATMBtn                     = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnRob"));
             m_BtnLeaveClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeave"));
             m_BtnLeaveYes                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeaveYes"));
             m_BtnLeaveNo                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonLeaveNo"));
+            m_BtnOwnerSafeBtn               = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSave"));
 
             m_OwnAccInputBox                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
             m_TransferInputBox              = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget1"));
             m_ClanAccInputBox               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("InputBoxClan"));
             m_EditBoxClanName               = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetName"));
             m_EditBoxClanTag                = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidgetTag"));
+            m_EditBoxClanNameOwner          = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("txtBoxClanName"));
+            m_EditBoxClanTagOwner           = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("txtBoxClanTag"));
 
 
             m_OwnedCurrencyLabel            = TextWidget.Cast(layoutRoot.FindAnyWidget("BankAmountValueText"));
@@ -232,11 +237,6 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
                 CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
                 break;
-            case m_BtnYesCreate:
-                int PriceToCreateClan = GetBankingClientManager().GetClientSettings().CostsToCreateClan;
-                if(PriceToCreateClan < GetBankingClientManager().GetPlayerCurrencyAmount());
-                    SpawnClanCreatePopup();
-                break;
             case m_BtnFinallyCreate:
                 if(m_UICooldownTimer > 0)
                 {
@@ -294,6 +294,12 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnLeaveYes:
                 HandleLeaveYes();   // by andrx line 363 following - delete if wrong
                 break;
+            case m_BtnOwnerSafeBtn:
+                HandleEditClan();
+                break;
+            case m_BtnYesCreate:
+                SpawnClanCreatePopup();
+                break;
         }
         return super.OnClick(w, x, y, button);
     }
@@ -337,15 +343,6 @@ class KR_BankingMenu extends UIScriptedMenu
                 m_BtnKick.Show(false);
             }
 
-            if(perms.m_CanEdit)
-            {
-               m_BtnEdit.Show(true);
-            }
-            else
-            {
-                m_BtnEdit.Show(false);
-            }
-
             if(perms.m_CanInvite)
             {
                 m_BtnAdd.Show(true);
@@ -356,13 +353,23 @@ class KR_BankingMenu extends UIScriptedMenu
             }
             LoadClanMemberList();
             
+            if(GetBankingClientManager().GetClientsClanData().GetOwnersID() == GetBankingClientManager().GetSteamID())
+            {
+                m_OwnersPanel.Show(true);
+                m_EditBoxClanTagOwner.SetText(GetBankingClientManager().GetClientsClanData().GetClanTag());
+                m_EditBoxClanNameOwner.SetText(GetBankingClientManager().GetClientsClanData().GetName());
+            }
+            else
+            {
+                m_OwnersPanel.Show(false);
+            }
         }
         else
         {
             Error("Permission error cant find clients permission.");
         }
     }
-//ANDRXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX - DELETE IF WRONG
+
     void HandleLeaveClan()
     {
         m_LeaveConfirm.Show(true);
@@ -377,6 +384,21 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleLeaveNo()
     {
         m_LeaveConfirm.Show(false);
+    }
+
+    void HandleEditClan()
+    {
+        string ClanName = m_EditBoxClanNameOwner.GetText();
+        string ClanTag  = m_EditBoxClanTagOwner.GetText();
+
+        if(ClanName && ClanTag)
+        {
+            GetBankingClientManager().RequestRemoteEditClan(ClanName, ClanTag);
+        }
+        else
+        {
+            GetBankingClientManager().SendNotification("Please Insert ClanName & Clan Tag!");
+        }
     }
 
     void HandleAddMemberToClan()
@@ -509,10 +531,21 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         string ClansName    = m_EditBoxClanName.GetText();
         string ClanTag      = m_EditBoxClanTag.GetText();
+        if(ClanTag.Length() > 4)
+        {
+            GetBankingClientManager().SendNotification("ClanTag length can not be longer as 4 chars!");
+            return;
+        }
+
+        if(ClanTag == "" || ClansName == "" || ClansName == "Clan Name" || ClanTag == "Clan Tag")
+        {
+            GetBankingClientManager().SendNotification("Please Insert a valid ClanName & Tag!");
+            return 
+        }
+
         GetBankingClientManager().RequestRemoteClanCreate(ClansName, ClanTag);
         HideNewClanPopup();
         m_PanelNewClan.Show(false);
-        m_IsClanAccountFresh = true;
     }
 
     void SwitchTab(int TabIndex)

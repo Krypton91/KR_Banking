@@ -21,4 +21,4 @@ modded class PluginManager
 			RegisterPlugin( "PluginKrBankingClientManager", 		true, 	false );
 		}
 	}
-}
+};

@@ -150,6 +150,11 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanUpdateMember", new Param2<PermissionObject, string>(newPermission, TargetsSteamID), true);
     }
 
+    void RequestRemoteEditClan(string Name, string Tag)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "ClanUpdate", new Param2<string, string>(Name, Tag), true);
+    }
+
     ref ClanDataBaseManager GetClientsClanData()
     {
         return m_OwnClan;
@@ -288,4 +293,4 @@ class PluginKrBankingClientManager extends PluginBase
 PluginKrBankingClientManager GetBankingClientManager()
 {
 	return PluginKrBankingClientManager.Cast(GetPluginManager().GetPluginByType(PluginKrBankingClientManager));
-}
+};

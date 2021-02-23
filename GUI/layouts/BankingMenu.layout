@@ -60,7 +60,7 @@ FrameWidgetClass MainRoot {
        stretch 1
       }
       ButtonWidgetClass CloseInvi {
-       position 0.00689 0.06058
+       position 0.00689 0.08181
        size 0.04446 0.5456
        halign right_ref
        hexactpos 0
@@ -563,6 +563,7 @@ FrameWidgetClass MainRoot {
     }
     PanelWidgetClass PDABodyTransfer {
      visible 0
+     disabled 0
      ignorepointer 1
      position 0.00954 0.05958
      size 0.5966 0.7863
@@ -677,6 +678,7 @@ FrameWidgetClass MainRoot {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       lines 10
       }
      }
     }
@@ -834,12 +836,12 @@ FrameWidgetClass MainRoot {
       PanelWidgetClass PanelAdmin {
        visible 1
        ignorepointer 1
-       position 3.39771 478.26102
-       size 865.15497 218.26199
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       position 0.004 0.68
+       size 0.948 0.31
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
        {
         ButtonWidgetClass ButtonKick {
          color 0.502 0 0 1
@@ -851,18 +853,6 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          style Colorable
          text "Kick"
-         font "gui/fonts/metron-bold28"
-        }
-        ButtonWidgetClass ButtonEdit {
-         color 0.502 0 0 1
-         position 0 0.21286
-         size 0.20555 0.18673
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style Colorable
-         text "Edit"
          font "gui/fonts/metron-bold28"
         }
         ButtonWidgetClass ButtonEdit0 {
@@ -947,6 +937,90 @@ FrameWidgetClass MainRoot {
            color 0 0.502 0.1255 1
            position 0.21868 0.79651
            size 0.516 0.17684
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style Colorable
+           text "Save"
+           font "gui/fonts/metron-bold48"
+          }
+         }
+        }
+        PanelWidgetClass PanelOwner {
+         ignorepointer 1
+         position 0 0
+         size 0.45577 0.79901
+         halign right_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          EditBoxWidgetClass txtBoxClanName {
+           color 0.502 0 0 1
+           position -0.00289 -0.23338
+           size 0.97436 0.1468
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style DefaultBorder
+           font "gui/fonts/metron22"
+          }
+          EditBoxWidgetClass txtBoxClanTag {
+           color 0.502 0 0 1
+           position -0.00365 0.11726
+           size 0.97436 0.1468
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           style DefaultBorder
+           font "gui/fonts/metron22"
+          }
+          TextWidgetClass ClanNameText {
+           ignorepointer 1
+           size 0.14151 0.19063
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "Clan Name"
+           font "gui/fonts/metron-bold28"
+           "exact text" 0
+           "size to text h" 1
+           "size to text v" 1
+           "text halign" center
+           "text valign" center
+          }
+          TextWidgetClass ClanNameText0 {
+           ignorepointer 1
+           position -0.00718 0.34981
+           size 0.14151 0.19063
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "Clan Tag"
+           font "gui/fonts/metron-bold28"
+           "exact text" 0
+           "size to text h" 1
+           "size to text v" 1
+           "text halign" center
+           "text valign" center
+          }
+          ButtonWidgetClass BtnSave {
+           color 0 0.502 0.1255 1
+           position 0.23612 0.7336
+           size 0.51803 0.21589
            hexactpos 0
            vexactpos 0
            hexactsize 0
@@ -1190,20 +1264,6 @@ FrameWidgetClass MainRoot {
        "size to text h" 1
       }
      }
-    }
-    ButtonWidgetClass BtnRob {
-     visible 1
-     color 0.502 0 0 1
-     size 0.32635 0.08611
-     halign right_ref
-     valign bottom_ref
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style Colorable
-     text "Rob ATM"
-     font "gui/fonts/metron-bold22"
     }
    }
   }
