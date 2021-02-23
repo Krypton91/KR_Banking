@@ -301,12 +301,18 @@ class PluginKRBankingManagerServer extends PluginBase
 					int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 					if(CurrencyOnPlayer >= m_krserverconfig.CostsToInviteAnPlayer)
 					{
+						ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+						if(!user || !user.GetPermission().m_CanInvite)
+						{
+							SendNotification("Sorry but you dont can do that!", identity, true);
+							return;
+						}
 						if(clandata.GetMemberCount() >= m_krserverconfig.MaxPlayersInClan)
 						{
 							SendNotification("Your Clan Already reached the max Amount of Players!", sender, true);
 							return;
 						}
-						
+
 						RemoveCurrencyFromPlayer(player, m_krserverconfig.CostsToInviteAnPlayer);
 						targetPlayer.SetClan(clandata.GetClanID());
 						PermissionObject perms = new PermissionObject();
@@ -596,7 +602,12 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(Ammount <= clanDB.GetBankCredit())
 				{
-
+					ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+					if(!user || !user.GetPermission().m_CanWithdraw)
+					{
+						SendNotification("Sorry but you dont can do that!", identity, true);
+						return;
+					}
 					clanDB.WitdrawMoney(Ammount);
 					clanDB.WriteLog(identity.GetName() + " Witdrawed: " + Ammount);
 					AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
@@ -667,6 +678,13 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
+				ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+				if(!user || !user.GetPermission().m_CanDeposit)
+				{
+					SendNotification("Sorry but you dont can do that!", identity, true);
+					return;
+				}
+
 				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForClanBank(clanDB);
 				int SumToInsert = Ammount;
 				if(SumToInsert > MaxPlaceAbleAmount)

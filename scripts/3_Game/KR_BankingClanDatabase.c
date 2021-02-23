@@ -166,6 +166,15 @@ class ClanDataBaseManager
         return m_OwnersPlainID;
     }
 
+    ref ClanMemberObject GetMemberByPlainId(string id)
+    {
+        for(int i = 0; i < m_Members.Count(); i++)
+        {
+            if(m_Members.Get(i).GetPlainID() == id)
+                return m_Members.Get(i);
+        }
+    }
+
     ref array<ref ClanMemberObject> GetClanMembers()
     {
         return m_Members;
