@@ -296,17 +296,34 @@ class PluginKRBankingManagerServer extends PluginBase
 				ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(currentPlayer.GetClanID());
 				if(clandata)
 				{
-					targetPlayer.SetClan(clandata.GetClanID());
-					PermissionObject perms = new PermissionObject();
-					AddClanMember(clandata, perms, data.param1, targetPlayer.GetName());
-					//Sync new clan data to both players!
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+					PlayerBase player = RemoteFindPlayer(sender.GetPlainId());
+					if(!player) return;
+					int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+					if(CurrencyOnPlayer >= m_krserverconfig.CostsToInviteAnPlayer)
+					{
+						if(clandata.GetMemberCount() >= m_krserverconfig.MaxPlayersInClan)
+						{
+							SendNotification("Your Clan Already reached the max Amount of Players!", sender, true);
+							return;
+						}
+						
+						RemoveCurrencyFromPlayer(player, m_krserverconfig.CostsToInviteAnPlayer);
+						targetPlayer.SetClan(clandata.GetClanID());
+						PermissionObject perms = new PermissionObject();
+						AddClanMember(clandata, perms, data.param1, targetPlayer.GetName());
+						//Sync new clan data to both players!
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
 
-					//Update the player data!
-					GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-					SendNotification("Sucesfully invited: " + t_player.GetIdentity().GetName(), sender);
-					SendNotification("You got an invite from clan: " + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+						//Update the player data!
+						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+						SendNotification("Sucesfully invited: " + t_player.GetIdentity().GetName(), sender);
+						SendNotification("You got an invite from clan: " + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+					}
+					else
+					{
+						SendNotification("You dont have enough money on you money needed: " + m_krserverconfig.CostsToInviteAnPlayer.ToString(), sender, true);
+					}
 				}
 				else
 				{

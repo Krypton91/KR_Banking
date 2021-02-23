@@ -1,6 +1,7 @@
 class KR_BankingConfigManager
 {
 
+    string  ModVersion;
     float   MenuDelay;
     int     startCurrency;
     int     maxCurrency;
@@ -8,6 +9,7 @@ class KR_BankingConfigManager
     int     CostsToCreateClan;
     int     CostsToInviteAnPlayer;
     int     MaxClanAccountLimit;
+    int     MaxPlayersInClan;
     bool    IsRobEventActive;
     int     MinPlayersForRob;
     int     MinMoneyForRob;
@@ -15,7 +17,7 @@ class KR_BankingConfigManager
     int     TimeInSecToRobATM;
     bool    RobMessagesActive;
     int     PayCheckValue;
-    float   PayCheckTickTime;
+    int     PayCheckTickTime;
     bool    PayCheckMessage;
     int     MinPlayersForPayCheck;
     bool    CanAddToFullAcc;
@@ -34,6 +36,7 @@ class KR_BankingConfigManager
 
     void LoadDefaultSettings()
     {
+        ModVersion = GetModVersion();
         MenuDelay = 1.0;
         startCurrency = 0;
         maxCurrency = 10000;
@@ -41,6 +44,7 @@ class KR_BankingConfigManager
         CostsToCreateClan = 5000;
         CostsToInviteAnPlayer = 1000;
         MaxClanAccountLimit = 200000;
+        MaxPlayersInClan = -1;
         IsRobEventActive = true;
         MinPlayersForRob = 5;
         MinMoneyForRob = 1000;
@@ -98,6 +102,11 @@ class KR_BankingConfigManager
     float GetCorrectPayCheckTime()
     {
         return PayCheckTickTime * 60000;
+    }
+
+    string GetModVersion()
+    {
+        return "1.0";
     }
 };
 

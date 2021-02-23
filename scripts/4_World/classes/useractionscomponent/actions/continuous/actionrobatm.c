@@ -67,7 +67,11 @@ class ActionRobATM: ActionContinuousBase
 
         array<Man> onlinePlayers = new array<Man>;
         GetGame().GetPlayers(onlinePlayers);
-
+        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForPayCheck)
+        {
+            GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
+            return;
+        }
         for(int n = 0; n < onlinePlayers.Count(); n++)
         {
             PlayerBase player = PlayerBase.Cast(onlinePlayers.Get(n));
@@ -91,6 +95,14 @@ class ActionRobATM: ActionContinuousBase
 
 	override void OnFinishProgressServer( ActionData action_data )
 	{	
+        array<Man> onlinePlayers = new array<Man>;
+        GetGame().GetPlayers(onlinePlayers);
+        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForPayCheck)
+        {
+            GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
+            return;
+        }
+        
         int Money = Math.RandomInt(GetKR_BankingServerConfig().MinMoneyForRob, GetKR_BankingServerConfig().MaxMoneyForRob);
         GetBankingServerManager().AddCurrencyToPlayer(action_data.m_Player, Money);
         GetBankingServerManager().SendNotification("You sucessfully robbbed this atm you recived: " + Money + " money!", action_data.m_Player.GetIdentity());

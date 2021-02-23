@@ -112,6 +112,10 @@ class ClanDataBaseManager
         return m_ClanLogs;
     }
 
+    int GetMemberCount()
+    {
+        return m_Members.Count();
+    }
     void WriteLog(string LogLine)
     {
         if(m_ClanLogs.Count() > 20)
