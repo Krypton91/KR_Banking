@@ -6,6 +6,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
     protected float                     m_UIUpdateTimer = 0;
     protected float                     m_UICooldownTimer = 0;
+    protected int                       m_LastMemberIndexClanList;
 
     protected Widget                    m_OwnBankAccountTab;
     protected Widget                    m_ClanBankAccountTab;
@@ -615,6 +616,29 @@ class KR_BankingMenu extends UIScriptedMenu
         float parsedfloat = progValue.ToString().ToFloat();
         m_ClanBankAccountProgressbar.SetCurrent(parsedfloat);
         m_ProgressTextClan.SetText(parsedfloat.ToString() + "%");
+
+        local int currentRowIndex = m_ListboxMember.GetSelectedRow();
+        if(m_LastMemberIndexClanList != currentRowIndex && m_ClanSettings.IsVisible() && GetBankingClientManager().GetClanPermission().m_CanEdit)
+        {
+            m_LastMemberIndexClanList = currentRowIndex;
+            if(currentRowIndex != -1)
+            {
+                PermissionObject perms = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(currentRowIndex).GetPermission();
+                if(perms)
+                {
+                    m_CheckBoxWithdraw.SetChecked(perms.m_CanWithdraw);
+                    m_CheckBoxDeposit.SetChecked(perms.m_CanDeposit);
+                    m_CheckBoxAdd.SetChecked(perms.m_CanInvite);
+                    m_CheckBoxKick.SetChecked(perms.m_CanKick);
+                    m_CheckBoxPermissions.SetChecked(perms.m_CanEdit);
+                    Print("Permissions Loadet!");
+                }
+                else
+                {
+                    Error("Cant load Permissions for player.");
+                }
+            }
+        }
     }
 
     //!This Updates the Playerlists from remote!
@@ -632,7 +656,7 @@ class KR_BankingMenu extends UIScriptedMenu
     void LoadClanLogs()
     {
         m_ClanLogs.ClearItems();
-        if(GetBankingClientManager().GetClientsClanData().GetClanLogs())
+        if(GetBankingClientManager().GetClientsClanData() && GetBankingClientManager().GetClientsClanData().GetClanLogs())
         {
             for(int i = 0; i < GetBankingClientManager().GetClientsClanData().GetClanLogs().Count(); i++)
             {
