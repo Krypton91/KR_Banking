@@ -82,6 +82,18 @@ class CfgVehicles
 			"\KR_Banking\data\ATM\data\ATM_co.paa"
 		};
 	};
+	class KR_ATMRusty: KR_BankingATM
+	{
+		scope=1;
+		hiddenSelections[]=
+		{
+			"zybtek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"\KR_Banking\data\ATM\data\ATM_co1.paa"
+		};
+	};
 	class KR_BankingCard: KeyCard_Base
 	{
 		scope=2;
