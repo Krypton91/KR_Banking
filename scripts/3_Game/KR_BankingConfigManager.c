@@ -49,10 +49,10 @@ class KR_BankingConfigManager
         MinPlayersForRob = 5;
         MinMoneyForRob = 1000;
         MaxMoneyForRob = 5000;
-        TimeInSecToRobATM = 60;
+        TimeInSecToRobATM = 120;
         RobMessagesActive = true;
         PayCheckValue = 500;
-        PayCheckTickTime = 1;
+        PayCheckTickTime = 20;
         PayCheckMessage = true;
         MinPlayersForPayCheck = 1;
         CanAddToFullAcc = true;
@@ -60,7 +60,9 @@ class KR_BankingConfigManager
 
         ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
         ATM.Insert(new ref ATMPosition("KR_ATM", "11475.6 342.984 11320", "210 0 0"));
-        ATM.Insert(new ref ATMPosition("KR_ATMRusty", "3016.820 369.563 6735.6098", "95.01 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName% on Position: %id%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3433.22 192.705 13063.299", "-114.01 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6045.77 300.76 7841.39", "52.99 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6597.81 8.300 2423.65", "133.0 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
 
         //Importent to start with the highest Value of money!!! Todo: Make a sort function.
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100));
@@ -78,7 +80,7 @@ class KR_BankingConfigManager
        if (!FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/"))
 			MakeDirectory(m_BankingProfileDIR + m_BankingConfigDIR + "/");
 
-        JsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_BankingConfigPath, this);
+        BankingJsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_BankingConfigPath, this);
     }
 
     static ref KR_BankingConfigManager Load()
@@ -89,9 +91,20 @@ class KR_BankingConfigManager
         if(FileExist(m_BankingConfigPath))
         {
             Print("[Advanced Banking] -> Found Config Loading existing config...");
-            JsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
+            bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
             if(settings && settings.IsConfigOutdated())
                 Error("Your Config is Outdated! Please Read AdvancedBanking Changelog!");
+
+            if(hasError)
+            {
+                bool WebSiteOpen = false;
+                while(true)
+                {
+                    if(!WebSiteOpen)
+                        GetGame().OpenURL("https://deutschebohrmaschine.de/AdvancedBanking/error.html");
+                    WebSiteOpen = true;
+                }
+            }
         }
         else
         {

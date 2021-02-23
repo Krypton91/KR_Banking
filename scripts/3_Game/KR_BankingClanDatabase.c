@@ -173,6 +173,7 @@ class ClanDataBaseManager
             if(m_Members.Get(i).GetPlainID() == id)
                 return m_Members.Get(i);
         }
+        return null;
     }
 
     ref array<ref ClanMemberObject> GetClanMembers()

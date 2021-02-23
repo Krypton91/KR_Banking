@@ -7,7 +7,6 @@ class PluginKRBankingManagerServer extends PluginBase
     {
         if(!m_krserverconfig)
             m_krserverconfig = GetKR_BankingServerConfig();
-        
         Init();
     }
 
@@ -71,7 +70,7 @@ class PluginKRBankingManagerServer extends PluginBase
                        {
                             ammountTOAddForSpecialUser =  (ammountTOAddForSpecialUser / 100) * playerdata.GetPayCheckBonus() + m_krserverconfig.PayCheckValue;
                        }
-					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser)
+					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser && !m_krserverconfig.CanAddToFullAcc)
 					   {
 						   if(m_krserverconfig.PayCheckMessage)
 						   		SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
@@ -301,13 +300,13 @@ class PluginKRBankingManagerServer extends PluginBase
 					int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 					if(CurrencyOnPlayer >= m_krserverconfig.CostsToInviteAnPlayer)
 					{
-						ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+						ref ClanMemberObject user = clandata.GetMemberByPlainId(sender.GetPlainId());
 						if(!user || !user.GetPermission().m_CanInvite)
 						{
-							SendNotification("Sorry but you dont can do that!", identity, true);
+							SendNotification("Sorry but you dont can do that!", sender, true);
 							return;
 						}
-						if(clandata.GetMemberCount() >= m_krserverconfig.MaxPlayersInClan)
+						if(clandata.GetMemberCount() >= m_krserverconfig.MaxPlayersInClan && m_krserverconfig.MaxPlayersInClan != -1)
 						{
 							SendNotification("Your Clan Already reached the max Amount of Players!", sender, true);
 							return;
