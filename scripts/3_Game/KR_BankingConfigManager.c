@@ -47,7 +47,7 @@ class KR_BankingConfigManager
         CostsToInviteAnPlayer = 1000;
         MaxClanAccountLimit = 200000;
         MaxPlayersInClan = -1;
-        MinAmountToTransfer = 5000;
+        MinAmountToTransfer = 1000;
         TransferfeesInProcent = 3;
         IsRobEventActive = true;
         MinPlayersForRob = 5;
@@ -62,11 +62,11 @@ class KR_BankingConfigManager
         CanAddToFullAcc = true;
         NeedsBankCardToOpenMenu = false;
 
-        ATM.Insert(new ref ATMPosition("KR_ATM", "3689.35 402.012 5988.02", "-110 0 0"));
-        ATM.Insert(new ref ATMPosition("KR_ATM", "11475.6 342.984 11320", "210 0 0"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3433.22 192.705 13063.299", "-114.01 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6045.77 300.76 7841.39", "52.99 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6597.81 8.300 2423.65", "133.0 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%  with: %id%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3689.35 402.012 5988.02", "-110 0 0"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "11475.6 342.984 11320", "210 0 0"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3433.22 192.705 13063.299", "-114.01 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6045.77 300.76 7841.39", "52.99 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%"));
+        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6597.81 8.300 2423.65", "133.0 0 0", true, "ATM Gets Robbed near Snosnovy Militäry from Player: %PlayerName%"));
 
         //Importent to start with the highest Value of money!!! Todo: Make a sort function.
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100));
