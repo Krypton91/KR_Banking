@@ -132,7 +132,7 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		if(type == CallType.Server)
         {
-            Param2<ref bankingplayerlistobj, int> data;
+            Param2<string, int> data;
             if(!ctx.Read(data)) return;
 			if(m_krserverconfig.MinAmountToTransfer > data.param2)
 			{
@@ -146,7 +146,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				if(ownpldata.GetBankCredit() >= data.param2)
 				{
 					//has enough
-					PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
+					PlayerBase targetPlayer = RemoteFindPlayer(data.param1);
 					if(!targetPlayer) return;
 
 					if(targetPlayer.GetIdentity().GetPlainId() == sender.GetPlainId())

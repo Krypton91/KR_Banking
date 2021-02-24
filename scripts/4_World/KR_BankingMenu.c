@@ -83,8 +83,7 @@ class KR_BankingMenu extends UIScriptedMenu
     protected ProgressBarWidget         m_OwnBankAccountProgressbar;
     protected ProgressBarWidget         m_ClanBankAccountProgressbar;
 
-
-    protected ref bankingplayerlistobj  m_target
+    protected int m_LastPlayerIndexTransfer;
 
 
     void KR_BankingMenu()
@@ -233,9 +232,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                int rowIndex = m_TransferPlayerList.GetSelectedRow();
-                m_target = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
-                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " + m_target.name + " ?");
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " +  GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).name + " ?");
                 break;
             case m_BtnFinallyCreate:
                 if(m_UICooldownTimer > 0)
@@ -468,6 +465,8 @@ class KR_BankingMenu extends UIScriptedMenu
             //Update all in UI
             UpdateUI();
             UpdateUIClanData();
+            if(m_LastPlayerIndexTransfer != m_TransferPlayerList.GetSelectedRow() && m_TransferPlayerList.GetSelectedRow() != -1)
+                m_LastPlayerIndexTransfer = m_TransferPlayerList.GetSelectedRow();
             m_UIUpdateTimer = 0;
         }
         else
@@ -508,7 +507,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleTransferConfirm()
     {
-        GetBankingClientManager().RequestRemoteForTransfer(m_target, m_TransferInputBox.GetText().ToInt());
+        GetBankingClientManager().RequestRemoteForTransfer(GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).plainid, m_TransferInputBox.GetText().ToInt());
         m_YesNoMessage.Show(false);
     }
 

@@ -129,9 +129,9 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "DepositRequest", new Param2<int, int>(ammount, mode), true);
     }
 
-    void RequestRemoteForTransfer(ref bankingplayerlistobj target, int ammount)
+    void RequestRemoteForTransfer(string PlainID, int ammount)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<ref bankingplayerlistobj, int>(target, ammount), true);
+        GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<string, int>(PlainID, ammount), true);
     }
 
     void RequestRemoteLeaveClan()
