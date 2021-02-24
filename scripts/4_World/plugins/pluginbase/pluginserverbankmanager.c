@@ -134,7 +134,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<ref bankingplayerlistobj, int> data;
             if(!ctx.Read(data)) return;
-			if(m_krserverconfig.MinAmountToTransfer < data.param2)
+			if(m_krserverconfig.MinAmountToTransfer > data.param2)
 			{
 				SendNotification("Min Amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
 				return;
@@ -165,7 +165,8 @@ class PluginKRBankingManagerServer extends PluginBase
 							SendNotification(" ERROR CANT TRANSFER MONEY!", sender, true);
 							return;
 						}
-						int currentFeec =  (data.param2 / 100) * m_krserverconfig.TransferfeesInProcent;
+
+						int currentFeec =  Math.Round((data.param2 / 100) * m_krserverconfig.TransferfeesInProcent);
 						int finalData = data.param2 - currentFeec;
 						Print("Feec of Transfer was: " + currentFeec);
 						Print("Rest was: " + finalData);
