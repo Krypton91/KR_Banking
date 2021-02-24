@@ -83,7 +83,7 @@ class PluginKrBankingClientManager extends PluginBase
         {
             if(m_BankingMenu && m_BankingMenu.IsVisible())
             {
-                m_BankingMenu.CloseBankingMenu();
+                CloseBankingMenu();
             }
         }
     }
@@ -103,6 +103,14 @@ class PluginKrBankingClientManager extends PluginBase
                 GetGame().GetUIManager().ShowScriptedMenu(m_BankingMenu, NULL);
                 m_BankingMenu.SetIsBankingMenuOpen(true);
             }
+        }
+    }
+
+    void CloseBankingMenu()
+    {
+        if(m_BankingMenu && m_BankingMenu.IsVisible())
+        {
+            m_BankingMenu.CloseBankingMenu();
         }
     }
 

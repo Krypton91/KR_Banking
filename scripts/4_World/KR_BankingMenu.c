@@ -442,8 +442,8 @@ class KR_BankingMenu extends UIScriptedMenu
         }
 
         ref bankingplayerlistobj member;
-        if(!GetBankingClientManager().GetOnlinePlayers()) return;
-        member = GetBankingClientManager().GetOnlinePlayers().Get(rowIndex);
+        if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
+        member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
         GetBankingClientManager().RemoveMember(member.plainid);
     }
 
