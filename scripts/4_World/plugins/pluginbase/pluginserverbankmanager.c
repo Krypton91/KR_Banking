@@ -7,6 +7,7 @@ class PluginKRBankingManagerServer extends PluginBase
     {
         if(!m_krserverconfig)
             m_krserverconfig = GetKR_BankingServerConfig();
+
         Init();
     }
 
@@ -146,9 +147,6 @@ class PluginKRBankingManagerServer extends PluginBase
 			Print(m_krserverconfig.TransferfeesInProcent.ToString() + " % is fees for Transfers!");
 			int currentFeec =  Math.Floor((TransferAmount / 100) * m_krserverconfig.TransferfeesInProcent);//Use Floor because Math.Round dont work lol.
 			int AmountToTransfer = TransferAmount - currentFeec; //Amount with fees!
-			Print("Default input: " + TransferAmount);
-			Print("Transferfeec: " + currentFeec);
-			Print("Amount without feec: " + AmountToTransfer);
 			PlayerBase targetPlayer = RemoteFindPlayer(TargetsPlainID);
 			if(!targetPlayer || sender.GetPlainId() == TargetsPlainID)
 			{
