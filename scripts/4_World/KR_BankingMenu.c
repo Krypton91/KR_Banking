@@ -441,10 +441,10 @@ class KR_BankingMenu extends UIScriptedMenu
             return;
         }
 
-        ref bankingplayerlistobj member;
+        ref ClanMemberObject member;
         if(!GetBankingClientManager().GetClientsClanData().GetClanMembers()) return;
         member = GetBankingClientManager().GetClientsClanData().GetClanMembers().Get(rowIndex);
-        GetBankingClientManager().RemoveMember(member.plainid);
+        GetBankingClientManager().RemoveMember(member.GetPlainID());
     }
 
     void LoadClanMemberList()

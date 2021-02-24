@@ -134,6 +134,12 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<ref bankingplayerlistobj, int> data;
             if(!ctx.Read(data)) return;
+			if(m_krserverconfig.MinAmountToTransfer < data.param2)
+			{
+				SendNotification("Min Amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
+				return;
+			}
+
             KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
 			if(ownpldata)
 			{
@@ -143,21 +149,31 @@ class PluginKRBankingManagerServer extends PluginBase
 					PlayerBase targetPlayer = RemoteFindPlayer(data.param1.plainid);
 					if(!targetPlayer) return;
 
+					if(targetPlayer.GetIdentity().GetPlainId() == sender.GetPlainId())
+					{
+						SendNotification("You can not transfer yourself money.", sender, true);
+						return;
+					}
+
 					PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
 						
 					KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
 					if(targetpl && targetIdentity != sender)
 					{
-						if(targetpl.GetBankCredits() >= m_krserverconfig.maxCurrency)
+						if(targetpl.GetBankCredit() >= m_krserverconfig.maxCurrency)
 						{
-							SendNotification(" ERROR CANT TRANSFER MONEY!");
+							SendNotification(" ERROR CANT TRANSFER MONEY!", sender, true);
 							return;
 						}
-						targetpl.DepositMoney(data.param2);
-						ownpldata.WitdrawMoney(data.param2);
+						int currentFeec =  (data.param2 / 100) * m_krserverconfig.TransferfeesInProcent;
+						int finalData = data.param2 - currentFeec;
+						Print("Feec of Transfer was: " + currentFeec);
+						Print("Rest was: " + finalData);
+						targetpl.DepositMoney(finalData);
+						ownpldata.WitdrawMoney(finalData);
 
-						SendNotification(" You received " + data.param2 + " from: " + sender.GetName(), targetIdentity);
-						SendNotification(" sucesfully transfered " + data.param2 + " to: " + targetIdentity.GetName(), sender);
+						SendNotification(" You received " + finalData + " from: " + sender.GetName(), targetIdentity);
+						SendNotification(" sucesfully transfered " + finalData + " to: " + targetIdentity.GetName(), sender);
 					}
 					else
 					{

@@ -10,6 +10,8 @@ class KR_BankingConfigManager
     int     CostsToInviteAnPlayer;
     int     MaxClanAccountLimit;
     int     MaxPlayersInClan;
+    int     MinAmountToTransfer;
+    int     TransferfeesInProcent;
     bool    IsRobEventActive;
     int     MinPlayersForRob;
     int     MinMoneyForRob;
@@ -45,6 +47,8 @@ class KR_BankingConfigManager
         CostsToInviteAnPlayer = 1000;
         MaxClanAccountLimit = 200000;
         MaxPlayersInClan = -1;
+        MinAmountToTransfer = 5000;
+        TransferfeesInProcent = 3;
         IsRobEventActive = true;
         MinPlayersForRob = 5;
         MinMoneyForRob = 1000;
