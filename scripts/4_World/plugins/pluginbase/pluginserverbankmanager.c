@@ -134,67 +134,63 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<string, int> data;
             if(!ctx.Read(data)) return;
-			
-			if(m_krserverconfig.MinAmountToTransfer > data.param2)
+			string TargetsPlainID = data.param1;
+			int TransferAmount = data.param2;
+			if(TransferAmount < m_krserverconfig.MinAmountToTransfer)
 			{
-				SendNotification("Min Amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
+				SendNotification("Minimum amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
 				return;
 			}
 
-            KR_JsonDatabaseHandler ownpldata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
-			if(ownpldata)
+			if(!TargetsPlainID || !TransferAmount)
+			Print(m_krserverconfig.TransferfeesInProcent.ToString() + " % is fees for Transfers!");
+			int currentFeec =  Math.Floor((TransferAmount / 100) * m_krserverconfig.TransferfeesInProcent);//Use Floor because Math.Round dont work lol.
+			int AmountToTransfer = TransferAmount - currentFeec; //Amount with fees!
+			Print("Default input: " + TransferAmount);
+			Print("Transferfeec: " + currentFeec);
+			Print("Amount without feec: " + AmountToTransfer);
+			PlayerBase targetPlayer = RemoteFindPlayer(TargetsPlainID);
+			if(!targetPlayer || sender.GetPlainId() == TargetsPlainID)
 			{
-				if(ownpldata.GetBankCredit() >= data.param2)
+				SendNotification("This player is currently not avaible for transfers!", sender, true);
+				return;
+			}
+
+			KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+			if(playerdata)
+			{
+				if(playerdata.GetBankCredit() < TransferAmount)
 				{
-					//has enough
-					PlayerBase targetPlayer = RemoteFindPlayer(data.param1);
-					if(!targetPlayer) return;
-
-					if(targetPlayer.GetIdentity().GetPlainId() == sender.GetPlainId())
-					{
-						SendNotification("You can not transfer yourself money.", sender, true);
-						return;
-					}
-
-					PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
-						
-					KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
-					if(targetpl && targetIdentity)
-					{
-						if(targetpl.GetBankCredit() >= m_krserverconfig.maxCurrency)
-						{
-							SendNotification(" ERROR CANT TRANSFER MONEY!", sender, true);
-							return;
-						}
-
-						int currentFeec =  Math.Round((data.param2 / 100) * m_krserverconfig.TransferfeesInProcent);
-						int finalData = data.param2 - currentFeec;
-						Print("Feec of Transfer was: " + currentFeec);
-						Print("Rest was: " + finalData);
-						targetpl.DepositMoney(finalData);
-						ownpldata.WitdrawMoney(finalData);
-
-						SendNotification(" You received " + finalData + " from: " + sender.GetName(), targetIdentity);
-						SendNotification(" sucesfully transfered " + finalData + " to: " + targetIdentity.GetName(), sender);
-					}
-					else
-					{
-						SendNotification(" You cannot transfer yourself money ", sender, true);
-					}
+					SendNotification("You dont have enough money to do this!", sender, true);
 				}
 				else
 				{
-					SendNotification(" You dont have enough money on your account! ", sender, true);
+					//Player what will transfer has enough money to Transfer!
+					KR_JsonDatabaseHandler targetdata = KR_JsonDatabaseHandler.LoadPlayerData(targetPlayer.GetIdentity().GetPlainId(), targetPlayer.GetIdentity().GetName());
+					if(targetdata)
+					{
+						//Check if target can store this transfer!
+						int TargetsMaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(targetdata);
+						if(targetdata.GetBankCredit() < TargetsMaxPlaceAbleAmount)
+						{
+							//Target can store this transfer!
+							playerdata.WitdrawMoney(AmountToTransfer);
+							targetdata.DepositMoney(AmountToTransfer);
+							SendNotification("Sucessfully transfered: " + AmountToTransfer + " to player: " + targetPlayer.GetIdentity().GetName(), sender);
+							SendNotification("Sucessfully recived: " + AmountToTransfer + " from player: " + sender.GetName(), targetPlayer.GetIdentity());
+
+						}
+						else
+						{
+							SendNotification("This target is currently not avaible for transfers!", sender, true);
+						}
+					}
+					else
+					{
+						SendNotification("It Looks like this player has no bank account!", sender, true);
+					}
 				}
 			}
-			else
-			{
-				Error("Playerdata from Player: " + sender.GetName() + " was not found! please report this to the dev team!");
-			}
-        }
-		else
-		{
-			Error("FATAL RPC ERROR CLIENT TRYED TO CALL SERVERSIDE CODE!");
 		}
 	}
 

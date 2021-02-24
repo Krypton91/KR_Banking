@@ -90,6 +90,10 @@ class ActionRobATM: ActionContinuousBase
         {
             TempRobmsg.Replace("%id%", player.GetIdentity().GetPlainId());
         }
+        if(TempRobmsg.Contains("%Pos%"))
+        {
+            TempRobmsg.Replace("%Pos%", player.GetPosition().ToString());
+        }
         return TempRobmsg;
     }
 
@@ -111,6 +115,7 @@ class ActionRobATM: ActionContinuousBase
         if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))
         {
             AdvATM.m_Banking_CanBeRobbed = false;
+            AdvATM.SetATMIsRobbed(true);
             AdvATM.SetSynchDirty();
         }
 
@@ -134,6 +139,7 @@ class ActionRobATM: ActionContinuousBase
 
     override void OnStartClient( ActionData action_data )
     {
+        //Max Trys then he is banned! Todo: Purge this.
         m_ClientSideTry++;
         if(m_ClientSideTry > 2)
         {
@@ -144,10 +150,5 @@ class ActionRobATM: ActionContinuousBase
             }
             GetBankingClientManager().SendNotification("You are now banned from Robbing this ATM because spamming!");
         }
-    }
-
-    override void OnEndClient( ActionData action_data )
-	{
-        m_ClientSideTry = 0;
     }
 }

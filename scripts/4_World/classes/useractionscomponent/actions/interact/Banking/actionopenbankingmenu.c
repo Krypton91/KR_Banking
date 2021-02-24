@@ -40,12 +40,17 @@ class ActionOpenBankingMenu: ActionInteractBase
 				if(GetBankingClientManager().GetClientSettings().isBankCardNeeded)
 					return CanOpenBankingMenu(player);
 				else
-					return true;
+					return !IsThisATMRobbed(atmbase);
 			}
 		}
 		return false;
 	}
 	
+	bool IsThisATMRobbed(KR_BankingATM atm)
+	{
+		return atm.IsATMRobbed();
+	}
+
 	bool CanOpenBankingMenu(PlayerBase player)
 	{
 		if(!player) return false;

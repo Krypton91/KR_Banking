@@ -91,6 +91,13 @@ class KR_BankingMenu extends UIScriptedMenu
        
     }
 
+    void ~KR_BankingMenu()
+    {
+        if(layoutRoot)
+            layoutRoot.Unlink();
+        m_IsBankingMenuInitialized = false;
+    }
+
     override Widget Init()
     {
         if(!m_IsBankingMenuInitialized)
@@ -507,7 +514,9 @@ class KR_BankingMenu extends UIScriptedMenu
 
     void HandleTransferConfirm()
     {
-        GetBankingClientManager().RequestRemoteForTransfer(GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).plainid, m_TransferInputBox.GetText().ToInt());
+        string TragetID = GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).plainid;
+        Print("Sending Remote RPC to transfer data: " + TragetID);
+        GetBankingClientManager().RequestRemoteForTransfer(TragetID, m_TransferInputBox.GetText().ToInt());
         m_YesNoMessage.Show(false);
     }
 
