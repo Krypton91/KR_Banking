@@ -134,6 +134,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<string, int> data;
             if(!ctx.Read(data)) return;
+			
 			if(m_krserverconfig.MinAmountToTransfer > data.param2)
 			{
 				SendNotification("Min Amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
@@ -158,7 +159,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					PlayerIdentity targetIdentity = targetPlayer.GetIdentity();
 						
 					KR_JsonDatabaseHandler targetpl = KR_JsonDatabaseHandler.LoadPlayerData(targetIdentity.GetPlainId(), targetIdentity.GetName());
-					if(targetpl && targetIdentity != sender)
+					if(targetpl && targetIdentity)
 					{
 						if(targetpl.GetBankCredit() >= m_krserverconfig.maxCurrency)
 						{
