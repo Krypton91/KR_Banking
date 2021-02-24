@@ -11,7 +11,6 @@ class ActionRobATMCB : ActiondeployObjectCB
 
 class ActionRobATM: ActionContinuousBase
 {
-	int         m_ClientSideTry = 0;
 	void ActionRobATM()
 	{
 		m_CallbackClass = ActionRobATMCB;
@@ -126,26 +125,11 @@ class ActionRobATM: ActionContinuousBase
 
     override bool ActionConditionContinue( ActionData action_data )
 	{	
-		 KR_BankingATM AdvATM;
+		KR_BankingATM AdvATM;
         if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))
         {
             return AdvATM.m_Banking_CanBeRobbed;
         }
         return false;
 	}
-
-    override void OnStartClient( ActionData action_data )
-    {
-        //Max Trys then he is banned! Todo: Purge this.
-        m_ClientSideTry++;
-        if(m_ClientSideTry > 2)
-        {
-            KR_BankingATM AdvATM;
-            if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))
-            {
-                AdvATM.m_Banking_CanBeRobbed = false;
-            }
-            GetBankingClientManager().SendNotification("You are now banned from Robbing this ATM because spamming!");
-        }
-    }
 }
