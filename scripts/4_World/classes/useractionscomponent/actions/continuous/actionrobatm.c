@@ -61,17 +61,12 @@ class ActionRobATM: ActionContinuousBase
             if(distance < 2)
             {
                 //Very sure its the correct ATM!
-                RobMessage = ReplacePlaceHolder(GetKR_BankingServerConfig().ATM.Get(i).GetRobMessage(), action_data.m_Player);
+                RobMessage = ReplacePlaceHolder(GetKR_BankingServerConfig().ATM.Get(i).GetRobMessage(), action_data);
             }
         }
 
         array<Man> onlinePlayers = new array<Man>;
         GetGame().GetPlayers(onlinePlayers);
-        if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForRob)
-        {
-            GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
-            return;
-        }
         for(int n = 0; n < onlinePlayers.Count(); n++)
         {
             PlayerBase player = PlayerBase.Cast(onlinePlayers.Get(n));
@@ -79,20 +74,22 @@ class ActionRobATM: ActionContinuousBase
         }
     }
 
-    string ReplacePlaceHolder(string robMessage, PlayerBase player)
+    string ReplacePlaceHolder(string robMessage, ActionData action_data)
     {
         local string TempRobmsg = robMessage;
         if(TempRobmsg.Contains("%PlayerName%"))
         {
-            TempRobmsg.Replace("%PlayerName%", player.GetIdentity().GetName());
+            TempRobmsg.Replace("%PlayerName%", action_data.m_Player.GetIdentity().GetName());
         }
         if(TempRobmsg.Contains("%id%"))
         {
-            TempRobmsg.Replace("%id%", player.GetIdentity().GetPlainId());
+            TempRobmsg.Replace("%id%", action_data.m_Player.GetIdentity().GetPlainId());
         }
         if(TempRobmsg.Contains("%Pos%"))
         {
-            TempRobmsg.Replace("%Pos%", player.GetPosition().ToString());
+            vector trg_pos = action_data.m_Target.GetObject().GetPosition();
+            string finalforMSG = "X:" + trg_pos[0].ToString() + " Y: " + trg_pos[2].ToString();
+            TempRobmsg.Replace("%Pos%", finalforMSG);
         }
         return TempRobmsg;
     }
@@ -119,11 +116,11 @@ class ActionRobATM: ActionContinuousBase
             AdvATM.SetSynchDirty();
         }
 
-        EntityAI item_in_Hands = EntityAI.Cast(action_data.m_Target.GetObject());
+        EntityAI item_in_Hands = EntityAI.Cast(action_data.m_MainItem);
         if(item_in_Hands)
         {
-            float max = item_in_Hands.GetMaxHealth("","");
-			item_in_Hands.SetHealth( "", "", max * GameConstants.DAMAGE_RUINED_VALUE );
+            //float max = item_in_Hands.GetMaxHealth("","");
+			item_in_Hands.SetHealth( "", "", GameConstants.DAMAGE_RUINED_VALUE ); //RUINED!
         }
 	}
 
