@@ -384,7 +384,7 @@ FrameWidgetClass MainRoot {
          {
           ImageWidgetClass ImageWidget1 {
            ignorepointer 1
-           position 0.00964 -0
+           position 0.00964 0
            size 0.08393 0.82461
            valign center_ref
            hexactpos 0
@@ -715,6 +715,11 @@ FrameWidgetClass MainRoot {
          vexactsize 0
          text "Transfer Check"
          font "gui/fonts/metron-bold58"
+         "size to text h" 1
+         "size to text v" 1
+         "text halign" center
+         "text valign" center
+         wrap 0
         }
         MultilineTextWidgetClass TextMessage0 {
          visible 1
@@ -723,14 +728,16 @@ FrameWidgetClass MainRoot {
          inheritalpha 0
          ignorepointer 1
          position 0.00619 0.2922
-         size 0.98494 0.48997
+         size 0.90442 0.48997
          hexactpos 0
          vexactpos 0
          hexactsize 0
          vexactsize 0
          scaled 1
          text "Are you sure you want to transfer x to x ?"
-         font "gui/fonts/metron-bold58"
+         font "gui/fonts/metron-bold48"
+         "text halign" center
+         "text valign" center
          wrap 1
         }
         PanelWidgetClass PanelWidgetmidget0 {
