@@ -1,4 +1,3 @@
-  
 class CfgPatches 
 {
 	class KR_Banking 
@@ -19,17 +18,18 @@ class CfgPatches
 
 class CfgMods 
 {
-	class KR_Banking {
+	class KR_Banking 
+	{
 		dir = "KR_Banking";
 		picture = "";
 		action = "https://DeutscheBohrmaschine.de";
 		hideName = 1;
 		hidePicture = 1;
-		name = "BANKING";
+		name = "Advanced Banking";
 		credits = "Krypton91";
 		author = "Krypton91";
-		authorID = "0";
-		version = "1.0";
+		authorID = "76561198796326626";
+		version = "1.11";
 		extra = 0;
 		type = "mod";
 		dependencies[] = {"Mission", "World", "Game"};
@@ -39,17 +39,17 @@ class CfgMods
 			class gameScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/3_Game"};
+                files[] = {"KR_Banking/scripts/3_Game"};
             };
 			class worldScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/4_World"};
+                files[] = {"KR_Banking/scripts/4_World"};
             };
 			class missionScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/5_Mission"};
+                files[] = {"KR_Banking/scripts/5_Mission"};
             };
         };
 	};

@@ -1,3 +1,0 @@
-#ifndef ADVANCEDBANKING
-#define ADVANCEDBANKING
-#endif
