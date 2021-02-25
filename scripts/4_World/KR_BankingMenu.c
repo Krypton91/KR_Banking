@@ -239,7 +239,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to: " +  GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).name + " ?");
+                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to " +  GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).name + " ?");
                 break;
             case m_BtnFinallyCreate:
                 if(m_UICooldownTimer > 0)

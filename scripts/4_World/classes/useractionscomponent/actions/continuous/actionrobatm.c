@@ -105,7 +105,7 @@ class ActionRobATM: ActionContinuousBase
         
         int Money = Math.RandomInt(GetKR_BankingServerConfig().MinMoneyForRob, GetKR_BankingServerConfig().MaxMoneyForRob);
         GetBankingServerManager().AddCurrencyToPlayer(action_data.m_Player, Money);
-        GetBankingServerManager().SendNotification("You sucessfully robbbed this atm you received: " + Money + " money!", action_data.m_Player.GetIdentity());
+        GetBankingServerManager().SendNotification("You sucessfully robbed this atm you received: " + Money + " ruble!", action_data.m_Player.GetIdentity());
 
         KR_BankingATM AdvATM;
         if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))

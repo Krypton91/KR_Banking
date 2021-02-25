@@ -38,7 +38,7 @@ class PluginBankingLogManagerServer extends PluginBase
         m_LogFileHandler = OpenFile(m_BankingLogDir + "/" + m_CurrentBankingLogFileName, FileMode.WRITE)
         if(m_LogFileHandler != 0)
         {
-            Log("Sucesfully started BankingLogger");
+            Log("Succesfully started BankingLogger");
         }
         else
         {
