@@ -118,7 +118,7 @@ class KR_BankingConfigManager
         return settings;
     }
 
-    float GetCorrectPayCheckTime()
+    int GetCorrectPayCheckTime()
     {
         return PayCheckTickTime * 60000;
     }

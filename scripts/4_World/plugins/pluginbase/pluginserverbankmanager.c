@@ -40,11 +40,12 @@ class PluginKRBankingManagerServer extends PluginBase
 
     protected void InitPayCheck()
     {
-        float TickTime = m_krserverconfig.GetCorrectPayCheckTime();
+        int TickTime = m_krserverconfig.GetCorrectPayCheckTime();
 
         if(TickTime && m_krserverconfig.PayCheckTickTime != -1)
         {
             //we sure he want to make paychecks.
+			GetBankingLogManager().Log("Internal PayCheck system starting tick time is: " + TickTime.ToString());
             GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.TickPayCheck, TickTime, true);
         }
     }
@@ -55,7 +56,7 @@ class PluginKRBankingManagerServer extends PluginBase
         GetGame().GetPlayers(onlinePlayers);
 		if(m_krserverconfig.MinPlayersForPayCheck > onlinePlayers.Count())
 			return;
-        if(m_krserverconfig.MinPlayersForPayCheck >= onlinePlayers.Count())
+        if(onlinePlayers.Count() >= m_krserverconfig.MinPlayersForPayCheck)
         {
             for(int i = 0; i < onlinePlayers.Count(); i++)
             {
