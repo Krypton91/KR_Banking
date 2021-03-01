@@ -45,7 +45,6 @@ class PluginKRBankingManagerServer extends PluginBase
         if(TickTime && m_krserverconfig.PayCheckTickTime != -1)
         {
             //we sure he want to make paychecks.
-			GetBankingLogManager().Log("Internal PayCheck system starting tick time is: " + TickTime.ToString());
             GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.TickPayCheck, TickTime, true);
         }
     }
@@ -949,7 +948,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName == invitem.GetType())
 				{
-					if(Class.CastTo(item, invitem)
+					if(Class.CastTo(item, invitem))
 					{
 						BKquantityNeeded = amountToRemove / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 						if(GetItemQuantityMax(item) == 0)
@@ -1041,7 +1040,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		while(player.GetInventory().FindFirstFreeLocationForNewEntity(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName, FindInventoryLocationType.CARGO, il) || MaxRetryCount < 100)
 		{
 			MaxRetryCount++;
-			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName))
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)))
             {
 				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
 				if(BKcurrencyItemMaxQuantity == 0)
@@ -1223,7 +1222,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		
 		foreach(EntityAI item : itemsArray)
 		{
-			if(Class.CastTo(currencyItem, item)
+			if(Class.CastTo(currencyItem, item))
 			{
 				for (int i = 0; i < m_krserverconfig.BankingCurrency.Count(); i++)
 				{
