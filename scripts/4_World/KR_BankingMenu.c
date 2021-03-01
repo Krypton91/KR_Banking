@@ -308,6 +308,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 SpawnClanCreatePopup();
                 break;
         }
+
         return super.OnClick(w, x, y, button);
     }
 
@@ -321,6 +322,34 @@ class KR_BankingMenu extends UIScriptedMenu
         return super.OnClick(w, x, y, button);
     }
     */
+
+    bool IsStringNumberOnly(string inputText, EditBoxWidget ctxBox = null)
+    {
+        bool needsAnUpdate = false;
+        for(int i = 0; i < inputText.Length(); i++)
+        {
+            if(!IsCharNumberOnly(inputText.Get(i)))
+            {
+                inputText.Set(i, "");
+                needsAnUpdate = true;
+            }
+        }
+
+        if(needsAnUpdate)
+        {
+            if(ctxBox)
+                ctxBox.SetText(inputText);
+            return false;
+        }
+        return true;
+    }
+
+    bool IsCharNumberOnly(string input)
+    {
+        if(input == "1" || input == "2" || input == "3" || input == "4" || input == "5" || input == "6" || input == "7" || input == "8" || input == "9" || input == "0")
+            return true;
+        return false;
+    }
     
     void OpenClanSettings()
     {
@@ -493,6 +522,12 @@ class KR_BankingMenu extends UIScriptedMenu
                 }
             }
 
+            /* Check for number only */
+            IsStringNumberOnly(m_OwnAccInputBox.GetText(), m_OwnAccInputBox);
+            IsStringNumberOnly(m_ClanAccInputBox.GetText(), m_ClanAccInputBox);
+            IsStringNumberOnly(m_TransferInputBox.GetText(), m_TransferInputBox);
+
+
             //Update all in UI
             UpdateUI();
             UpdateUIClanData();
@@ -532,7 +567,7 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
-        
+
         GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
     }
 
