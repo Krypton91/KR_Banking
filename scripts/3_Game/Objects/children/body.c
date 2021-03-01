@@ -1,12 +1,12 @@
-class DiscordObject_Body : DiscordObject
+class BankingDiscordObject_Body : BankingDiscordObject
 {
 	private int m_color;
-	private ref array<ref DiscordObject_Fields> m_otherFields;
+	private ref array<ref BankingDiscordObject_Fields> m_otherFields;
 
-	void DiscordObject_Body(int color = -1)
+	void BankingDiscordObject_Body(int color = -1)
 	{
 		m_color = color;
-		m_otherFields = new array<ref DiscordObject_Fields>;
+		m_otherFields = new array<ref BankingDiscordObject_Fields>;
 	}
 	
 	override protected string ConvertSpecialFields()
@@ -22,7 +22,7 @@ class DiscordObject_Body : DiscordObject
 	{
 		if (m_color > -1)
 		{
-			return DiscordHelper.GetJSONLineOthers("color", m_color.ToString());
+			return BankingDiscordHelper.GetJSONLineOthers("color", m_color.ToString());
 		}
 		return "";
 	}
@@ -45,7 +45,7 @@ class DiscordObject_Body : DiscordObject
 
 	private void AddNewField(string name, string value, bool inline = false)
 	{
-		m_otherFields.Insert(new DiscordObject_Fields(name, value, inline));
+		m_otherFields.Insert(new BankingDiscordObject_Fields(name, value, inline));
 	}
 
 	override protected bool CanSetKey(string key)

@@ -1,9 +1,9 @@
-class DiscordObject_Video : DiscordObject
+class BankingDiscordObject_Video : BankingDiscordObject
 {
 	private int m_width;
 	private int m_height;
 
-	void DiscordObject_Video(string url, int width = -1, int height = -1)
+	void BankingDiscordObject_Video(string url, int width = -1, int height = -1)
 	{
 		m_width = width;
 		m_height = height;
@@ -28,7 +28,7 @@ class DiscordObject_Video : DiscordObject
 	{
 		if (m_width > -1)
 		{
-			return DiscordHelper.GetJSONLineOthers("width", m_width.ToString());
+			return BankingDiscordHelper.GetJSONLineOthers("width", m_width.ToString());
 		}
 		return "";
 	}
@@ -37,7 +37,7 @@ class DiscordObject_Video : DiscordObject
 	{
 		if (m_height > -1)
 		{
-			return DiscordHelper.GetJSONLineOthers("height", m_height.ToString());
+			return BankingDiscordHelper.GetJSONLineOthers("height", m_height.ToString());
 		}
 		return "";
 	}

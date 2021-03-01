@@ -1,12 +1,12 @@
-class DiscordJSON
+class BankingDiscordJSON
 {
-	ref DiscordObject_Body m_body;
-	ref DiscordObject_Footer m_footer;
-	ref DiscordObject_Image m_image;
-	ref DiscordObject_Thumbnail m_thumbnail;
-	ref DiscordObject_Video m_video;
-	ref DiscordObject_Provider m_provider;
-	ref DiscordObject_Author m_author;
+	ref BankingDiscordObject_Body m_body;
+	ref BankingDiscordObject_Footer m_footer;
+	ref BankingDiscordObject_Image m_image;
+	ref BankingDiscordObject_Thumbnail m_thumbnail;
+	ref BankingDiscordObject_Video m_video;
+	ref BankingDiscordObject_Provider m_provider;
+	ref BankingDiscordObject_Author m_author;
 
 	string GetJSON()
 	{
@@ -20,11 +20,11 @@ class DiscordJSON
 		jsonData += GetModuleJSON(m_provider);
 		jsonData += GetModuleJSON(m_author);
 		jsonData += "}";
-		jsonData = DiscordHelper.RemoveExtraCommasJSON(jsonData);
+		jsonData = BankingDiscordHelper.RemoveExtraCommasJSON(jsonData);
 		return jsonData;
 	}
 	
-	string GetModuleJSON(ref DiscordObject module)
+	string GetModuleJSON(ref BankingDiscordObject module)
 	{
 		if (module)
 		{

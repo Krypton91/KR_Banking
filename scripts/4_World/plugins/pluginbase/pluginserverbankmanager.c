@@ -584,22 +584,29 @@ class PluginKRBankingManagerServer extends PluginBase
 		}
 	}
 
-    void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Ammount)
+    void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Amount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
-            if(Ammount == 0) return;
+            int CorrectAmountToWitdraw;
+			Print("Input from client was: " + Amount.ToString());
+			if(Amount == 0)
+				CorrectAmountToWitdraw = playerdata.GetBankCredit();
+			else
+				CorrectAmountToWitdraw = Amount;
+			
 
-            int CorrectAmountToWitdraw = Ammount;
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
-            
+            Print("DEBUG for Widtraw Input to Witraw was: " + CorrectAmountToWitdraw.ToString());
+			Print("Currency on Bank Account: " + playerdata.GetBankCredit().ToString());
             int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
 			int finalAmount = CorrectAmountToWitdraw - sillNeeded; 
+			Print("Final Amount was: " + finalAmount.ToString());
 			playerdata.WitdrawMoney(finalAmount);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
-            //Todo add here logs.
+
 
 			if(m_krserverconfig.m_DiscordWebhook.m_LogWithdrawToDiscord)
 				GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " withdrawed " + finalAmount + " from own account.");
@@ -609,7 +616,7 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
-	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Ammount)
+	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Amount)
 	{
 		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
@@ -617,7 +624,10 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
-				if(Ammount <= clanDB.GetBankCredit())
+				if(Amount == 0)
+					Amount = clanDB.GetBankCredit();
+				
+ 				if(Amount <= clanDB.GetBankCredit())
 				{
 					ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
 					if(!user || !user.GetPermission().m_CanWithdraw)
@@ -625,8 +635,8 @@ class PluginKRBankingManagerServer extends PluginBase
 						SendNotification("Sorry but you cant do that!", identity, true);
 						return;
 					}
-					int stillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Ammount);
-					int FinallyAmount = Ammount - stillNeeded;
+					int stillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Amount);
+					int FinallyAmount = Amount - stillNeeded;
 					clanDB.WitdrawMoney(FinallyAmount);
 					clanDB.WriteLog(identity.GetName() + " withdrawed: " + FinallyAmount);
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
@@ -653,18 +663,23 @@ class PluginKRBankingManagerServer extends PluginBase
 		}
 	}
 
-    void DepositMoneyOnOwnBank(PlayerIdentity identity, int Ammount)
+    void DepositMoneyOnOwnBank(PlayerIdentity identity, int Amount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
 			int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
-			int SumToInsert = Ammount;
+			int SumToInsert;
+			PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
+			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+			if(!player) return;
+
+			if(Amount == 0)
+				SumToInsert = CurrencyOnPlayer;
+			
 			if(SumToInsert > MaxPlaceAbleAmount)
 				SumToInsert = MaxPlaceAbleAmount;
-			PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
-			if(!player) return;
-			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+			
 			if(CurrencyOnPlayer >= SumToInsert)
 			{
 				playerdata.DepositMoney(SumToInsert);
@@ -703,14 +718,17 @@ class PluginKRBankingManagerServer extends PluginBase
 					return;
 				}
 
-				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForClanBank(clanDB);
-				int SumToInsert = Ammount;
-				if(SumToInsert > MaxPlaceAbleAmount)
-					SumToInsert = MaxPlaceAbleAmount;
-
 				PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
 				if(!player) return;
+				int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForClanBank(clanDB);
+				int SumToInsert = Ammount;
 				int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
+				
+				if(SumToInsert == 0)
+					SumToInsert = CurrencyOnPlayer;
+				
+				if(SumToInsert > MaxPlaceAbleAmount)
+					SumToInsert = MaxPlaceAbleAmount;
 				
 				if( SumToInsert <= MaxPlaceAbleAmount)
 				{
@@ -733,7 +751,6 @@ class PluginKRBankingManagerServer extends PluginBase
 				}
 				else
 				{
-					//Todo: Add Notify Module here....
 					SendNotification("Max Clan Limit reached", identity, true);
 				}
 			}
@@ -889,86 +906,76 @@ class PluginKRBankingManagerServer extends PluginBase
 		return sum;
 	}
 
-    /* THANKS TO DAEMON FORGE! <3 */
     int AddCurrencyToPlayer(PlayerBase player, int amountToAdd)
 	{
-		if(amountToAdd <= 0)
-		{
+		if(!player || amountToAdd <= 0)
 			return 0;
-		}
 
-		int amountStillNeeded = amountToAdd;
-		int quantityNeeded;
-		int quantityLeft;
+		int BKquantityNeeded;
+		int BKquantityLeft;
 		
 		for(int i = 0; i < GetKR_BankingServerConfig().BankingCurrency.Count(); i++)
 		{
-			quantityNeeded = Math.Floor(amountStillNeeded / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue);
-			if(quantityNeeded > 0)
+			BKquantityNeeded = amountToAdd / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+			if(BKquantityNeeded > 0)
 			{
-				quantityLeft = AddCurrencyToInventory(player, i, quantityNeeded);
-				amountStillNeeded -= (quantityNeeded - quantityLeft) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+				BKquantityLeft = AddCurrencyToInventory(player, i, BKquantityNeeded);
+				amountToAdd -= (BKquantityNeeded - BKquantityLeft) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 				
-				if(amountStillNeeded == 0)
+				if(amountToAdd == 0)
 				{
 					return 0;
 				}
 			}
 		}
-		return amountStillNeeded;
+		return amountToAdd;
 	}
 
     int RemoveCurrencyFromPlayer(PlayerBase player, int amountToRemove)
 	{
-		int amountStillNeeded = amountToRemove;
 
-        if(amountToRemove <= 0)
-		{
+        if(!player || amountToRemove <= 0)
 			return 0;
-		}
 
+		ItemBase item;
+		int BKquantityNeeded;
 		array<EntityAI> invItems = new array<EntityAI>;
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invItems);
-		
-		ItemBase item;
-		
-		int currencyValue;
-		int quantityNeeded;
+
 		for(int i = GetKR_BankingServerConfig().BankingCurrency.Count() - 1; i >= 0; i--)
 		{
-			for(int j = 0; j < invItems.Count(); j++)
+			foreach(EntityAI invitem : invItems)
 			{
-				if(GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName == invItems.Get(j).GetType())
+				if(GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyName == invitem.GetType())
 				{
-					if(Class.CastTo(item, invItems.Get(j))
+					if(Class.CastTo(item, invitem)
 					{
-						currencyValue = GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
-						quantityNeeded = amountStillNeeded / currencyValue;
+						BKquantityNeeded = amountToRemove / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 						if(GetItemQuantityMax(item) == 0)
 						{
 							GetGame().ObjectDelete(item);
-							if(quantityNeeded >= 1)
+							if(BKquantityNeeded >= 1)
 							{
-								amountStillNeeded -= currencyValue;
+								amountToRemove -= GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 							}
 							else
 							{
-								return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);
+								return AddCurrencyToPlayer(player, GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue - amountToRemove);
 							}
 						}
 						else
 						{
-							if(quantityNeeded >= GetItemQuantity(item))
+							if(BKquantityNeeded >= GetItemQuantity(item))
 							{
-								amountStillNeeded -= GetItemQuantity(item) * currencyValue;
+								amountToRemove -= GetItemQuantity(item) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 								GetGame().ObjectDelete(item);
 							}
 							else
 							{
-								SetItemQuantity(item, GetItemQuantity(item) - quantityNeeded);
-								amountStillNeeded -= quantityNeeded * currencyValue;
+								SetItemQuantity(item, GetItemQuantity(item) - BKquantityNeeded);
+								amountToRemove -= BKquantityNeeded * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 								
-								if(amountStillNeeded < currencyValue)
+								if(amountToRemove < GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue)
 								{
 									if(GetItemQuantity(item) == 1)
 									{
@@ -978,7 +985,7 @@ class PluginKRBankingManagerServer extends PluginBase
 									{
 										SetItemQuantity(item, GetItemQuantity(item) - 1);
 									}
-									return AddCurrencyToPlayer(player, currencyValue - amountStillNeeded);
+									return AddCurrencyToPlayer(player, GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue - amountToRemove);
 								}
 							}
 						}
@@ -991,80 +998,71 @@ class PluginKRBankingManagerServer extends PluginBase
     
     int AddCurrencyToInventory(PlayerBase player, int CurrencyArrayIndex, int ammountToAdd)
 	{
-		if(ammountToAdd <= 0)
-		{
+		if(!player || ammountToAdd <= 0)
 			return 0;
-		}
-		
-		int quantityLeft = ammountToAdd;
-		
-		CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
 		
 		array<EntityAI> invArray = new array<EntityAI>;
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invArray);
 		ItemBase currencyItem;
+		int BKcurrencyItemMaxQuantity;
+		InventoryLocation il = new InventoryLocation();
+		int MaxRetryCount = 0;
 		
-		int addableQuantity;
-		
-		for(int i = 0; i < invArray.Count(); i++) //Add currency to already in the inventory existing currency
+		foreach(EntityAI item: invArray)
 		{
-			if(invArray.Get(i).GetType() == currency.CurrencyName)
+			if(item.GetType() == GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)
 			{
-				Class.CastTo(currencyItem, invArray.Get(i));
-				if(currencyItem)
+				if(Class.CastTo(currencyItem, item))
 				{
-					addableQuantity = GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
-					if(addableQuantity > 0)
+
+					if(GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem) > 0)
 					{
-						if(addableQuantity >= quantityLeft)
+						if(GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem) >= ammountToAdd)
 						{
-							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + quantityLeft);
-							quantityLeft = 0;
+							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + ammountToAdd);
+							ammountToAdd = 0;
 						}
 						else
 						{
 							SetItemQuantity(currencyItem, GetItemQuantityMax(currencyItem));
-							quantityLeft -= addableQuantity;
+							ammountToAdd -= GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
 						}
 					}
 					
-					if(quantityLeft == 0)
+					if(ammountToAdd == 0)
 					{
 						return 0;
 					}
 				}
 			}
 		}
-		
-		EntityAI createdCurrencyEntity;
-		int currencyItemMaxQuantity;
-		InventoryLocation il = new InventoryLocation();
-		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, il))
+	
+		while(player.GetInventory().FindFirstFreeLocationForNewEntity(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName, FindInventoryLocationType.CARGO, il) || MaxRetryCount < 100)
 		{
-			createdCurrencyEntity = player.GetHumanInventory().CreateInInventory(currency.CurrencyName);
-			if(Class.CastTo(currencyItem, createdCurrencyEntity)
+			MaxRetryCount++;
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName))
             {
-				currencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
-				if(currencyItemMaxQuantity == 0)
+				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
+				if(BKcurrencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					quantityLeft -= 1;
+					ammountToAdd -= 1;
 				}
 				else
 				{
-					if(quantityLeft <= currencyItemMaxQuantity)
+					if(ammountToAdd <= BKcurrencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, quantityLeft);
-						quantityLeft = 0;
+						SetItemQuantity(currencyItem, ammountToAdd);
+						ammountToAdd = 0;
 					}
 					else
 					{
-						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
-						quantityLeft -= currencyItemMaxQuantity;
+						SetItemQuantity(currencyItem, BKcurrencyItemMaxQuantity);
+						ammountToAdd -= BKcurrencyItemMaxQuantity;
 					}
 				}
 				
-				if(quantityLeft == 0)
+				if(ammountToAdd == 0)
 				{
 					return 0;
 				}
@@ -1075,39 +1073,37 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
 		}
 		
-		if(!player.GetHumanInventory().GetEntityInHands()) //Create new currency in the hands of the player
+		if(!player.GetHumanInventory().GetEntityInHands())
 		{
-			createdCurrencyEntity = player.GetHumanInventory().CreateInHands(currency.CurrencyName);
-			Class.CastTo(currencyItem, createdCurrencyEntity);
-			if(currencyItem)
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInHands(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)))
 			{
-				currencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
-				if(currencyItemMaxQuantity == 0)
+				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
+				if(BKcurrencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					quantityLeft -= 1;
+					ammountToAdd -= 1;
 				}
 				else
 				{
-					if(quantityLeft <= currencyItemMaxQuantity)
+					if(ammountToAdd <= BKcurrencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, quantityLeft);
-						quantityLeft = 0;
+						SetItemQuantity(currencyItem, ammountToAdd);
+						ammountToAdd = 0;
 					}
 					else
 					{
-						SetItemQuantity(currencyItem, currencyItemMaxQuantity);
-						quantityLeft -= currencyItemMaxQuantity;
+						SetItemQuantity(currencyItem, BKcurrencyItemMaxQuantity);
+						ammountToAdd -= BKcurrencyItemMaxQuantity;
 					}
 				}
 				
-				if(quantityLeft == 0)
+				if(ammountToAdd == 0)
 				{
 					return 0;
 				}
 			}
 		}
-		return quantityLeft;
+		return ammountToAdd;
 	}
 
     /* QUANTITY SECTION */ 
@@ -1217,29 +1213,27 @@ class PluginKRBankingManagerServer extends PluginBase
 	//!Returns the currency Ammount in Players Invenory
     int GetPlayerCurrencyAmount(PlayerBase player)
 	{
-		int currencyAmount = 0;
+		int currencyInInventory = 0;
 		
 		array<EntityAI> itemsArray = new array<EntityAI>;
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
 
-		ItemBase item;
+		ItemBase currencyItem;
 		
-		for (int i = 0; i < itemsArray.Count(); i++)
+		foreach(EntityAI item : itemsArray)
 		{
-			Class.CastTo(item, itemsArray.Get(i));
-
-			if (!item)
-				continue;
-
-			for (int j = 0; j < m_krserverconfig.BankingCurrency.Count(); j++)
+			if(Class.CastTo(currencyItem, item)
 			{
-				if(item.GetType() == m_krserverconfig.BankingCurrency.Get(j).CurrencyName)
+				for (int i = 0; i < m_krserverconfig.BankingCurrency.Count(); i++)
 				{
-					currencyAmount += GetItemAmount(item) * m_krserverconfig.BankingCurrency.Get(j).CurrencyValue;
+					if(item.GetType() == m_krserverconfig.BankingCurrency.Get(i).CurrencyName)
+					{
+						currencyInInventory += GetItemAmount(item) * m_krserverconfig.BankingCurrency.Get(i).CurrencyValue;
+					}
 				}
 			}
 		}
-		return currencyAmount;
+		return currencyInInventory;
 	}
 
 	int GetItemAmount(ItemBase item)

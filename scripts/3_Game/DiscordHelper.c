@@ -1,4 +1,4 @@
-class DiscordHelper
+class BankingDiscordHelper
 {
 	static string GetJSONLineString(string field, string value)
 	{

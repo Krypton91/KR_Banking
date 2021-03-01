@@ -85,10 +85,13 @@ class KR_BankingMenu extends UIScriptedMenu
 
     protected int m_LastPlayerIndexTransfer;
 
+    protected vector                    m_OpenMenuPosition;
+    protected PlayerBase                m_Player;
 
     void KR_BankingMenu()
     {
-       
+       m_Player = PlayerBase.Cast(GetGame().GetPlayer());
+       m_OpenMenuPosition = m_Player.GetPosition();
     }
 
     void ~KR_BankingMenu()
@@ -307,6 +310,17 @@ class KR_BankingMenu extends UIScriptedMenu
         }
         return super.OnClick(w, x, y, button);
     }
+
+    /*override bool OnDoubleClick(Widget w, int x, int y, int button)
+    {
+        if(w == m_DepositOwnAccBtn)
+        {
+            HandleDepositMoney(1);
+        }
+
+        return super.OnClick(w, x, y, button);
+    }
+    */
     
     void OpenClanSettings()
     {
@@ -469,6 +483,16 @@ class KR_BankingMenu extends UIScriptedMenu
         
         if(m_UIUpdateTimer >= 0.05)
         {
+            if(m_Player)
+            {
+                float DistanceToAtm = vector.Distance(m_Player.GetPosition(), m_OpenMenuPosition);
+                if(DistanceToAtm > 1.5)
+                {
+                    GetGame().GetUIManager().Back();
+                    SetIsBankingMenuOpen(false);
+                }
+            }
+
             //Update all in UI
             UpdateUI();
             UpdateUIClanData();
@@ -493,8 +517,8 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
-        if(parsedMoney)
-            GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+
+        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
     }
     
     void HandleDepositMoney(int mode)
@@ -508,8 +532,8 @@ class KR_BankingMenu extends UIScriptedMenu
         {
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
-        if(parsedMoney)
-            GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
+        
+        GetBankingClientManager().RequestRemoteToDeposit(parsedMoney, mode);
     }
 
     void HandleTransferConfirm()

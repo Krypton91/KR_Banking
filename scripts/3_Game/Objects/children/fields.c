@@ -1,8 +1,8 @@
-class DiscordObject_Fields : DiscordObject
+class BankingDiscordObject_Fields : BankingDiscordObject
 {
 	private bool m_inline;
 
-	void DiscordObject_Fields(string name, string value, bool inline = false)
+	void BankingDiscordObject_Fields(string name, string value, bool inline = false)
 	{
 		m_inline = inline;
 		m_fields.Set("name", name);

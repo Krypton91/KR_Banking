@@ -1,17 +1,17 @@
 class WebhookManager
 {
 	ref map<string, string> m_alias;
-	ref DiscordJSON data;
-	ref DiscordObject_Body dataBody;
-	ref DiscordObject_Thumbnail dataThumb;
+	ref BankingDiscordJSON data;
+	ref BankingDiscordObject_Body dataBody;
+	ref BankingDiscordObject_Thumbnail dataThumb;
 	void WebhookManager()
 	{
 		if(GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 		{
 			m_alias = new map<string, string>;
-			data = new DiscordJSON();
-			dataBody = new DiscordObject_Body(5019904);
-			dataThumb = new DiscordObject_Thumbnail(64, 64);
+			data = new BankingDiscordJSON();
+			dataBody = new BankingDiscordObject_Body(5019904);
+			dataThumb = new BankingDiscordObject_Thumbnail(64, 64);
 			m_alias.Set("Advanced Banking", GetKR_BankingServerConfig().m_DiscordWebhook.m_WebhookURL);
 		}
 	}
@@ -45,7 +45,7 @@ class WebhookManager
 		return false;
 	}
 
-	private string WrapData(ref DiscordJSON data)
+	private string WrapData(ref BankingDiscordJSON data)
 	{
 		string json = "{\"embeds\":[";
 		

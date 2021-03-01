@@ -1,4 +1,4 @@
-class DiscordObject_Author : DiscordObject
+class BankingDiscordObject_Author : BankingDiscordObject
 {
 	override string DefaultJSONConvert()
 	{

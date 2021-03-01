@@ -1,6 +1,6 @@
-class DiscordObject_Footer : DiscordObject
+class BankingDiscordObject_Footer : BankingDiscordObject
 {
-	void DiscordObject_Footer(string text)
+	void BankingDiscordObject_Footer(string text)
 	{
 		m_fields.Set("text", text);
 	}

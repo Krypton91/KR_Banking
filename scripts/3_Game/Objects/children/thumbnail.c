@@ -1,9 +1,9 @@
-class DiscordObject_Thumbnail : DiscordObject
+class BankingDiscordObject_Thumbnail : BankingDiscordObject
 {
 	private int m_width;
 	private int m_height;
 
-	void DiscordObject_Thumbnail(int width = -1, int height = -1)
+	void BankingDiscordObject_Thumbnail(int width = -1, int height = -1)
 	{
 		m_width = width;
 		m_height = height;
@@ -27,7 +27,7 @@ class DiscordObject_Thumbnail : DiscordObject
 	{
 		if (m_width > -1)
 		{
-			return DiscordHelper.GetJSONLineOthers("width", m_width.ToString());
+			return BankingDiscordHelper.GetJSONLineOthers("width", m_width.ToString());
 		}
 		return "";
 	}
@@ -36,7 +36,7 @@ class DiscordObject_Thumbnail : DiscordObject
 	{
 		if (m_height > -1)
 		{
-			return DiscordHelper.GetJSONLineOthers("height", m_height.ToString());
+			return BankingDiscordHelper.GetJSONLineOthers("height", m_height.ToString());
 		}
 		return "";
 	}

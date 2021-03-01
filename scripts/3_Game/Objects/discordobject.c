@@ -1,8 +1,8 @@
-class DiscordObject
+class BankingDiscordObject
 {
 	protected ref map<string, string> m_fields;
 
-	void DiscordObject()
+	void BankingDiscordObject()
 	{
 		m_fields = new map<string, string>;
 	}
@@ -52,7 +52,7 @@ class DiscordObject
 
 	protected string FormatField(string key)
 	{
-		return DiscordHelper.GetJSONLineString(key, m_fields.Get(key));
+		return BankingDiscordHelper.GetJSONLineString(key, m_fields.Get(key));
 	}
 	
 	protected bool CanSetKey(string key)

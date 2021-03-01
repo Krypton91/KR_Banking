@@ -237,7 +237,8 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Editor
-           font "gui/fonts/metron-bold22"
+           text "0"
+           font "gui/fonts/metron48"
           }
          }
         }
@@ -450,6 +451,7 @@ FrameWidgetClass MainRoot {
          }
         }
         PanelWidgetClass PanelInteract0 {
+         visible 1
          ignorepointer 1
          position -0.0004 0.31956
          size 0.99993 0.10913
@@ -469,7 +471,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Editor
-           font "gui/fonts/metron22"
+           font "gui/fonts/metron48"
           }
          }
         }
@@ -633,7 +635,7 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          style Editor
-         font "gui/fonts/metron-bold22"
+         font "gui/fonts/metron48"
         }
        }
       }
@@ -956,6 +958,7 @@ FrameWidgetClass MainRoot {
          }
         }
         PanelWidgetClass PanelOwner {
+         visible 1
          ignorepointer 1
          position 0 0
          size 0.45577 0.79901
@@ -977,7 +980,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style DefaultBorder
-           font "gui/fonts/metron22"
+           font "gui/fonts/metron48"
           }
           EditBoxWidgetClass txtBoxClanTag {
            color 0.502 0 0 1
@@ -990,7 +993,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style DefaultBorder
-           font "gui/fonts/metron22"
+           font "gui/fonts/metron48"
           }
           TextWidgetClass ClanNameText {
            ignorepointer 1
