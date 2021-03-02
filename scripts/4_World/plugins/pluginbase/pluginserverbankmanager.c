@@ -599,6 +599,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
+			
             Print("DEBUG for Widtraw Input to Witraw was: " + CorrectAmountToWitdraw.ToString());
 			Print("Currency on Bank Account: " + playerdata.GetBankCredit().ToString());
             int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
@@ -911,24 +912,25 @@ class PluginKRBankingManagerServer extends PluginBase
 		if(!player || amountToAdd <= 0)
 			return 0;
 
+		int BKamountStillNeeded = amountToAdd;
 		int BKquantityNeeded;
 		int BKquantityLeft;
 		
 		for(int i = 0; i < GetKR_BankingServerConfig().BankingCurrency.Count(); i++)
 		{
-			BKquantityNeeded = amountToAdd / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+			BKquantityNeeded = BKamountStillNeeded / GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 			if(BKquantityNeeded > 0)
 			{
 				BKquantityLeft = AddCurrencyToInventory(player, i, BKquantityNeeded);
-				amountToAdd -= (BKquantityNeeded - BKquantityLeft) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
+				BKamountStillNeeded -= (BKquantityNeeded - BKquantityLeft) * GetKR_BankingServerConfig().BankingCurrency.Get(i).CurrencyValue;
 				
-				if(amountToAdd == 0)
+				if(BKamountStillNeeded == 0)
 				{
 					return 0;
 				}
 			}
 		}
-		return amountToAdd;
+		return BKamountStillNeeded;
 	}
 
     int RemoveCurrencyFromPlayer(PlayerBase player, int amountToRemove)
@@ -1001,71 +1003,70 @@ class PluginKRBankingManagerServer extends PluginBase
 		if(!player || ammountToAdd <= 0)
 			return 0;
 		
+		local int BKquantityLeft = ammountToAdd;
+		local int BKaddableQuantity;
+		local int BKcurrencyItemMaxQuantity;
+		InventoryLocation il = new InventoryLocation();
+		ref CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
 		array<EntityAI> invArray = new array<EntityAI>;
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invArray);
 		ItemBase currencyItem;
-		int BKcurrencyItemMaxQuantity;
-		InventoryLocation il = new InventoryLocation();
-		int MaxRetryCount = 0;
-		
-		foreach(EntityAI item: invArray)
+
+		foreach(EntityAI item : invArray)
 		{
-			if(item.GetType() == GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)
+			if(item.GetType() == currency.CurrencyName)
 			{
 				if(Class.CastTo(currencyItem, item))
 				{
-
-					if(GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem) > 0)
+					BKaddableQuantity = GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
+					if(BKaddableQuantity > 0)
 					{
-						if(GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem) >= ammountToAdd)
+						if(BKaddableQuantity < BKquantityLeft)
 						{
-							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + ammountToAdd);
-							ammountToAdd = 0;
+							SetItemQuantity(currencyItem, GetItemQuantityMax(currencyItem));
+							BKquantityLeft -= BKaddableQuantity;
 						}
 						else
 						{
-							SetItemQuantity(currencyItem, GetItemQuantityMax(currencyItem));
-							ammountToAdd -= GetItemQuantityMax(currencyItem) - GetItemQuantity(currencyItem);
+							SetItemQuantity(currencyItem, GetItemQuantity(currencyItem) + BKquantityLeft);
+							BKquantityLeft = 0;
 						}
 					}
 					
-					if(ammountToAdd == 0)
+					if(BKquantityLeft == 0)
 					{
 						return 0;
 					}
 				}
 			}
 		}
-	
-		while(player.GetInventory().FindFirstFreeLocationForNewEntity(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName, FindInventoryLocationType.CARGO, il) || MaxRetryCount < 100)
+		
+		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, il))
 		{
-			MaxRetryCount++;
-			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)))
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(currency.CurrencyName))
             {
 				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
 				if(BKcurrencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					ammountToAdd -= 1;
+					BKquantityLeft -= 1;
 				}
 				else
 				{
-					if(ammountToAdd <= BKcurrencyItemMaxQuantity)
+					if(BKquantityLeft <= BKcurrencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, ammountToAdd);
-						ammountToAdd = 0;
+						SetItemQuantity(currencyItem, BKquantityLeft);
+						BKquantityLeft = 0;
 					}
 					else
 					{
 						SetItemQuantity(currencyItem, BKcurrencyItemMaxQuantity);
-						ammountToAdd -= BKcurrencyItemMaxQuantity;
+						BKquantityLeft -= BKcurrencyItemMaxQuantity;
 					}
 				}
 				
-				if(ammountToAdd == 0)
-				{
+				if(BKquantityLeft == 0)
 					return 0;
-				}
 			}
 			else
 			{
@@ -1075,35 +1076,35 @@ class PluginKRBankingManagerServer extends PluginBase
 		
 		if(!player.GetHumanInventory().GetEntityInHands())
 		{
-			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInHands(GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex).CurrencyName)))
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(currency.CurrencyName)))
 			{
 				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
 				if(BKcurrencyItemMaxQuantity == 0)
 				{
 					SetItemQuantity(currencyItem, 0);
-					ammountToAdd -= 1;
+					BKquantityLeft -= 1;
 				}
 				else
 				{
-					if(ammountToAdd <= BKcurrencyItemMaxQuantity)
+					if(BKquantityLeft <= BKcurrencyItemMaxQuantity)
 					{
-						SetItemQuantity(currencyItem, ammountToAdd);
-						ammountToAdd = 0;
+						SetItemQuantity(currencyItem, BKquantityLeft);
+						BKquantityLeft = 0;
 					}
 					else
 					{
 						SetItemQuantity(currencyItem, BKcurrencyItemMaxQuantity);
-						ammountToAdd -= BKcurrencyItemMaxQuantity;
+						BKquantityLeft -= BKcurrencyItemMaxQuantity;
 					}
 				}
 				
-				if(ammountToAdd == 0)
+				if(BKquantityLeft == 0)
 				{
 					return 0;
 				}
 			}
 		}
-		return ammountToAdd;
+		return BKquantityLeft;
 	}
 
     /* QUANTITY SECTION */ 
