@@ -669,12 +669,12 @@ class PluginKRBankingManagerServer extends PluginBase
         if(playerdata)
         {
 			int MaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(playerdata);
-			int SumToInsert;
+			int SumToInsert = Amount;
 			PlayerBase player = RemoteFindPlayer(identity.GetPlainId());
 			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 			if(!player) return;
 
-			if(Amount == 0)
+			if(SumToInsert <= 0)
 				SumToInsert = CurrencyOnPlayer;
 			
 			if(SumToInsert > MaxPlaceAbleAmount)

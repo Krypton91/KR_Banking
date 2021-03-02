@@ -184,6 +184,10 @@ class CfgVehicles
 		displayName="Banking Card";
 		descriptionShort="For Logging in into ATM";
 		model="\KR_Banking\data\ATMCard\KR_BankingCard.p3d";
+		hiddenSelections[]=
+		{
+			"zbytek"
+		};
 		hiddenSelectionsTextures[] = 
 		{
 			"\KR_Banking\data\ATMCard\data\ATMCard_co.paa"
