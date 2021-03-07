@@ -232,7 +232,7 @@ FrameWidgetClass rootFrame {
          "exact text" 0
          font "gui/fonts/metron-bold58"
         }
-        CheckBoxWidgetClass UseWebhook0 {
+        CheckBoxWidgetClass Log1 {
          position 0.01498 0.65589
          size 0.39837 0.13755
          hexactpos 0
@@ -242,7 +242,7 @@ FrameWidgetClass rootFrame {
          text "Log Deposit"
          font "gui/fonts/metron-bold28"
         }
-        CheckBoxWidgetClass UseWebhook1 {
+        CheckBoxWidgetClass Log2 {
          position 0.01498 0.81274
          size 0.39837 0.13755
          hexactpos 0
@@ -252,7 +252,7 @@ FrameWidgetClass rootFrame {
          text "Log Withdraw"
          font "gui/fonts/metron-bold28"
         }
-        CheckBoxWidgetClass UseWebhook2 {
+        CheckBoxWidgetClass Log3 {
          position 0.4479 0.65589
          size 0.48495 0.13755
          hexactpos 0
@@ -262,7 +262,7 @@ FrameWidgetClass rootFrame {
          text "Log Clan Deposit"
          font "gui/fonts/metron-bold28"
         }
-        CheckBoxWidgetClass UseWebhook3 {
+        CheckBoxWidgetClass Log4 {
          position 0.4479 0.81203
          size 0.52175 0.13755
          hexactpos 0
