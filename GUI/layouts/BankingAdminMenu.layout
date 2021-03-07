@@ -8,6 +8,7 @@ FrameWidgetClass rootFrame {
  vexactsize 0
  {
   PanelWidgetClass Content {
+   visible 1
    ignorepointer 1
    position 0 0
    size 1.00148 1.00585
@@ -20,7 +21,9 @@ FrameWidgetClass rootFrame {
    style rover_sim_black
    {
     PanelWidgetClass Header {
+     visible 1
      ignorepointer 1
+     color 0.2118 0.2118 0.2118 1
      position 0.0003 0.00028
      size 0.99823 0.06207
      halign center_ref
@@ -28,9 +31,10 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style rover_sim_black
+     style rover_sim_colorable
      {
       TextWidgetClass AdmimText {
+       visible 1
        ignorepointer 1
        position 0 0.01959
        size 0.39516 0.94695
@@ -48,6 +52,7 @@ FrameWidgetClass rootFrame {
        "text valign" center
       }
       ImageWidgetClass CloseImage {
+       visible 1
        inheritalpha 1
        ignorepointer 1
        position 0.00756 0.00555
@@ -63,9 +68,19 @@ FrameWidgetClass rootFrame {
        "src alpha" 1
        stretch 1
       }
+      ButtonWidgetClass ButtonWidget0 {
+       visible 1
+       position 0.96884 0.16158
+       size 0.02396 0.69085
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
      }
     }
     PanelWidgetClass PanelTabControlBody {
+     visible 1
      ignorepointer 1
      position 0.00015 0.06022
      size 0.2115 0.9464
@@ -134,6 +149,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabServerSettings {
+     visible 1
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
@@ -143,6 +159,7 @@ FrameWidgetClass rootFrame {
      vexactsize 0
      {
       PanelWidgetClass GroupBoxATM {
+       visible 1
        ignorepointer 1
        color 0 0 0 1
        position 0.014 0.028
@@ -170,6 +187,7 @@ FrameWidgetClass rootFrame {
        }
       }
       PanelWidgetClass GroupBoxLogs {
+       visible 1
        ignorepointer 1
        color 0 0 0 1
        position 0.01449 0.41803
@@ -197,6 +215,7 @@ FrameWidgetClass rootFrame {
        }
       }
       PanelWidgetClass GroupBoxGernal {
+       visible 1
        ignorepointer 1
        color 0 0 0 1
        position 0.44109 0.02796
@@ -217,7 +236,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          style Colorable
-         text "Gernal Settings"
+         text "General Settings"
          font "gui/fonts/metron22"
          switch normal
         }
@@ -252,6 +271,26 @@ FrameWidgetClass rootFrame {
        switch normal
       }
      }
+    }
+    PanelWidgetClass PanelTabPlayerManager {
+     visible 0
+     ignorepointer 1
+     position 0.213 0.065
+     size 0.78164 0.92568
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass PanelWidgetClanManager {
+     visible 0
+     ignorepointer 1
+     position 0.21325 0.06509
+     size 0.78055 0.92151
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
     }
    }
   }
