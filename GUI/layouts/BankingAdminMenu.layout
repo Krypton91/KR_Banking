@@ -20,65 +20,6 @@ FrameWidgetClass rootFrame {
    vexactsize 0
    style rover_sim_black
    {
-    PanelWidgetClass Header {
-     visible 1
-     ignorepointer 1
-     color 0.2118 0.2118 0.2118 1
-     position 0.0003 0.00028
-     size 0.99823 0.06207
-     halign center_ref
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style rover_sim_colorable
-     {
-      TextWidgetClass AdmimText {
-       visible 1
-       ignorepointer 1
-       position 0 0.01959
-       size 0.39516 0.94695
-       halign center_ref
-       valign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "Advanced Banking Admin Section"
-       font "gui/fonts/metron-bold28"
-       "size to text h" 1
-       "size to text v" 1
-       "text halign" center
-       "text valign" center
-      }
-      ImageWidgetClass CloseImage {
-       visible 1
-       inheritalpha 1
-       ignorepointer 1
-       position 0.00756 0.00555
-       size 0.02386 0.70308
-       halign right_ref
-       valign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
-       mode blend
-       "src alpha" 1
-       stretch 1
-      }
-      ButtonWidgetClass ButtonWidget0 {
-       visible 1
-       position 0.96884 0.16158
-       size 0.02396 0.69085
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-      }
-     }
-    }
     PanelWidgetClass PanelTabControlBody {
      visible 1
      ignorepointer 1
@@ -199,6 +140,7 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         ButtonWidgetClass BtnClManager1 {
+         visible 1
          color 0.4314 0.051 0.3373 1
          position 0.00153 0.00046
          size 0.99991 0.08193
@@ -291,6 +233,66 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
+    }
+    PanelWidgetClass Header {
+     visible 1
+     ignorepointer 1
+     color 0.2118 0.2118 0.2118 1
+     position 0.0003 0.00028
+     size 0.99823 0.06207
+     halign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+     {
+      TextWidgetClass AdmimText {
+       visible 1
+       ignorepointer 1
+       position 0 0.01959
+       size 0.39516 0.94695
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Advanced Banking Admin Section"
+       font "gui/fonts/metron-bold28"
+       "size to text h" 1
+       "size to text v" 1
+       "text halign" center
+       "text valign" center
+      }
+      ImageWidgetClass CloseImage {
+       visible 1
+       inheritalpha 1
+       ignorepointer 1
+       position 0.00756 0.00555
+       size 0.02386 0.70308
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
+       mode blend
+       "src alpha" 1
+       stretch 1
+      }
+      ButtonWidgetClass ButtonWidget0 {
+       visible 1
+       position 0.96884 0.16158
+       size 0.02396 0.69085
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Empty
+      }
+     }
     }
    }
   }
