@@ -61,8 +61,8 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnPlManager {
        color 0.4314 0.051 0.3373 1
-       position -0.00294 -0.12239
-       size 1.01095 0.09032
+       position -0.00175 -0.12328
+       size 1.00976 0.0921
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -1067,8 +1067,8 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       EditBoxWidgetClass SearchOfflineBox {
-       position 0.507 0.688
-       size 0.409 0.061
+       position 0.55129 0.688
+       size 0.36471 0.061
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1118,6 +1118,34 @@ FrameWidgetClass rootFrame {
        text "Open in Clan Manager"
        font "gui/fonts/metron22"
        switch normal
+      }
+      ImageWidgetClass ImageWidget0 {
+       ignorepointer 1
+       position -0.01217 0.85658
+       size 0.1003 0.16151
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
+       mode blend
+       "src alpha" 1
+       "no wrap" 1
+       stretch 1
+      }
+      ImageWidgetClass ImageWidget1 {
+       ignorepointer 1
+       position 0.47552 0.63781
+       size 0.1003 0.16151
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
+       mode blend
+       "src alpha" 1
+       "no wrap" 1
+       stretch 1
       }
      }
     }
