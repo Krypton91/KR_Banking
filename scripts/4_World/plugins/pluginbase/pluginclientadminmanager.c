@@ -6,6 +6,7 @@ class BankingClientAdminManager extends PluginBase
     void BankingClientAdminManager()
     {
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminPlayerDataResponse", this, SingleplayerExecutionType.Client);
     }
 
     void ~BankingClientAdminManager()
@@ -17,7 +18,6 @@ class BankingClientAdminManager extends PluginBase
     //======= ADMIN RPC Handle =========
     void AdminDataResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        Print("Admin Data from Remote recived!");
         Param2<ref AdminPermissions, bool> data;
         if(!ctx.Read(data)) return;
         if(type == CallType.Client)
@@ -25,7 +25,25 @@ class BankingClientAdminManager extends PluginBase
             m_ClientPermissions = data.param1;
             IsBankingAdminDataRecived = true;
             IsBankingAdmin = data.param2;//We set this variable from remote.
+            OpenBankingAdmin();
         }
+    }
+
+    void AdminPlayerDataResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        Param5<int, int, string, string, string> data;
+        if(!ctx.Read(data)) return;
+        if(type == CallType.Client)
+        {
+            if(m_AdminMenu)
+                m_AdminMenu.UpdatePlayerCard(data.param1, data.param2, data.param3, data.param4, data.param5);
+        }
+    }
+
+    void UpdatePlayerlist()
+    {
+        if(m_AdminMenu)
+            m_AdminMenu.InvokePlayerList();
     }
 
     void OpenBankingAdmin()
@@ -33,7 +51,7 @@ class BankingClientAdminManager extends PluginBase
         if(!IsBankingAdminDataRecived)
         {
             GetBankingClientManager().SendNotification("Please wait for server response....");
-            GetRPCManager().SendRPC("KR_BANKING", "AdminDataRequest", null, true);
+            //GetRPCManager().SendRPC("KR_BANKING", "AdminDataRequest", null, true);
             return;
         }
         else

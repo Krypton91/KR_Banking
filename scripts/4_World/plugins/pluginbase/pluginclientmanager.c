@@ -9,7 +9,7 @@ class PluginKrBankingClientManager extends PluginBase
     protected ref KR_BankingClientConfig            m_clientSettings;
     protected ref array<ref bankingplayerlistobj>   m_BankingPlayers;
     protected ref ClanDataBaseManager               m_OwnClan;
-    
+    protected bool                                  m_AdminMenuNeedsAnUpdate = false;
 
     void PluginKrBankingClientManager()
     {
@@ -60,8 +60,10 @@ class PluginKrBankingClientManager extends PluginBase
             if(m_BankingPlayers)
                 m_BankingPlayers.Clear();
             m_BankingPlayers = data.param1;
-            if(m_BankingMenu)
+            if(m_BankingMenu && !m_AdminMenuNeedsAnUpdate)
                 m_BankingMenu.InvokePlayerList();
+            if(m_AdminMenuNeedsAnUpdate)
+                GetBankingClientAdminManager().UpdatePlayerlist();
         }
     }
 
@@ -114,9 +116,10 @@ class PluginKrBankingClientManager extends PluginBase
         }
     }
 
-    void RequestOnlinePlayers()
+    void RequestOnlinePlayers(bool AdminRequest = false)
     {
         GetRPCManager().SendRPC("KR_BANKING", "PlayerListRequst", null, true);
+        m_AdminMenuNeedsAnUpdate = AdminRequest;
     }
 
     void RequestRemoteToWitdraw(int ammount, int mode)

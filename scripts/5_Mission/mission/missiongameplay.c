@@ -20,13 +20,12 @@ modded class MissionGameplay
             {
 				if(IsBankingAdmin && IsBankingAdminDataRecived)
 				{
-					Print("Input pressed! Try to trigger Menu.....");
                 	GetBankingClientAdminManager().OpenBankingAdmin();
 				}
 				else if(!IsBankingAdminDataRecived)
 				{
 					GetRPCManager().SendRPC("KR_BANKING", "AdminDataRequest", null, true);
-					Print("Request data from Remote for Admin Data!");
+					GetBankingClientManager().SendNotification("Please wait for server response....");
 				}
             }
 		}

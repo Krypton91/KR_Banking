@@ -70,7 +70,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_SearchOfflineID               =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSearchOfflineID"));
 
             m_PlayersList                   =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
-            m_SearchBarPlayers              =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));:
+            m_SearchBarPlayers              =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));
 
 
             m_IsAdminMenuInitialized = true;
@@ -79,6 +79,15 @@ class KR_AdminMenu extends UIScriptedMenu
         return layoutRoot;
     }
 
+    //Gets triggert from PluginAdminClient, after RPC response from remote! :)
+    void UpdatePlayerCard(int AmountOnBank, int BonusAmountOnBank, string PlayersName, string TargetsPlainID, string ClanID)
+    {
+        m_PlayerName.SetText(PlayersName);
+        m_SteamIDBox.SetText(TargetsPlainID);
+        m_ClanIdBox.SetText(ClanID);
+        m_AtmAmount.SetText(AmountOnBank.ToString());
+        m_Bonus.SetText(BonusAmountOnBank.ToString());
+    }
     override bool OnClick(Widget w, int x, int y, int button) 
     {
         switch(w)
@@ -137,6 +146,15 @@ class KR_AdminMenu extends UIScriptedMenu
         }
     }
 
+    void InvokePlayerList()
+    {
+        m_PlayersList.ClearItems();
+        for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
+        {
+            m_PlayersList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+        }
+    }
+
     bool IsAdminMenuOpen()
     {
         return m_IsAdminMenuOpened;
@@ -149,6 +167,7 @@ class KR_AdminMenu extends UIScriptedMenu
 
     override void OnShow()
 	{
+        GetBankingClientManager().RequestOnlinePlayers(true);
 
 		super.OnShow();
 
@@ -179,13 +198,4 @@ class KR_AdminMenu extends UIScriptedMenu
 
 		Close();
 	}
-
-
-    void UpdatePlayerCard(int AmountOnBank, int BonusAmountOnBank, string TargetsPlainID, string ClanID)
-    {
-        
-    }    
-
-    
-       
 };
