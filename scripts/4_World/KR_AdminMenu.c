@@ -61,19 +61,19 @@ class KR_AdminMenu extends UIScriptedMenu
                 CloseAdminMenu();
                 break;
             case m_PlayerManagerButton:
-                SwitchTab(1);
+                SwitchTab(2);
                 break;
             case m_ServerSettingsButton:
-                SwitchTab(2);
+                SwitchTab(1);
                 break;
             case m_ClanManagerButton:
                 SwitchTab(3);
                 break;
             case m_SaveButton:
-                HandleSave();
+                //HandleSave();
                 break;
             case m_ReloadButton:
-                handleConfigReload();
+                //handleConfigReload();
                 break;
         }
 
