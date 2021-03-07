@@ -14,12 +14,26 @@ class KR_AdminMenu extends UIScriptedMenu
     protected Widget                    m_ServerClanManager;
 
 
+
+    protected TextWidget                m_PlayerName;
+    protected TextWidget                m_SteamIDBox;
+    protected TextWidget                m_ClanIdBox;
+
+    protected EditBoxWidget             m_AtmAmount;
+    protected EditBoxWidget             m_Bonus;
+
+
     protected ButtonWidget              m_ServerSettingsButton;
     protected ButtonWidget              m_PlayerManagerButton;
     protected ButtonWidget              m_ClanManagerButton;
     protected ButtonWidget              m_SaveButton;
     protected ButtonWidget              m_ReloadButton;
     protected ButtonWidget              m_CloseButton;
+    protected ButtonWidget              m_SearchOfflineID;
+
+
+    protected TextListboxWidget         m_PlayersList;
+    protected TextListboxWidget         m_SearchBarPlayers;
 
 
     override Widget Init ()
@@ -36,12 +50,28 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ServerPlayerManager           =  Widget.Cast(layoutRoot.FindAnyWidget("PanelTabPlayerManager"));
             m_ServerClanManager             =  Widget.Cast(layoutRoot.FindAnyWidget("PanelWidgetClanManager"));
 
+
+            m_PlayerName                    =  TextWidget.Cast(layoutRoot.FindAnyWidget("PlayerName"));
+            m_SteamIDBox                    =  TextWidget.Cast(layoutRoot.FindAnyWidget("SteamIDBox"));
+            m_ClanIdBox                     =  TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox"));
+
+            m_AtmAmount                     =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnAtm"));
+            m_Bonus                         =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Bonus"));
+
+
+
+
             m_ServerSettingsButton          =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnServerS"));
             m_PlayerManagerButton           =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnPlManager"));
             m_ClanManagerButton             =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager"));
             m_SaveButton                    =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager3"));
             m_ReloadButton                  =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager4"));
             m_CloseButton                   =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
+            m_SearchOfflineID               =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSearchOfflineID"));
+
+            m_PlayersList                   =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
+            m_SearchBarPlayers              =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));:
+
 
             m_IsAdminMenuInitialized = true;
         }
@@ -149,4 +179,13 @@ class KR_AdminMenu extends UIScriptedMenu
 
 		Close();
 	}
+
+
+    void UpdatePlayerCard(int AmountOnBank, int BonusAmountOnBank, string TargetsPlainID, string ClanID)
+    {
+        
+    }    
+
+    
+       
 };

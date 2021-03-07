@@ -104,7 +104,7 @@ FrameWidgetClass rootFrame {
        ignorepointer 1
        color 0 0 0 1
        position 0.014 0.028
-       size 0.42307 0.38577
+       size 0.42307 0.58292
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -125,14 +125,56 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron22"
          switch normal
         }
+        TextListboxWidgetClass TextListboxWidget0 {
+         position 0.00538 0.109
+         size 0.98829 0.29373
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+        }
+        ButtonWidgetClass ButtonWidget1 {
+         color 0.4392 0 0.3294 1
+         position 0.14822 0.55598
+         size 0.67526 0.082
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Insert new Spawn here"
+         font "gui/fonts/metron-bold28"
+        }
+        CheckBoxWidgetClass CheckBoxWidget0 {
+         position 0.00726 0.41045
+         size 0.39149 0.07746
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Can be robbed"
+         font "gui/fonts/metron-bold28"
+        }
+        ButtonWidgetClass ButtonWidget2 {
+         color 0.4392 0 0.3294 1
+         position 0.61698 0.4088
+         size 0.37561 0.07687
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Delete ATM"
+         font "gui/fonts/metron-bold28"
+        }
        }
       }
       PanelWidgetClass GroupBoxLogs {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.01449 0.41803
-       size 0.42307 0.56391
+       position 0.01449 0.61071
+       size 0.42307 0.37123
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -142,8 +184,8 @@ FrameWidgetClass rootFrame {
         ButtonWidgetClass BtnClManager1 {
          visible 1
          color 0.4314 0.051 0.3373 1
-         position 0.00153 0.00046
-         size 0.99991 0.08193
+         position 0.00153 0.00896
+         size 0.99991 0.08484
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -160,7 +202,7 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.44109 0.02796
+       position 0.44066 0.02796
        size 0.54833 0.80348
        hexactpos 0
        vexactpos 0
@@ -181,6 +223,193 @@ FrameWidgetClass rootFrame {
          text "General Settings"
          font "gui/fonts/metron22"
          switch normal
+        }
+        TextWidgetClass TextWidget4 {
+         ignorepointer 1
+         position 0.04861 0.05764
+         size 0.31549 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Start Currency :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget6 {
+         ignorepointer 1
+         position 0.06267 0.11019
+         size 0.26825 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Max Currency :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget7 {
+         ignorepointer 1
+         position 0.0632 0.16225
+         size 0.26524 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Clan Accounts :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget8 {
+         ignorepointer 1
+         position 0.00494 0.214
+         size 0.32048 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Create Clan Costs :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget9 {
+         ignorepointer 1
+         position 0.01546 0.26517
+         size 0.32453 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Add Player Costs :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget10 {
+         ignorepointer 1
+         position 0.01346 0.31574
+         size 0.35165 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Max Clan Storage:"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget11 {
+         ignorepointer 1
+         position 0.01799 0.36703
+         size 0.36973 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Max Clan players :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget12 {
+         ignorepointer 1
+         position 0.09084 0.41819
+         size 0.32224 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Min Transfer :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget13 {
+         ignorepointer 1
+         position 0.07717 0.47049
+         size 0.33962 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Transfer Fees :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget14 {
+         ignorepointer 1
+         position 0.04382 0.523
+         size 0.38965 0.04627
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "ATM Rob Active :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget15 {
+         ignorepointer 1
+         position 0.02237 0.57644
+         size 0.36424 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Min Player for Rob :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget16 {
+         ignorepointer 1
+         position 0.0241 0.62894
+         size 0.37828 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Min Money for Rob :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget17 {
+         ignorepointer 1
+         position 0.02583 0.68144
+         size 0.37277 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Max Money for Rob :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget18 {
+         ignorepointer 1
+         position 0.02658 0.7347
+         size 0.41824 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Seconds for Rob :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget19 {
+         ignorepointer 1
+         position 0.02658 0.78726
+         size 0.43409 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Rob Message active:"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget20 {
+         ignorepointer 1
+         position 0.02658 0.83981
+         size 0.32453 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Paycheck Value :"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget21 {
+         ignorepointer 1
+         position 0.02535 0.89245
+         size 0.32453 0.04799
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Add Player Costs :"
+         font "gui/fonts/metron-bold28"
         }
        }
       }
@@ -213,16 +442,6 @@ FrameWidgetClass rootFrame {
        switch normal
       }
      }
-    }
-    PanelWidgetClass PanelTabPlayerManager {
-     visible 0
-     ignorepointer 1
-     position 0.213 0.065
-     size 0.78164 0.92568
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
     }
     PanelWidgetClass PanelWidgetClanManager {
      visible 0
@@ -291,6 +510,279 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 0
        style Empty
+      }
+     }
+    }
+    PanelWidgetClass PanelTabPlayerManager {
+     visible 0
+     ignorepointer 1
+     position 0.21179 0.05705
+     size 0.78798 0.94639
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass GroupBoxATM0 {
+       visible 1
+       ignorepointer 1
+       color 0 0 0 1
+       position 0.014 0.02449
+       size 0.42307 0.95493
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Outline
+       {
+        ButtonWidgetClass BtnClManager5 {
+         color 0.4314 0.051 0.3373 1
+         position -0.00353 0.00272
+         size 1.0002 0.04156
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Players"
+         font "gui/fonts/metron22"
+         switch normal
+        }
+        EditBoxWidgetClass EditBoxPlayersFind {
+         visible 1
+         position 0.11 0.927
+         size 0.873 0.064
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Search"
+         font "gui/fonts/metron-bold28"
+        }
+        TextListboxWidgetClass TextListboxPlayers {
+         color 0.502 0 0.3765 1
+         position 0 0.047
+         size 0.993 0.873
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Editor
+         "title visible" 0
+         colums "0"
+         lines 12
+         font "gui/fonts/metron-bold28"
+        }
+       }
+      }
+      ButtonWidgetClass BtnSavePlayer {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.21954 0.5225
+       size 0.54569 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Save Settings"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      PanelWidgetClass GroupBoxLogs0 {
+       visible 1
+       ignorepointer 1
+       color 0 0 0 1
+       position 0.00487 0.02445
+       size 0.55077 0.57303
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Outline
+       {
+        ButtonWidgetClass BtnClManager6 {
+         visible 1
+         color 0.4314 0.051 0.3373 1
+         position 0.00153 0.00348
+         size 0.99991 0.072
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Player Menu"
+         font "gui/fonts/metron22"
+         switch normal
+        }
+        TextWidgetClass PlayerName {
+         ignorepointer 1
+         position -0.0035 0.08836
+         size 0.71749 0.1199
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "AndrX"
+         font "gui/fonts/metron-bold48"
+         "text halign" center
+         "text valign" center
+        }
+        TextWidgetClass TextWidget0 {
+         ignorepointer 1
+         position 0.019 0.253
+         size 0.16187 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "On ATM :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        EditBoxWidgetClass BankOnAtm {
+         position 0.18524 0.25284
+         size 0.39718 0.06569
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "350000"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget1 {
+         ignorepointer 1
+         position 0.02023 0.47003
+         size 0.16187 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "SteamID :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        TextWidgetClass SteamIDBox {
+         ignorepointer 1
+         position 0.19138 0.47057
+         size 0.39597 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "712371263214761"
+         font "gui/fonts/metron-bold28"
+         "text valign" center
+        }
+        TextWidgetClass TextWidget3 {
+         ignorepointer 1
+         position 0.02012 0.57248
+         size 0.16187 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "ClanID :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        TextWidgetClass ClanIDBox {
+         ignorepointer 1
+         position 0.1908 0.57277
+         size 0.39597 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "2342"
+         font "gui/fonts/metron-bold28"
+         "text valign" center
+        }
+        TextWidgetClass TextWidget5 {
+         ignorepointer 1
+         position 0.019 0.33154
+         size 0.18849 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Bonus :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        EditBoxWidgetClass Bonus {
+         position 0.18397 0.33138
+         size 0.39718 0.06569
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "350000"
+         font "gui/fonts/metron-bold28"
+        }
+       }
+      }
+      ButtonWidgetClass BtnRefreshInfo {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.21954 0.44772
+       size 0.54569 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Refresh Data"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      EditBoxWidgetClass SearchOfflineBox {
+       position 0.507 0.688
+       size 0.409 0.061
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Search"
+       font "gui/fonts/metron-bold28"
+      }
+      TextWidgetClass TextWidget2 {
+       ignorepointer 1
+       position 0.61174 0.62912
+       size 0.2112 0.04555
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Search With SteamID"
+       font "gui/fonts/metron-bold28"
+       "text halign" center
+       "text valign" center
+      }
+      ButtonWidgetClass BtnSearchOfflineID {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.21074 0.77543
+       size 0.4225 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Search!"
+       font "gui/fonts/metron22"
+       switch normal
       }
      }
     }
