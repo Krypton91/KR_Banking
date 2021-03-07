@@ -90,9 +90,9 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabServerSettings {
-     visible 1
+     visible 0
      ignorepointer 1
-     position 0.21179 0.05705
+     position 0.211 0.05705
      size 0.78798 0.94639
      hexactpos 0
      vexactpos 0
@@ -125,7 +125,7 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron22"
          switch normal
         }
-        TextListboxWidgetClass TextListboxWidget0 {
+        TextListboxWidgetClass AtmSpotList {
          color 0.502 0 0.3765 1
          position 0.00538 0.109
          size 0.98829 0.29373
@@ -560,7 +560,7 @@ FrameWidgetClass rootFrame {
          text "100000"
          font "gui/fonts/metron-bold58"
         }
-        EditBoxWidgetClass "Add Costs" {
+        EditBoxWidgetClass AddCosts {
          position 0.43832 0.2468
          size 0.52392 0.04806
          hexactpos 0
@@ -834,7 +834,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabPlayerManager {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
@@ -1101,6 +1101,21 @@ FrameWidgetClass rootFrame {
        vexactsize 0
        style Colorable
        text "Search!"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      ButtonWidgetClass OpenInClanManagerBtn {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.39793 0.15214
+       size 0.17941 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Open in Clan Manager"
        font "gui/fonts/metron22"
        switch normal
       }

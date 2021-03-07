@@ -6,7 +6,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected float                     m_UIUpdateTimer;
 
     protected Widget                    m_AdminMenu;
-    protected Widget                    m_ATMspots;
+    protected Widget                    m_ATMspotlol;
     protected Widget                    m_ServerLogSetting;
     protected Widget                    m_GeneralSetting;
     
@@ -24,6 +24,37 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_AtmAmount;
     protected EditBoxWidget             m_Bonus;
 
+    protected EditBoxWidget             m_StarterEdit;
+    protected EditBoxWidget             m_MaxATMEdit;
+    protected EditBoxWidget             m_ClanCreateCostsEdit;
+    protected EditBoxWidget             m_AddPlayerCosts;
+    protected EditBoxWidget             m_MaxClanStorageEdit;
+    protected EditBoxWidget             m_MaxClanPlayerEdit;
+    protected EditBoxWidget             m_MinTransferEdit;
+    protected EditBoxWidget             m_TransferFeesEdit;
+    protected EditBoxWidget             m_MinPlayerForRobEdit;
+    protected EditBoxWidget             m_MinMoneyForRobEdit;
+    protected EditBoxWidget             m_MaxMoneyForRobEdit;
+    protected EditBoxWidget             m_SecondsForRobEdit;
+    protected EditBoxWidget             m_PaycheckValueEdit;
+    protected EditBoxWidget             m_PayCheckMinPlayersEdit;
+    protected EditBoxWidget             m_WebHookUrlEdit;
+
+
+    protected CheckBoxWidget            m_CanBeRobbedCheck;
+    protected CheckBoxWidget            m_UseWebhookCheck;
+    protected CheckBoxWidget            m_LogDepositCheck;
+    protected CheckBoxWidget            m_LogWithdrawCheck;
+    protected CheckBoxWidget            m_LogClanDepositCheck;
+    protected CheckBoxWidget            m_LogClanWithdrawCheck;
+
+    protected CheckBoxWidget            m_ClanAccountsActiveCheck;
+    protected CheckBoxWidget            m_ATMRobActiveCheck;
+    protected CheckBoxWidget            m_RobMessageActiveCheck;
+    protected CheckBoxWidget            m_PaycheckMessageActiveCheck;
+    protected CheckBoxWidget            m_CanAddToFullAccCheck;
+    protected CheckBoxWidget            m_NeedBankCardToOpenCheck;
+
 
     protected ButtonWidget              m_ServerSettingsButton;
     protected ButtonWidget              m_PlayerManagerButton;
@@ -32,10 +63,12 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_ReloadButton;
     protected ButtonWidget              m_CloseButton;
     protected ButtonWidget              m_SearchOfflineID;
+    protected ButtonWidget              m_OpenInClanManagerButton;
 
 
     protected TextListboxWidget         m_PlayersList;
     protected TextListboxWidget         m_SearchBarPlayers;
+    protected TextListboxWidget         m_ATMspots;
 
     protected int                       m_LastSelectedPlayerIndex;
 
@@ -47,7 +80,7 @@ class KR_AdminMenu extends UIScriptedMenu
             layoutRoot                      = GetGame().GetWorkspace().CreateWidgets("KR_Banking/GUI/layouts/BankingAdminMenu.layout");
 
             m_GeneralSetting                =  Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxGernal"));
-            m_ATMspots                      =  Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxATM"));
+            m_ATMspotlol                    =  Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxATM"));
             m_ServerLogSetting              =  Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxLogs"));
             m_ServerGeneralSettings         =  Widget.Cast(layoutRoot.FindAnyWidget("PanelTabServerSettings"));
             m_ServerPlayerManager           =  Widget.Cast(layoutRoot.FindAnyWidget("PanelTabPlayerManager"));
@@ -58,6 +91,22 @@ class KR_AdminMenu extends UIScriptedMenu
             m_SteamIDBox                    =  TextWidget.Cast(layoutRoot.FindAnyWidget("SteamIDBox"));
             m_ClanIdBox                     =  TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox"));
 
+
+            m_StarterEdit                   =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Starter"));
+            m_MaxATMEdit                    =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Max"));
+            m_ClanCreateCostsEdit           =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("ClanCosts"));
+            m_AddPlayerCosts                =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("AddCosts"));
+            m_MaxClanStorageEdit            =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MaxClanMoney"));
+            m_MaxClanPlayerEdit             =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MaxClanMember"));
+            m_MinTransferEdit               =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MinTransfer"));
+            m_TransferFeesEdit              =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("TransferFees"));
+            m_MinPlayerForRobEdit           =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MinPlayerRob"));
+            m_MinMoneyForRobEdit            =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MinMoneyRob"));
+            m_MaxMoneyForRobEdit            =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MaxMoneyRob"));
+            m_SecondsForRobEdit             =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("SecondsRob"));
+            m_PaycheckValueEdit             =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PaycheckValue"));
+            m_PayCheckMinPlayersEdit        =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PaycheckMinPlayers"));
+            m_WebHookUrlEdit                =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("WebhookLink"));
             m_AtmAmount                     =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnAtm"));
             m_Bonus                         =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Bonus"));
 
@@ -71,9 +120,28 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ReloadButton                  =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager4"));
             m_CloseButton                   =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
             m_SearchOfflineID               =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSearchOfflineID"));
+            m_OpenInClanManagerButton       =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("OpenInClanManagerBtn"));
+
+
+
+            m_CanBeRobbedCheck              =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CanbeRobbed"));
+            m_UseWebhookCheck               =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("UseWebhook"));
+            m_LogDepositCheck               =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("Log1"));
+            m_LogWithdrawCheck              =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("Log2"));
+            m_LogClanDepositCheck           =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("Log3"));
+            m_LogClanWithdrawCheck          =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("Log4"));
+
+            m_ClanAccountsActiveCheck       =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("ClanActive"));
+            m_ATMRobActiveCheck             =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("AtmRobActive"));
+            m_RobMessageActiveCheck         =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("RobMessageActive"));
+            m_PaycheckMessageActiveCheck    =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("PaycheckMessageActive"));
+            m_CanAddToFullAccCheck          =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CanAddToFullAccount"));
+            m_NeedBankCardToOpenCheck       =  CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("NeedBankCardToOpen"));
+
 
             m_PlayersList                   =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxPlayers"));
             m_SearchBarPlayers              =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));
+            m_ATMspots                      =  TextListboxWidget.Cast(layoutRoot.FindAnyWidget("AtmSpotList"));
 
 
             m_IsAdminMenuInitialized = true;
@@ -130,11 +198,16 @@ class KR_AdminMenu extends UIScriptedMenu
                 SwitchTab(3);
                 break;
             case m_SaveButton:
-                //HandleSave();
+                //HandleSave();     NOT IMPLEMENTED YET
                 break;
             case m_ReloadButton:
-                //handleConfigReload();
+                //handleConfigReload(); NOT IMPLEMENTED YET
                 break;
+            case m_OpenInClanManagerButton:
+               // handleShowPlayerClan(); NOT IMPLEMENTED YET
+                SwitchTab(3);
+                break;
+
         }
 
         return super.OnClick(w, x, y, button);
