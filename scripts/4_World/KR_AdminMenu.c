@@ -2,6 +2,8 @@ class KR_AdminMenu extends UIScriptedMenu
 {
     protected bool                      m_IsAdminMenuInitialized = false;
     protected bool                      m_IsAdminMenuOpened;
+    protected float                     m_UICooldownTimer;
+    protected float                     m_UIUpdateTimer;
 
     protected Widget                    m_AdminMenu;
     protected Widget                    m_ATMspots;
@@ -35,6 +37,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected TextListboxWidget         m_PlayersList;
     protected TextListboxWidget         m_SearchBarPlayers;
 
+    protected int                       m_LastSelectedPlayerIndex;
 
     override Widget Init ()
     {
@@ -77,6 +80,28 @@ class KR_AdminMenu extends UIScriptedMenu
         }
 
         return layoutRoot;
+    }
+
+     override void Update(float timeslice)
+    {
+        super.Update(timeslice);
+
+        if(m_UICooldownTimer > 0)
+            m_UICooldownTimer -= timeslice;
+        
+        if(m_UIUpdateTimer >= 0.05)
+        {
+            if(m_LastSelectedPlayerIndex != m_PlayersList.GetSelectedRow())
+            {
+                m_LastSelectedPlayerIndex = m_PlayersList.GetSelectedRow();
+                GetBankingClientAdminManager().RequestPlayerdata(m_LastSelectedPlayerIndex);
+            }
+            m_UIUpdateTimer = 0;
+        }
+        else
+        {
+            m_UIUpdateTimer += timeslice;
+        }
     }
 
     //Gets triggert from PluginAdminClient, after RPC response from remote! :)

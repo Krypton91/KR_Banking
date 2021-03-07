@@ -41,6 +41,11 @@ class BankingAdminManager extends PluginBase
         }
     }
 
+    void RequestPlayerdata(int PlayerArrayIndex)
+    {
+
+    }
+
     void AdminRequestPlayerdata(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
