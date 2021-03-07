@@ -111,21 +111,18 @@ class PluginKRBankingManagerServer extends PluginBase
 
     void DepositRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
+        Param2<int, int> data;
+        if(!ctx.Read(data)) return;
         if(type == CallType.Server)
         {
-            Param2<int, int> data;
-            if(!ctx.Read(data)) return;
-            if(type == CallType.Server)
+            if(data.param2 == 1)
             {
-                if(data.param2 == 1)
-                {
-                    DepositMoneyOnOwnBank(sender, data.param1);
-                }
-				else
-				{
-					DepositMoneyOnClanBank(sender, data.param1);
-				}
+                DepositMoneyOnOwnBank(sender, data.param1);
             }
+			else
+			{
+				DepositMoneyOnClanBank(sender, data.param1);
+			}
         }
     }
 

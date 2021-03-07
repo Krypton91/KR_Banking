@@ -32,6 +32,7 @@ class CfgMods
 		version = "1.11";
 		extra = 0;
 		type = "mod";
+		inputs = "KR_Banking\data\inputs.xml";
 		dependencies[] = {"Mission", "World", "Game"};
 
 	    class defs

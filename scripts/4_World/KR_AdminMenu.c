@@ -1,7 +1,7 @@
 class KR_AdminMenu extends UIScriptedMenu
 {
     protected bool                      m_IsAdminMenuInitialized = false;
-    protected bool                      m_IsAdminMenuInitialized = false;
+    protected bool                      m_IsAdminMenuOpened;
 
     protected Widget                    m_AdminMenu;
     protected Widget                    m_ATMspots;
@@ -22,14 +22,10 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_CloseButton;
 
 
-
-    protected 
-
-
     override Widget Init ()
     {
 
-        if(!m_IsBankingMenuInitialized)
+        if(!m_IsAdminMenuInitialized)
         {
             layoutRoot                      = GetGame().GetWorkspace().CreateWidgets("KR_Banking/GUI/layouts/BankingAdminMenu.layout");
 
@@ -80,7 +76,12 @@ class KR_AdminMenu extends UIScriptedMenu
         return super.OnClick(w, x, y, button);
     }
 
-     void SwitchTab(int TabIndex)
+    void CloseAdminMenu()
+    {
+        GetGame().GetUIManager().Back();
+    }
+
+    void SwitchTab(int TabIndex)
     {
         int lastTab;
         if(lastTab == TabIndex)
@@ -105,4 +106,47 @@ class KR_AdminMenu extends UIScriptedMenu
                 break;
         }
     }
-}
+
+    bool IsAdminMenuOpen()
+    {
+        return m_IsAdminMenuOpened;
+    }
+
+    void SetIsAdminMenuOpened(bool visiblestate)
+    {
+        m_IsAdminMenuOpened= visiblestate;
+    }
+
+    override void OnShow()
+	{
+
+		super.OnShow();
+
+		PPEffects.SetBlurMenu(0.5);
+
+		GetGame().GetInput().ChangeGameFocus(1);
+
+		SetFocus( layoutRoot );
+
+		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+
+        GetGame().GetUIManager().ShowUICursor( true );
+	}
+
+    override void OnHide()
+	{
+		super.OnHide();
+
+		PPEffects.SetBlurMenu(0);
+
+		GetGame().GetInput().ResetGameFocus();
+
+		GetGame().GetMission().PlayerControlEnable(false);
+
+        GetGame().GetUIManager().ShowUICursor( false );
+
+        SetIsAdminMenuOpened( false );
+
+		Close();
+	}
+};

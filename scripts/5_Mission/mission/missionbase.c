@@ -11,6 +11,9 @@ modded class MissionBase
                 case KR_BANKING_MENU:
                     menu = new KR_BankingMenu;
                     break;
+                case KR_BANKING_ADMIN_MENU:
+                    menu = new KR_AdminMenu;
+                    break;
             }
             if (menu)
             {

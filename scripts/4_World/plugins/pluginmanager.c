@@ -16,10 +16,12 @@ modded class PluginManager
 		{
 			RegisterPlugin( "PluginKRBankingManagerServer",			false, 	true );
 			RegisterPlugin( "PluginBankingLogManagerServer",		false, 	true );
+			RegisterPlugin( "BankingAdminManager",					false, 	true );
 		}
 		else
 		{
 			RegisterPlugin( "PluginKrBankingClientManager", 		true, 	false );
+			RegisterPlugin( "BankingClientAdminManager", 			true, 	false );
 		}
 	}
 };
