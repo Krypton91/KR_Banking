@@ -277,6 +277,7 @@ class KR_AdminMenu extends UIScriptedMenu
         m_PlayerName.SetText(PlayersName);
         m_SteamIDBox.SetText(TargetsPlainID);
         m_LastTargetsSteamID = TargetsPlainID;
+        m_LastTargetedClan   = TargetedClan;
         m_ClanIdBox.SetText(ClanID);
         m_AtmAmount.SetText(AmountOnBank.ToString());
         m_Bonus.SetText(BonusAmountOnBank.ToString());
@@ -381,9 +382,49 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_BtnSaveServerConfig:
                 GetBankingClientAdminManager().SendConfigToRemote();
                 break;
+            case m_JoinClanButton:
+               HandleJoinClan();
+                break;
+            case m_DeleteClanButton:
+                HandleDeleteClan();
+                break;
+            case m_RefreshClanInfoButton:
+               RefreshClanInfo();
+                break;
+            case m_SaveClanSettingsButton:
+               HandleSaveClanSettings();
+                break;
         }
 
         return super.OnClick(w, x, y, button);
+    }
+
+    void HandleJoinClan()
+    {
+
+
+    }
+
+    void HandleDeleteClan()
+    {
+
+
+    }
+
+    void RefreshClanInfo()
+    {
+
+
+    }
+
+    void HandleSaveClanSettings()
+    {   
+        int newClanBankAmount = m_OnClanAtmEdit.GetText().ToInt();
+        string newClanName    = m_ClanNameEdit.GetText().ToString();
+        string NewClanTag     = m_ClanTagEdit.GetText().ToString();
+
+       // MARIO HELP ME xD musst noch die funktion in plugin mugin richtig einfügen hab das nicht gecheckt, habe dir hier ne base gemacht :
+       // GetBankingClientAdminManager().RequestSavePlayerData(m_LastTargetedClan, newBankAmount, newClanName, NewClanTag);
     }
 
     void HandleInsertNewAtm()
