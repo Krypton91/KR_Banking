@@ -87,10 +87,24 @@ FrameWidgetClass rootFrame {
        font "gui/fonts/metron22"
        switch normal
       }
+      ButtonWidgetClass BtnMisc {
+       color 0.4314 0.051 0.3373 1
+       position -0.00418 0.09576
+       size 1.00896 0.09032
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Misc"
+       font "gui/fonts/metron22"
+       switch normal
+      }
      }
     }
     PanelWidgetClass PanelTabServerSettings {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.211 0.05705
      size 0.78798 0.94639
@@ -1336,7 +1350,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelWidgetClanManager {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
@@ -1628,6 +1642,111 @@ FrameWidgetClass rootFrame {
        vexactsize 0
        style Editor
        font "gui/fonts/metron-bold28"
+      }
+     }
+    }
+    PanelWidgetClass PanelWidgetMisc {
+     visible 0
+     ignorepointer 1
+     position 0.21202 0.063
+     size 0.78751 0.92801
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      TextWidgetClass TextWidget31 {
+       ignorepointer 1
+       position 0.01 0.011
+       size 0.25287 0.06422
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Players Online:"
+       font "gui/fonts/metron-bold48"
+      }
+      TextWidgetClass OnlinePlayersAmount {
+       ignorepointer 1
+       position 0.26423 0.011
+       size 0.09423 0.06422
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "35"
+       font "gui/fonts/metron-bold48"
+      }
+      PanelWidgetClass PanelWidget0 {
+       ignorepointer 1
+       color 0.502 0 0.3765 1
+       position -0.00168 0.126
+       size 1.00775 0.062
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+      }
+      TextWidgetClass TextWidget33 {
+       ignorepointer 1
+       position 0.38322 0.12979
+       size 0.24405 0.05525
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Money Drop"
+       font "gui/fonts/metron-bold48"
+       "text halign" center
+       "text valign" center
+      }
+      EditBoxWidgetClass EditBoxWidget0 {
+       position 0.382 0.273
+       size 0.237 0.062
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "1000"
+       font "gui/fonts/metron-bold28"
+      }
+      TextWidgetClass TextWidget34 {
+       ignorepointer 1
+       position 0.25156 0.20232
+       size 0.51176 0.05525
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Add to every Online Player"
+       font "gui/fonts/metron-bold48"
+       "text halign" center
+       "text valign" center
+      }
+      ButtonWidgetClass ButtonWidget3 {
+       color 0.502 0 0.3765 1
+       position 0.43213 0.35692
+       size 0.14446 0.06444
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Add!"
+       font "gui/fonts/metron-bold48"
+      }
+      ButtonWidgetClass ButtonWidget4 {
+       color 0.502 0 0.3765 1
+       position -0.00754 0.48897
+       size 1.01724 0.06444
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Reset Atm Robs"
+       font "gui/fonts/metron-bold48"
       }
      }
     }

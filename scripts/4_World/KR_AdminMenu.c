@@ -17,6 +17,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected Widget                    m_ServerGeneralSettings;
     protected Widget                    m_ServerPlayerManager;
     protected Widget                    m_ServerClanManager;
+    protected Widget                    m_MiscTab;
 
     protected Widget                    m_MapCard;
     protected MapWidget                 m_MapWidget;
@@ -29,6 +30,8 @@ class KR_AdminMenu extends UIScriptedMenu
 
     protected TextWidget                m_ClanOwnerID;
     protected TextWidget                m_ClanIDBox2;
+
+    protected TextWidget                m_OnlinePlayers;
 
     protected EditBoxWidget             m_AtmAmount;
     protected EditBoxWidget             m_Bonus;
@@ -54,6 +57,8 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_ClanNameEdit;
     protected EditBoxWidget             m_OnClanAtmEdit;
     protected EditBoxWidget             m_ClansSearchBarEdit;
+    protected EditBoxWidget             m_AddToAllPlayersEdit;
+
 
 
     protected CheckBoxWidget            m_CanBeRobbedCheck;
@@ -95,6 +100,10 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_DeleteClanButton;
     protected ButtonWidget              m_RefreshClanInfoButton;
     protected ButtonWidget              m_SaveClanSettingsButton;
+    protected ButtonWidget              m_ResetAtmRobs;
+    protected ButtonWidget              m_AddToAllPlayersButton;
+    protected ButtonWidget              m_MiscButton;
+
 
 
     protected ItemPreviewWidget         m_ItemPreviewWidget;
@@ -136,6 +145,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_InsertNewATMCard              =   Widget.Cast(layoutRoot.FindAnyWidget("PanelInsertNewATM"));
             m_ClanMenuGeneral               =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxClanMenu"));
             m_ClanListPanel                 =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxClans"));
+            m_MiscTab                       =   Widget.Cast(layoutRoot.FindAnyWidget("PanelWidgetMisc"));
 
 
             m_PlayerName                    =   TextWidget.Cast(layoutRoot.FindAnyWidget("PlayerName"));
@@ -143,6 +153,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ClanIdBox                     =   TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox"));
             m_ClanOwnerID                   =   TextWidget.Cast(layoutRoot.FindAnyWidget("SteamIDBoxClanOwner"));
             m_ClanIDBox2                    =   TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox1"));
+            m_OnlinePlayers                 =   TextWidget.Cast(layoutRoot.FindAnyWidget("OnlinePlayersAmount"));
 
 
 
@@ -169,6 +180,8 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ClanNameEdit                  =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("ClanNameEdit"));
             m_OnClanAtmEdit                 =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnClanAtm"));
             m_ClansSearchBarEdit            =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxClansFind"));
+            m_AddToAllPlayersEdit           =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxWidget0"));
+
 
 
 
@@ -188,6 +201,10 @@ class KR_AdminMenu extends UIScriptedMenu
             m_InsertNewATMBtn               =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnInsertATM"));
             m_InsertNewATMSpawnMainBtn      =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("InsertNewSpawnHere"));
             m_BtnSaveServerConfig           =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager3"));
+            m_AddToAllPlayersButton         =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
+            m_ResetAtmRobs                  =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget4"));
+            m_MiscButton                    =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnMisc"));
+
 
             m_JoinClanButton                =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("JoinClanButton"));
             m_DeleteClanButton              =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("DeleteClanButton"));
@@ -344,6 +361,9 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_ClanManagerButton:
                 SwitchTab(3);
                 break;
+            case m_MiscButton:
+                SwitchTab(4);
+                break;
             case m_BtnSavePlayerData:
                 HandlePlayerDataSave();
                 break;
@@ -382,6 +402,7 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_BtnSaveServerConfig:
                 GetBankingClientAdminManager().SendConfigToRemote();
                 break;
+            //New Functions from here on 09.03.2021
             case m_JoinClanButton:
                HandleJoinClan();
                 break;
@@ -394,10 +415,18 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_SaveClanSettingsButton:
                HandleSaveClanSettings();
                 break;
+            case m_ResetAtmRobs:
+                HandleResetAtmRobs();
+                break;
+            case m_AddToAllPlayersButton:
+                HandleAddMoneyToAllPlayers();
+                break;
         }
 
         return super.OnClick(w, x, y, button);
     }
+
+    //New Clan Manager functions here 08.03.2021 - Hier habe ich weiter gemacht wo du pennen gegangen bist - ist meistens nur die base - du musst den code noch reinmachen schnuggi
 
     void HandleJoinClan()
     {
@@ -417,6 +446,18 @@ class KR_AdminMenu extends UIScriptedMenu
 
     }
 
+    void HandleAddMoneyToAllPlayers()
+    {
+
+
+    }
+
+    void HandleResetAtmRobs()
+    {
+
+
+    }
+
     void HandleSaveClanSettings()
     {   
         int newClanBankAmount = m_OnClanAtmEdit.GetText().ToInt();
@@ -424,7 +465,7 @@ class KR_AdminMenu extends UIScriptedMenu
         string NewClanTag     = m_ClanTagEdit.GetText().ToString();
 
        // MARIO HELP ME xD musst noch die funktion in plugin mugin richtig einfügen hab das nicht gecheckt, habe dir hier ne base gemacht :
-       // GetBankingClientAdminManager().RequestSavePlayerData(m_LastTargetedClan, newBankAmount, newClanName, NewClanTag);
+       // GetBankingClientAdminManager().RequestSaveClanData(m_LastTargetedClan, newBankAmount, newClanName, NewClanTag);
     }
 
     void HandleInsertNewAtm()
@@ -534,17 +575,26 @@ class KR_AdminMenu extends UIScriptedMenu
                 m_ServerGeneralSettings.Show(true);
                 m_ServerPlayerManager.Show(false);
                 m_ServerClanManager.Show(false);
+                m_MiscTab.Show(false);
                 break;
             case 2:
                 m_ServerPlayerManager.Show(true);
                 m_ServerClanManager.Show(false);
                 m_ServerGeneralSettings.Show(false);
+                m_MiscTab.Show(false);
                 break;
             case 3:
                 m_ServerClanManager.Show(true);
                 m_ServerPlayerManager.Show(false);
                 m_ServerGeneralSettings.Show(false);
+                m_MiscTab.Show(false);
                 break;
+            case 4:
+                m_MiscTab.Show(true);
+                m_ServerClanManager.Show(false);
+                m_ServerPlayerManager.Show(false);
+                m_ServerGeneralSettings.Show(false);
+
         }
     }
 
