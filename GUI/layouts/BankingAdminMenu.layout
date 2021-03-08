@@ -90,7 +90,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabServerSettings {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.211 0.05705
      size 0.78798 0.94639
@@ -905,16 +905,6 @@ FrameWidgetClass rootFrame {
       }
      }
     }
-    PanelWidgetClass PanelWidgetClanManager {
-     visible 0
-     ignorepointer 1
-     position 0.21325 0.06509
-     size 0.78055 0.92151
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-    }
     PanelWidgetClass Header {
      visible 1
      ignorepointer 1
@@ -1082,6 +1072,7 @@ FrameWidgetClass rootFrame {
          switch normal
         }
         TextWidgetClass PlayerName {
+         visible 0
          ignorepointer 1
          position -0.0035 0.08836
          size 0.71749 0.1199
@@ -1341,6 +1332,325 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+      }
+     }
+    }
+    PanelWidgetClass PanelWidgetClanManager {
+     visible 1
+     ignorepointer 1
+     position 0.21179 0.05705
+     size 0.78798 0.94639
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass GroupBoxClans {
+       visible 1
+       ignorepointer 1
+       color 0 0 0 1
+       position 0.014 0.07107
+       size 0.42307 0.90835
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Outline
+       {
+        ButtonWidgetClass BtnClManager7 {
+         color 0.4314 0.051 0.3373 1
+         position -0.00353 0.00272
+         size 1.0002 0.04156
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Clans"
+         font "gui/fonts/metron22"
+         switch normal
+        }
+        EditBoxWidgetClass EditBoxClansFind {
+         visible 1
+         position 0.11 0.927
+         size 0.873 0.064
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Search"
+         font "gui/fonts/metron-bold28"
+        }
+        TextListboxWidgetClass TextListboxClans {
+         color 0.502 0 0.3765 1
+         position 0 0.047
+         size 0.993 0.873
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Editor
+         "title visible" 0
+         colums "0"
+         lines 12
+         font "gui/fonts/metron-bold28"
+        }
+       }
+      }
+      ButtonWidgetClass BtnSavePlayer0 {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.21954 0.5225
+       size 0.54569 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Save Settings"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      PanelWidgetClass GroupBoxLogs1 {
+       visible 1
+       ignorepointer 1
+       color 0 0 0 1
+       position 0.00487 0.02551
+       size 0.55077 0.57303
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Outline
+       {
+        ButtonWidgetClass BtnClManager8 {
+         visible 1
+         color 0.4314 0.051 0.3373 1
+         position 0.00153 0.00348
+         size 0.99991 0.072
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Clan Menu"
+         font "gui/fonts/metron22"
+         switch normal
+        }
+        TextWidgetClass TextWidget28 {
+         ignorepointer 1
+         position 0.019 0.253
+         size 0.16187 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "On ATM :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        EditBoxWidgetClass BankOnAtm0 {
+         position 0.18524 0.25284
+         size 0.39718 0.06569
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "350000"
+         font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget29 {
+         ignorepointer 1
+         position 0.00386 0.47003
+         size 0.17824 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "OwnerID:"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        TextWidgetClass SteamIDBoxClanOwner {
+         ignorepointer 1
+         position 0.19138 0.47057
+         size 0.39597 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "712371263214761"
+         font "gui/fonts/metron-bold28"
+         "text valign" center
+        }
+        TextWidgetClass TextWidget30 {
+         ignorepointer 1
+         position 0.02012 0.57248
+         size 0.16187 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "ClanID :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        TextWidgetClass ClanIDBox1 {
+         ignorepointer 1
+         position 0.1908 0.57277
+         size 0.39597 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "2342"
+         font "gui/fonts/metron-bold28"
+         "text valign" center
+        }
+        TextWidgetClass TextWidget31 {
+         ignorepointer 1
+         position 0.019 0.33154
+         size 0.18849 0.06511
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Bonus :"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        EditBoxWidgetClass Bonus0 {
+         position 0.18397 0.33138
+         size 0.39718 0.06569
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "350000"
+         font "gui/fonts/metron-bold28"
+        }
+        EditBoxWidgetClass ClanTagEdit {
+         position 0.016 0.078
+         size 0.26135 0.122
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "[RB]"
+         font "gui/fonts/metron-bold28"
+        }
+        EditBoxWidgetClass ClanNameEdit {
+         position 0.28378 0.07974
+         size 0.70633 0.122
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "RanzBudeClan"
+         font "gui/fonts/metron-bold28"
+        }
+       }
+      }
+      ButtonWidgetClass BtnRefreshInfo0 {
+       visible 1
+       color 0.4314 0.051 0.3373 1
+       position 0.21954 0.44772
+       size 0.54569 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Refresh Data"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      TextWidgetClass TextWidget32 {
+       ignorepointer 1
+       position 0.60885 0.60151
+       size 0.2112 0.04555
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Clan Logs"
+       font "gui/fonts/metron-bold28"
+       "text halign" center
+       "text valign" center
+      }
+      ButtonWidgetClass JoinClanButton {
+       visible 1
+       color 0 0.502 0.1255 1
+       position 0.39793 0.15214
+       size 0.17941 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Join Clan"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      ImageWidgetClass ImageWidget2 {
+       ignorepointer 1
+       position -0.01217 0.85658
+       size 0.1003 0.16151
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
+       mode blend
+       "src alpha" 1
+       "no wrap" 1
+       stretch 1
+      }
+      CheckBoxWidgetClass ShowClanTagsOnlyCheck {
+       position 0.01454 0.02612
+       size 0.22195 0.038
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Show Clan Tags Only"
+       font "gui/fonts/metron-bold28"
+      }
+      ButtonWidgetClass DeleteClanButton {
+       visible 1
+       color 0.502 0 0 1
+       position 0.39793 0.22806
+       size 0.17941 0.06833
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Colorable
+       text "Delete Clan"
+       font "gui/fonts/metron22"
+       switch normal
+      }
+      TextListboxWidgetClass ClanLogsList {
+       color 0.502 0 0.3765 1
+       position 0.45232 0.65485
+       size 0.53732 0.31867
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Editor
+       font "gui/fonts/metron-bold28"
       }
      }
     }
