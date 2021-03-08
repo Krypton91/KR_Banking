@@ -41,6 +41,7 @@ class BankingClientAdminManager extends PluginBase
                 m_AdminMenu.UpdatePlayerCard(data.param1, data.param2, data.param3, data.param4, data.param5);
         }
     }
+
     void AdminServerConfigResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         Param1<ref KR_BankingConfigManager> data;
@@ -51,6 +52,11 @@ class BankingClientAdminManager extends PluginBase
             if(m_AdminMenu)
                 m_AdminMenu.InitServerSettings(); // This will call an update method in admin menu to check and load correct values!
         }
+    }
+
+    void InsertNewATM(string classname, bool canRob, vector position, vector orientation)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminInsertATM", new Param4<string, bool, vector, vector>(classname, canRob, position, orientation), true);
     }
 
 
@@ -64,6 +70,11 @@ class BankingClientAdminManager extends PluginBase
     {
         if(m_AdminMenu)
             m_AdminMenu.InvokePlayerList();
+    }
+
+    void TeleportToAtm(vector TeleportEndPoint)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminTeleportToPosition", new Param1<vector>(TeleportEndPoint), true);
     }
 
     void OpenBankingAdmin()
@@ -95,6 +106,12 @@ class BankingClientAdminManager extends PluginBase
     void RequestSavePlayerData(string PlainID, int newBankAmount, int newBonusAmount)
     {
         GetRPCManager().SendRPC("KR_BANKING", "AdminSafePlayerdata", new Param3<string, int, int>(PlainID, newBankAmount, newBonusAmount), true);
+    }
+
+    void DeleteATMWithID(int ID)
+    {
+        if(ID)
+            GetRPCManager().SendRPC("KR_BANKING", "AdminDeleteATM", new Param1<int>(ID), true);
     }
 
     void RequestPlayerdata(int PlayerArrayIndex)

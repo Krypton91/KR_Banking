@@ -87,6 +87,21 @@ class KR_BankingConfigManager
         BankingJsonFileLoader<KR_BankingConfigManager>.JsonSaveFile(m_BankingConfigPath, this);
     }
 
+    void RemoveATMWithIndex(int index)
+    {
+        if(ATM && ATM.Get(index))
+        {
+            ATM.Remove(index);
+            Save();
+        }
+    }
+
+    void AddATM(string classname, bool canRob, vector Position, vector Orientation)
+    {
+        ATM.Insert(new ref ATMPosition(classname, Position, Orientation, true, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
+        Save();
+    }
+
     static ref KR_BankingConfigManager Load()
     {
         ref KR_BankingConfigManager settings = new KR_BankingConfigManager();
