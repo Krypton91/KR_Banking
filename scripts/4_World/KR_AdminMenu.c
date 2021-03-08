@@ -277,6 +277,7 @@ class KR_AdminMenu extends UIScriptedMenu
         switch(TabIndex)
         {
             case 1:
+                SyncServerSettings();
                 m_ServerGeneralSettings.Show(true);
                 m_ServerPlayerManager.Show(false);
                 m_ServerClanManager.Show(false);
@@ -311,6 +312,54 @@ class KR_AdminMenu extends UIScriptedMenu
     void SetIsAdminMenuOpened(bool visiblestate)
     {
         m_IsAdminMenuOpened= visiblestate;
+    }
+
+    void SyncServerSettings()
+    {
+        GetBankingClientManager().SendNotification("Please wait a bit downloading server settings....");
+        GetBankingClientAdminManager().GetServerSettings();
+    }
+
+    //!Updates the server tab!
+    void InitServerSettings()
+    {
+        /* General Settings */
+        m_StarterEdit.SetText(GetBankingClientAdminManager().Getservercfg().startCurrency.ToString());
+        m_MaxATMEdit.SetText(GetBankingClientAdminManager().Getservercfg().maxCurrency.ToString());
+        m_ClanAccountsActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().IsClanAccountActive);
+        m_ClanCreateCostsEdit.SetText(GetBankingClientAdminManager().Getservercfg().CostsToCreateClan.ToString());
+        m_AddPlayerCosts.SetText(GetBankingClientAdminManager().Getservercfg().CostsToInviteAnPlayer.ToString());
+        m_MaxClanStorageEdit.SetText(GetBankingClientAdminManager().Getservercfg().MaxClanAccountLimit.ToString());
+        m_MaxClanPlayerEdit.SetText(GetBankingClientAdminManager().Getservercfg().MaxPlayersInClan.ToString());
+        m_MinTransferEdit.SetText(GetBankingClientAdminManager().Getservercfg().MinAmountToTransfer.ToString());
+        m_TransferFeesEdit.SetText(GetBankingClientAdminManager().Getservercfg().TransferfeesInProcent.ToString());
+        m_ATMRobActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().IsRobEventActive);
+        m_MinPlayerForRobEdit.SetText(GetBankingClientAdminManager().Getservercfg().MinPlayersForRob.ToString());
+        m_MinMoneyForRobEdit.SetText(GetBankingClientAdminManager().Getservercfg().MinMoneyForRob.ToString());
+        m_MaxMoneyForRobEdit.SetText(GetBankingClientAdminManager().Getservercfg().MaxMoneyForRob.ToString());
+        m_SecondsForRobEdit.SetText(GetBankingClientAdminManager().Getservercfg().TimeInSecToRobATM.ToString());
+        m_RobMessageActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().RobMessagesActive);
+        m_PaycheckValueEdit.SetText(GetBankingClientAdminManager().Getservercfg().PayCheckValue.ToString());
+        m_PayCheckMinPlayersEdit.SetText(GetBankingClientAdminManager().Getservercfg().MinPlayersForPayCheck.ToString());
+        m_PaycheckMessageActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().PayCheckMessage);
+        m_CanAddToFullAccCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().CanAddToFullAcc);
+        m_NeedBankCardToOpenCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().NeedsBankCardToOpenMenu);
+
+        /* Server Log Settings */
+        m_UseWebhookCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_UseWebhook);
+        m_WebHookUrlEdit.SetText(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_WebhookURL);
+        m_LogDepositCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogDepositToDiscord);
+        m_LogWithdrawCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogWithdrawToDiscord);
+        m_LogClanDepositCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanDepositToDiscord);
+        m_LogClanWithdrawCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanWithdrawToDiscord);
+
+        /* ATM */
+        //AtmSpotList m_ATMspots
+
+        for(int i = 0; i < GetBankingClientAdminManager().Getservercfg().ATM.Count(); i++)
+        {
+            m_ATMspots.AddItem(" " + GetBankingClientAdminManager().Getservercfg().ATM.Get(i).ATMSName, NULL, 0);
+        }
     }
 
     override void OnShow()

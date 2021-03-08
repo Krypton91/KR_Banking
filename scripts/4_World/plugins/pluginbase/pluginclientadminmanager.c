@@ -2,11 +2,13 @@ class BankingClientAdminManager extends PluginBase
 {
     protected ref KR_AdminMenu                    m_AdminMenu;
     protected ref AdminPermissions                m_ClientPermissions;
+    protected ref KR_BankingConfigManager         m_BankingServercfg;
 
     void BankingClientAdminManager()
     {
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "AdminPlayerDataResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminServerConfigResponse", this, SingleplayerExecutionType.Client);
     }
 
     void ~BankingClientAdminManager()
@@ -39,6 +41,24 @@ class BankingClientAdminManager extends PluginBase
                 m_AdminMenu.UpdatePlayerCard(data.param1, data.param2, data.param3, data.param4, data.param5);
         }
     }
+    void AdminServerConfigResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        Param1<ref KR_BankingConfigManager> data;
+        if(!ctx.Read(data)) return;
+        if(type == CallType.Client)
+        {
+            UpdateClientsServerCFGData(data.param1); // Update server cfg in clients memory.
+            if(m_AdminMenu)
+                m_AdminMenu.InitServerSettings(); // This will call an update method in admin menu to check and load correct values!
+        }
+    }
+
+
+    //This Sends an rpc to remote to request new server settings! Response comes in to method: AdminServerConfigResponse();
+    void GetServerSettings()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminRequestServerSettings", null, true);
+    }
 
     void UpdatePlayerlist()
     {
@@ -50,6 +70,7 @@ class BankingClientAdminManager extends PluginBase
     {
         if(!IsBankingAdminDataRecived)
         {
+            //return when admin data is not recived from remote, remote will open the menu self when the sender is an admin!
             return;
         }
         else
@@ -89,11 +110,22 @@ class BankingClientAdminManager extends PluginBase
             GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param1<string>(PlainID), true);
     }
 
+    ref KR_BankingConfigManager Getservercfg()
+    {
+        return m_BankingServercfg;
+    }
+
+    void UpdateClientsServerCFGData(ref KR_BankingConfigManager cfg)
+    {
+        m_BankingServercfg = cfg;
+    }
+
     ref AdminPermissions GetAdminPermissions()
     {
         return m_ClientPermissions;
     }
 };
+
 BankingClientAdminManager GetBankingClientAdminManager()
 {
 	return BankingClientAdminManager.Cast(GetPluginManager().GetPluginByType(BankingClientAdminManager));

@@ -90,7 +90,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabServerSettings {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.211 0.05705
      size 0.78798 0.94639
@@ -168,6 +168,30 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          style Colorable
          text "Delete ATM"
+         font "gui/fonts/metron-bold28"
+        }
+        ButtonWidgetClass InsertNewSpawnHere0 {
+         color 0.4392 0 0.3294 1
+         position 0.14783 0.64662
+         size 0.67526 0.082
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Show On Map"
+         font "gui/fonts/metron-bold28"
+        }
+        ButtonWidgetClass InsertNewSpawnHere1 {
+         color 0.4392 0 0.3294 1
+         position 0.14726 0.7375
+         size 0.67526 0.082
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Teleport to ATM"
          font "gui/fonts/metron-bold28"
         }
        }
@@ -834,7 +858,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabPlayerManager {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
