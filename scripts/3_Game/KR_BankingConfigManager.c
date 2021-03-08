@@ -102,6 +102,13 @@ class KR_BankingConfigManager
         Save();
     }
 
+    void SetConfig(ref KR_BankingConfigManager newConfig)
+    {
+        this = newConfig;
+        g_KR_BankingConfigManager = newConfig;
+        Save();
+    }
+
     static ref KR_BankingConfigManager Load()
     {
         ref KR_BankingConfigManager settings = new KR_BankingConfigManager();

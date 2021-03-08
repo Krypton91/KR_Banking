@@ -78,6 +78,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_CloseNewATMCardBtn;
     protected ButtonWidget              m_InsertNewATMBtn;
     protected ButtonWidget              m_InsertNewATMSpawnMainBtn;
+    protected ButtonWidget              m_BtnSaveServerConfig;
 
 
     protected ItemPreviewWidget         m_ItemPreviewWidget;
@@ -160,6 +161,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_CloseNewATMCardBtn            =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget2"));
             m_InsertNewATMBtn               =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnInsertATM"));
             m_InsertNewATMSpawnMainBtn      =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("InsertNewSpawnHere"));
+            m_BtnSaveServerConfig           =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager3"));
 
 
             m_CanBeRobbedCheck              =   CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CanBeRobbed"));
@@ -340,6 +342,9 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_InsertNewATMSpawnMainBtn:
                 m_InsertNewATMCard.Show(true);
                 LoadAllATMs();
+                break;
+            case m_BtnSaveServerConfig:
+                GetBankingClientAdminManager().SendConfigToRemote();
                 break;
         }
 

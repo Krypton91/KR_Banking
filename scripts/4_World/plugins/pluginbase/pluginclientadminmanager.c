@@ -59,6 +59,11 @@ class BankingClientAdminManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "AdminInsertATM", new Param4<string, bool, vector, vector>(classname, canRob, position, orientation), true);
     }
 
+    void SendConfigToRemote()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateServerConfig", new Param1<ref KR_BankingConfigManager>(m_BankingServercfg), true);
+    }
+
 
     //This Sends an rpc to remote to request new server settings! Response comes in to method: AdminServerConfigResponse();
     void GetServerSettings()

@@ -892,7 +892,8 @@ FrameWidgetClass rootFrame {
         }
        }
       }
-      CheckBoxWidgetClass Log0 {
+      CheckBoxWidgetClass CheckBoxCanRob {
+       visible 1
        position 0.58404 0.69361
        size 0.25691 0.05638
        hexactpos 0

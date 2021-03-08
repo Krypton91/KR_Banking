@@ -19,6 +19,7 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminTeleportToPosition", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteATM", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminInsertATM", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminUpdateServerConfig", 	this, SingleplayerExecutionType.Server);
     }
 
     void AdminDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -219,6 +220,28 @@ class BankingAdminManager extends PluginBase
                     AdvATMS.m_Banking_CanBeRobbed = data.param2;
                     Print("[Advanced Banking] -> ATM Was an Correct ATM!");
                 }
+            }
+        }
+    }
+
+    void AdminUpdateServerConfig(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param1<ref KR_BankingConfigManager> data;
+            if(!ctx.Read(data)) return;
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanIgnoreNamePermission)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+                GetKR_BankingServerConfig().SetConfig(data.param1);
             }
         }
     }
