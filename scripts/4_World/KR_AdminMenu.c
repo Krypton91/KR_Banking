@@ -10,6 +10,8 @@ class KR_AdminMenu extends UIScriptedMenu
     protected Widget                    m_ServerLogSetting;
     protected Widget                    m_GeneralSetting;
     protected Widget                    m_InsertNewATMCard;
+    protected Widget                    m_ClanMenuGeneral;
+    protected Widget                    m_ClanListPanel;
     
 
     protected Widget                    m_ServerGeneralSettings;
@@ -24,6 +26,9 @@ class KR_AdminMenu extends UIScriptedMenu
     protected TextWidget                m_PlayerName;
     protected TextWidget                m_SteamIDBox;
     protected TextWidget                m_ClanIdBox;
+
+    protected TextWidget                m_ClanOwnerID;
+    protected TextWidget                m_ClanIDBox2;
 
     protected EditBoxWidget             m_AtmAmount;
     protected EditBoxWidget             m_Bonus;
@@ -45,6 +50,10 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_PayCheckMinPlayersEdit;
     protected EditBoxWidget             m_WebHookUrlEdit;
     protected EditBoxWidget             m_SearchPlayerInListBox;
+    protected EditBoxWidget             m_ClanTagEdit;
+    protected EditBoxWidget             m_ClanNameEdit;
+    protected EditBoxWidget             m_OnClanAtmEdit;
+    protected EditBoxWidget             m_ClansSearchBarEdit;
 
 
     protected CheckBoxWidget            m_CanBeRobbedCheck;
@@ -53,6 +62,9 @@ class KR_AdminMenu extends UIScriptedMenu
     protected CheckBoxWidget            m_LogWithdrawCheck;
     protected CheckBoxWidget            m_LogClanDepositCheck;
     protected CheckBoxWidget            m_LogClanWithdrawCheck;
+    protected CheckBoxWidget            m_ShowClanTagsOnlyCheck;
+
+
 
     protected CheckBoxWidget            m_ClanAccountsActiveCheck;
     protected CheckBoxWidget            m_ATMRobActiveCheck;
@@ -79,6 +91,10 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_InsertNewATMBtn;
     protected ButtonWidget              m_InsertNewATMSpawnMainBtn;
     protected ButtonWidget              m_BtnSaveServerConfig;
+    protected ButtonWidget              m_JoinClanButton;
+    protected ButtonWidget              m_DeleteClanButton;
+    protected ButtonWidget              m_RefreshClanInfoButton;
+    protected ButtonWidget              m_SaveClanSettingsButton;
 
 
     protected ItemPreviewWidget         m_ItemPreviewWidget;
@@ -89,6 +105,9 @@ class KR_AdminMenu extends UIScriptedMenu
     protected TextListboxWidget         m_SearchBarPlayers;
     protected TextListboxWidget         m_ATMspots;
     protected TextListboxWidget         m_AvaibleATMClassList;
+    protected TextListboxWidget         m_ClanLogsList;
+    protected TextListboxWidget         m_ClanList;
+
     protected ref TStringArray          m_ActiveATMClassNames;
 
     protected int                       m_LastSelectedPlayerIndex;
@@ -105,7 +124,7 @@ class KR_AdminMenu extends UIScriptedMenu
 
         if(!m_IsAdminMenuInitialized)
         {
-            layoutRoot                      = GetGame().GetWorkspace().CreateWidgets("KR_Banking/GUI/layouts/BankingAdminMenu.layout");
+            layoutRoot                      =   GetGame().GetWorkspace().CreateWidgets("KR_Banking/GUI/layouts/BankingAdminMenu.layout");
 
             m_GeneralSetting                =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxGernal"));
             m_ATMspotlol                    =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxATM"));
@@ -115,11 +134,16 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ServerClanManager             =   Widget.Cast(layoutRoot.FindAnyWidget("PanelWidgetClanManager"));
             m_MapCard                       =   Widget.Cast(layoutRoot.FindAnyWidget("MapPanel"));
             m_InsertNewATMCard              =   Widget.Cast(layoutRoot.FindAnyWidget("PanelInsertNewATM"));
+            m_ClanMenuGeneral               =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxClanMenu"));
+            m_ClanListPanel                 =   Widget.Cast(layoutRoot.FindAnyWidget("GroupBoxClans"));
 
 
             m_PlayerName                    =   TextWidget.Cast(layoutRoot.FindAnyWidget("PlayerName"));
             m_SteamIDBox                    =   TextWidget.Cast(layoutRoot.FindAnyWidget("SteamIDBox"));
             m_ClanIdBox                     =   TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox"));
+            m_ClanOwnerID                   =   TextWidget.Cast(layoutRoot.FindAnyWidget("SteamIDBoxClanOwner"));
+            m_ClanIDBox2                    =   TextWidget.Cast(layoutRoot.FindAnyWidget("ClanIDBox1"));
+
 
 
             m_StarterEdit                   =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Starter"));
@@ -141,8 +165,10 @@ class KR_AdminMenu extends UIScriptedMenu
             m_Bonus                         =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Bonus"));
             m_SearchWithSteamIDBox          =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("SearchOfflineBox"));
             m_SearchPlayerInListBox         =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));
-        
-
+            m_ClanTagEdit                   =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("ClanTagEdit"));
+            m_ClanNameEdit                  =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("ClanNameEdit"));
+            m_OnClanAtmEdit                 =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnClanAtm"));
+            m_ClansSearchBarEdit            =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxClansFind"));
 
 
 
@@ -162,6 +188,11 @@ class KR_AdminMenu extends UIScriptedMenu
             m_InsertNewATMBtn               =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnInsertATM"));
             m_InsertNewATMSpawnMainBtn      =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("InsertNewSpawnHere"));
             m_BtnSaveServerConfig           =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager3"));
+
+            m_JoinClanButton                =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("JoinClanButton"));
+            m_DeleteClanButton              =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("DeleteClanButton"));
+            m_RefreshClanInfoButton         =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnRefreshInfo0"));
+            m_SaveClanSettingsButton        =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSaveClanSettings"));
 
 
             m_CanBeRobbedCheck              =   CheckBoxWidget.Cast(layoutRoot.FindAnyWidget("CanBeRobbed"));
@@ -184,6 +215,10 @@ class KR_AdminMenu extends UIScriptedMenu
             m_SearchBarPlayers              =   TextListboxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));
             m_ATMspots                      =   TextListboxWidget.Cast(layoutRoot.FindAnyWidget("AtmSpotList"));
             m_AvaibleATMClassList           =   TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ATMClassNameList"));
+            m_ClanLogsList                  =   TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ClanLogsList"));
+            m_ClanList                      =   TextListboxWidget.Cast(layoutRoot.FindAnyWidget("TextListboxClans"));
+
+
             m_MapWidget                     =   MapWidget.Cast(layoutRoot.FindAnyWidget("MapWidget0"));
 
             m_ActiveATMClassNames = new ref TStringArray();
@@ -292,7 +327,7 @@ class KR_AdminMenu extends UIScriptedMenu
         return super.OnChange(w, x, y, finished);
     }
 
-    override bool OnClick(Widget w, int x, int y, int button) 
+    override bool OnClick(Widget w, int x, int y, int button)
     {
         switch(w)
         {
