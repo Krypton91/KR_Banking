@@ -36,10 +36,20 @@ class KR_JsonDatabaseHandler
         return m_PayCheckBonus;
     }
     
-    void UpdateCurrency(int newCurrency)
+    void UpdateCurrency(int newCurrency, bool forceSave = false)
     {
         m_OwnedCurrency = newCurrency;
-        SavePlayerData(this);
+
+        if(forceSave)
+            SavePlayerData(this);
+    }
+
+    void UpdateBonus(int newBonus, bool forceSave = false)
+    {
+        m_BonusCurrency = newBonus;
+
+        if(forceSave)
+            SavePlayerData(this);
     }
 
     void WitdrawMoney(int moneyToWitdraw)
@@ -60,7 +70,7 @@ class KR_JsonDatabaseHandler
         SavePlayerData(this);
     }
 
-    static KR_JsonDatabaseHandler LoadPlayerData(string Steam_ID, string username = "")
+    static KR_JsonDatabaseHandler LoadPlayerData(string Steam_ID, string username = "", bool IsSearchOnly = false)
     {
         if(Steam_ID == "")
             return null;
@@ -80,9 +90,9 @@ class KR_JsonDatabaseHandler
         }
         else
         {
-            database = CreateDefaultDataBaseData(Steam_ID, username);
+            if(!IsSearchOnly)
+                database = CreateDefaultDataBaseData(Steam_ID, username);
         }
-
         return database;
     }
 

@@ -50,8 +50,6 @@ class BankingClientAdminManager extends PluginBase
     {
         if(!IsBankingAdminDataRecived)
         {
-            GetBankingClientManager().SendNotification("Please wait for server response....");
-            //GetRPCManager().SendRPC("KR_BANKING", "AdminDataRequest", null, true);
             return;
         }
         else
@@ -71,6 +69,24 @@ class BankingClientAdminManager extends PluginBase
                 }
             }
         }
+    }
+
+    void RequestSavePlayerData(string PlainID, int newBankAmount, int newBonusAmount)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminSafePlayerdata", new Param3<string, int, int>(PlainID, newBankAmount, newBonusAmount), true);
+    }
+
+    void RequestPlayerdata(int PlayerArrayIndex)
+    {
+        string trgstid = GetBankingClientManager().GetOnlinePlayers().Get(PlayerArrayIndex).plainid;
+        if(trgstid)
+            GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param1<string>(trgstid), true);
+    }
+
+    void RequestPlayerdataWithId(string PlainID)
+    {
+        if(PlainID)
+            GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param1<string>(PlainID), true);
     }
 
     ref AdminPermissions GetAdminPermissions()

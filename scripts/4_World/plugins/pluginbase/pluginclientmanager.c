@@ -13,7 +13,10 @@ class PluginKrBankingClientManager extends PluginBase
 
     void PluginKrBankingClientManager()
     {
-        Init();
+        if(GetGame().IsClient() && !GetGame().IsServer()) //Maybe this will solve wrong rpc call.
+        {
+            Init();
+        }
     }
 
     void Init()
@@ -124,7 +127,7 @@ class PluginKrBankingClientManager extends PluginBase
 
     void RequestRemoteToWitdraw(int ammount, int mode)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "WithdrawRequest", new Param2<int, int>(ammount, mode), true);
+        GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param2<int, int>(ammount, mode), true);
     }
 
     void RequestRemoteToDeposit(int ammount, int mode)

@@ -15,6 +15,7 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataRequest", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestPlayerdata", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestServerSettings", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminSafePlayerdata", 	this, SingleplayerExecutionType.Server);
     }
 
     void AdminDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -41,11 +42,6 @@ class BankingAdminManager extends PluginBase
         }
     }
 
-    void RequestPlayerdata(int PlayerArrayIndex)
-    {
-
-    }
-
     void AdminRequestPlayerdata(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -65,10 +61,48 @@ class BankingAdminManager extends PluginBase
                         return;
                     }
                 }
-                KR_JsonDatabaseHandler targetdata = KR_JsonDatabaseHandler.LoadPlayerData(targetsPlainId, "");
+                KR_JsonDatabaseHandler targetdata = KR_JsonDatabaseHandler.LoadPlayerData(targetsPlainId, "", true);//true because search only otherwise it will create a new json lol!
                 if(targetdata)
                 {
                     GetRPCManager().SendRPC("KR_BANKING", "AdminPlayerDataResponse", new Param5< int, int, string, string, string >( targetdata.GetBankCredit(), targetdata.GetBonusAmount(), targetdata.GetName(), targetdata.GetSteamID(), targetdata.GetClanID()), true, sender);
+                }
+                else
+                {
+                    GetBankingServerManager().SendNotification("Error while loading playerdata from: " + targetsPlainId, sender, true);
+                }
+            }
+            else
+            {
+                GetBankingServerManager().SendNotification("You dont have enought permission to do that!", sender, true);
+            }
+        }
+    }
+
+    void AdminSafePlayerdata(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param3<string, int, int> data;
+            if(!ctx.Read(data)) return;
+            string targetsPlainId = data.param1;
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUsePlayersBankData)
+            {
+                if(!admin.m_permissions.m_CanIgnoreNamePermission)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+                KR_JsonDatabaseHandler targetdata = KR_JsonDatabaseHandler.LoadPlayerData(targetsPlainId, "");
+                if(targetdata)
+                {
+                    targetdata.UpdateCurrency(data.param2, false);
+                    targetdata.UpdateBonus(data.param3, true);
+                    GetBankingServerManager().SendNotification("Sucesfully Update Playerdata from: " + targetdata.GetName(), sender, true);
+                    //GetRPCManager().SendRPC("KR_BANKING", "AdminPlayerDataResponse", new Param5< int, int, string, string, string >( targetdata.GetBankCredit(), targetdata.GetBonusAmount(), targetdata.GetName(), targetdata.GetSteamID(), targetdata.GetClanID()), true, sender);
                 }
                 else
                 {

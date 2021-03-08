@@ -30,6 +30,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_AddPlayerCosts;
     protected EditBoxWidget             m_MaxClanStorageEdit;
     protected EditBoxWidget             m_MaxClanPlayerEdit;
+    protected EditBoxWidget             m_SearchWithSteamIDBox;
     protected EditBoxWidget             m_MinTransferEdit;
     protected EditBoxWidget             m_TransferFeesEdit;
     protected EditBoxWidget             m_MinPlayerForRobEdit;
@@ -39,6 +40,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_PaycheckValueEdit;
     protected EditBoxWidget             m_PayCheckMinPlayersEdit;
     protected EditBoxWidget             m_WebHookUrlEdit;
+    protected EditBoxWidget             m_SearchPlayerInListBox;
 
 
     protected CheckBoxWidget            m_CanBeRobbedCheck;
@@ -59,7 +61,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_ServerSettingsButton;
     protected ButtonWidget              m_PlayerManagerButton;
     protected ButtonWidget              m_ClanManagerButton;
-    protected ButtonWidget              m_SaveButton;
+    protected ButtonWidget              m_BtnSavePlayerData;
     protected ButtonWidget              m_ReloadButton;
     protected ButtonWidget              m_CloseButton;
     protected ButtonWidget              m_SearchOfflineID;
@@ -71,6 +73,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected TextListboxWidget         m_ATMspots;
 
     protected int                       m_LastSelectedPlayerIndex;
+    protected string                    m_LastTargetsSteamID;
 
     override Widget Init ()
     {
@@ -109,6 +112,9 @@ class KR_AdminMenu extends UIScriptedMenu
             m_WebHookUrlEdit                =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("WebhookLink"));
             m_AtmAmount                     =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnAtm"));
             m_Bonus                         =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Bonus"));
+            m_SearchWithSteamIDBox          =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("SearchOfflineBox"));
+            m_SearchPlayerInListBox         =  EditBoxWidget.Cast(layoutRoot.FindAnyWidget("EditBoxPlayersFind"));
+        
 
 
 
@@ -116,7 +122,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_ServerSettingsButton          =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnServerS"));
             m_PlayerManagerButton           =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnPlManager"));
             m_ClanManagerButton             =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager"));
-            m_SaveButton                    =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager3"));
+            m_BtnSavePlayerData             =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSavePlayer"));
             m_ReloadButton                  =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnClManager4"));
             m_CloseButton                   =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget0"));
             m_SearchOfflineID               =  ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSearchOfflineID"));
@@ -177,9 +183,21 @@ class KR_AdminMenu extends UIScriptedMenu
     {
         m_PlayerName.SetText(PlayersName);
         m_SteamIDBox.SetText(TargetsPlainID);
+        m_LastTargetsSteamID = TargetsPlainID;
         m_ClanIdBox.SetText(ClanID);
         m_AtmAmount.SetText(AmountOnBank.ToString());
         m_Bonus.SetText(BonusAmountOnBank.ToString());
+    }
+
+    override bool OnChange(Widget w, int x, int y, bool finished)
+	{
+        switch(w)
+        {
+            case m_SearchPlayerInListBox:
+                SearchPlayer();
+                break;
+        }
+        return super.OnChange(w, x, y, finished);
     }
     override bool OnClick(Widget w, int x, int y, int button) 
     {
@@ -197,8 +215,8 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_ClanManagerButton:
                 SwitchTab(3);
                 break;
-            case m_SaveButton:
-                //HandleSave();     NOT IMPLEMENTED YET
+            case m_BtnSavePlayerData:
+                HandlePlayerDataSave();
                 break;
             case m_ReloadButton:
                 //handleConfigReload(); NOT IMPLEMENTED YET
@@ -207,10 +225,42 @@ class KR_AdminMenu extends UIScriptedMenu
                // handleShowPlayerClan(); NOT IMPLEMENTED YET
                 SwitchTab(3);
                 break;
+            case m_SearchOfflineID:
+                GetBankingClientAdminManager().RequestPlayerdataWithId(m_SearchWithSteamIDBox.GetText());
+                break;
 
         }
 
         return super.OnClick(w, x, y, button);
+    }
+
+    void SearchPlayer()
+    {
+        string searchTerm = m_SearchPlayerInListBox.GetText();
+        if(searchTerm == ""){
+            InvokePlayerList();
+        }
+        searchTerm.ToLower();
+        m_PlayersList.ClearItems();
+
+        for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
+        {
+            string trgname = GetBankingClientManager().GetOnlinePlayers().Get(i).name;
+            trgname.ToLower();
+            if(trgname.Contains(searchTerm))
+            {
+                //Add 
+                m_PlayersList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+            }
+        }
+    }
+
+    void HandlePlayerDataSave()
+    {
+        int newBankAmount = m_AtmAmount.GetText().ToInt();
+        int newBankBonus =  m_Bonus.GetText().ToInt();
+        //Todo add nullchecks.
+        GetBankingClientAdminManager().RequestSavePlayerData(m_LastTargetsSteamID, newBankAmount, newBankBonus);
     }
 
     void CloseAdminMenu()
