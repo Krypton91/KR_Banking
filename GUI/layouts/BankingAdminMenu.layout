@@ -104,7 +104,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelTabServerSettings {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.211 0.05705
      size 0.78798 0.94639
@@ -1381,7 +1381,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          style Colorable
-         text "Clans"
+         text "Members"
          font "gui/fonts/metron22"
          switch normal
         }
