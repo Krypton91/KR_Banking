@@ -22,6 +22,8 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminUpdateServerConfig", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminReloadConfig", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestClanDataWithID", this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminJoinClan", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteClan", this, SingleplayerExecutionType.Server);
         Print("[Advanced Banking] -> RPCs Registered!");
     }
 
@@ -310,7 +312,7 @@ class BankingAdminManager extends PluginBase
 
     void AdminRequestClanDataWithID(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-         if(type == CallType.Server)
+        if(type == CallType.Server)
         {
             Param1<string> data;
             if(!ctx.Read(data)) return;
@@ -334,6 +336,83 @@ class BankingAdminManager extends PluginBase
                 else
                 {
                     //Reponse with empty data!
+                }
+            }
+        }
+    }
+
+    void AdminJoinClan(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param1<string> data;
+            if(!ctx.Read(data)) return;
+
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanUsePlayersClans)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+
+                ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(data.param1);
+				if(clandata)
+				{
+                    KR_JsonDatabaseHandler adminsData = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
+                    if(adminsData)
+                    {
+                        adminsData.SetClan(data.param1);
+                        PermissionObject perms = new PermissionObject();
+                        perms.GiveClanOwner();
+                        GetBankingServerManager().AddClanMember(clandata, perms, sender.GetPlainId(), sender.GetName());
+                        GetBankingServerManager().SendNotification("Sucesfully joined clan!", sender);
+                    }
+                }
+            }
+        }
+    }
+
+    void AdminDeleteClan(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param1<string> data;
+            if(!ctx.Read(data)) return;
+
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanUsePlayersClans)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+
+                ClanDataBaseManager clandata = ClanDataBaseManager.LoadClanData(data.param1);
+				if(clandata)
+				{
+                    for(int i = 0; i < clandata.GetClanMembers().Count(); i++)
+                    {
+                        string plainId = clandata.GetClanMembers().Get(i).GetPlainID();
+                        if(plainId)
+                        {
+                            KR_JsonDatabaseHandler membersData = KR_JsonDatabaseHandler.LoadPlayerData(plainId);
+                            if(membersData)
+                            {
+                                membersData.SetClan("NONE");
+                            }
+                        }
+                    }
+                    clandata.DeleteClan();
+                    GetBankingServerManager().SendNotification("Sucesfully deleted clan!", sender);
                 }
             }
         }

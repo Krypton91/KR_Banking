@@ -373,7 +373,8 @@ class KR_AdminMenu extends UIScriptedMenu
                 GetRPCManager().SendRPC("KR_BANKING", "AdminReloadConfig", null, true);
                 break;
             case m_OpenInClanManagerButton:
-               // handleShowPlayerClan(); NOT IMPLEMENTED YET
+                string stttttt = GetBankingClientManager().GetOnlinePlayers().Get(m_PlayersList.GetSelectedRow()).plainid;
+                GetBankingClientAdminManager().RequestPlayerdataWithId(stttttt);
                 SwitchTab(3);
                 break;
             case m_SearchOfflineID:
@@ -497,6 +498,8 @@ class KR_AdminMenu extends UIScriptedMenu
         m_OnClanAtmEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetBankCredit().ToString());
         m_ClanNameEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetName());
         m_ClanTagEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanTag());
+        m_ClanIDBox2.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanID());
+
 
         m_ClanList.ClearItems();
         m_ClanLogsList.ClearItems();
@@ -515,14 +518,12 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void HandleJoinClan()
     {
-
-
+        GetBankingClientAdminManager().JoinLastLoadedClan();
     }
 
     void HandleDeleteClan()
     {
-
-
+        GetBankingClientAdminManager().DeleteClan();
     }
 
     void RefreshClanInfo()

@@ -93,6 +93,16 @@ class BankingClientAdminManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "AdminRequestClanDataWithID", new Param1<string>(ID), true);
     }
 
+    void JoinLastLoadedClan()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminJoinClan", new Param1<string>(m_LastRequestedClanData.GetClanID()), true);
+    }
+
+    void DeleteClan()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminDeleteClan", new Param1<string>(m_LastRequestedClanData.GetClanID()), true);
+    }
+
     void UpdatePlayerlist()
     {
         if(m_AdminMenu)
