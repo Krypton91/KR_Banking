@@ -5,6 +5,7 @@ class BankingAdminManager extends PluginBase
         if(GetGame() && GetGame().IsServer())
         {
             Print("[Advanced Banking] -> Internal Admin Module starting....");
+            Print(" Found: " + GetKR_AdminConfig().m_Admins.Count().ToString());
             Init();
         }
     }
