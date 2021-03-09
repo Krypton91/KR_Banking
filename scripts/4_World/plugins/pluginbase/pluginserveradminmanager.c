@@ -24,6 +24,7 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestClanDataWithID", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminJoinClan", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteClan", this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminRequestMoneyDrop", this, SingleplayerExecutionType.Server);
         Print("[Advanced Banking] -> RPCs Registered!");
     }
 
@@ -283,6 +284,45 @@ class BankingAdminManager extends PluginBase
         }
     }
 
+    void AdminRequestMoneyDrop(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param1<int> data;
+            if(!ctx.Read(data)) return;
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanUseMiscServer)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+                
+                array<Man> allOnlinePlayers = new array<Man>;
+                GetGame().GetPlayers(allOnlinePlayers);
+
+                PlayerBase ntarplayer;
+                foreach(Man man : allOnlinePlayers)
+                {
+                    if(Class.CastTo(ntarplayer, man))
+                    {
+                        KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(ntarplayer.GetIdentity().GetPlainId(), ntarplayer.GetIdentity().GetName());
+                        if(playerdata)
+                        {
+                            playerdata.DepositMoney(data.param1);
+                            GetRPCManager().SendRPC("KR_BANKING", "MoneyDropRecvied", null, true, ntarplayer.GetIdentity());
+                            GetBankingServerManager().SendNotification("You reviced an Money Drop (" + data.param1 + ") from Admin: " + sender.GetName(), ntarplayer.GetIdentity(), true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void AdminTeleportToPosition(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -327,15 +367,12 @@ class BankingAdminManager extends PluginBase
                         return;
                     }
                 }
-
-                ClanDataBaseManager clanData = ClanDataBaseManager.LoadClanData(data.param1);
+                KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1); 
+                if(!targetPlayer) return;
+                ClanDataBaseManager clanData = ClanDataBaseManager.LoadClanData(targetPlayer.GetClanID());
                 if(clanData)
                 {
                     GetRPCManager().SendRPC("KR_BANKING", "AdminClanDataReponse", new Param1< ref ClanDataBaseManager >( clanData ), true, sender);
-                }
-                else
-                {
-                    //Reponse with empty data!
                 }
             }
         }

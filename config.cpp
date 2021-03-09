@@ -195,3 +195,31 @@ class CfgVehicles
 		};
 	};
 };
+//MoneyDropSoundset
+class CfgSoundShaders
+{
+	class MoneyDrop_SoundShaders
+	{
+		samples[]=
+		{
+			
+			{
+				"KR_Banking\data\Sounds\MoneyDrop.ogg",
+				1
+			}
+		};
+		range=5;
+		volume=1.5;
+	};
+};
+
+class CfgSoundSets
+{
+	class MoneyDrop_SoundSet
+	{
+		soundShaders[]=
+		{
+			"MoneyDrop_SoundShaders"
+		};
+	};
+};

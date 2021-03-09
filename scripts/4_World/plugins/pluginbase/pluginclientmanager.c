@@ -26,6 +26,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING","PlayeristResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "ClanSyncRespose", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "UIQuitRequest", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "MoneyDropRecvied", this, SingleplayerExecutionType.Client);
         GetRPCManager().SendRPC("KR_BANKING", "ServerConfigRequest", null, true);
     }
 
@@ -90,6 +91,14 @@ class PluginKrBankingClientManager extends PluginBase
             {
                 CloseBankingMenu();
             }
+        }
+    }
+
+    void MoneyDropRecvied(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Client)
+        {
+            SEffectManager.PlaySoundOnObject( "MoneyDrop_SoundSet", GetGame().GetPlayer() );
         }
     }
 

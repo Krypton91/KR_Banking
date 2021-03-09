@@ -374,7 +374,8 @@ class KR_AdminMenu extends UIScriptedMenu
                 break;
             case m_OpenInClanManagerButton:
                 string stttttt = GetBankingClientManager().GetOnlinePlayers().Get(m_PlayersList.GetSelectedRow()).plainid;
-                GetBankingClientAdminManager().RequestPlayerdataWithId(stttttt);
+                Print("Requesting Clandata from player with id: " + stttttt);
+                GetBankingClientAdminManager().RequestClanDataById(stttttt);
                 SwitchTab(3);
                 break;
             case m_SearchOfflineID:
@@ -534,8 +535,8 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void HandleAddMoneyToAllPlayers()
     {
-
-
+        int AmountForDrop = m_AddToAllPlayersEdit.GetText().ToInt();
+        GetBankingClientAdminManager().MakeMoneyDrop(AmountForDrop);
     }
 
     void HandleResetAtmRobs()

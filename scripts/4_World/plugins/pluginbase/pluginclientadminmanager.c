@@ -109,6 +109,11 @@ class BankingClientAdminManager extends PluginBase
             m_AdminMenu.InvokePlayerList();
     }
 
+    void MakeMoneyDrop(int amount)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminRequestMoneyDrop", new Param1<int>(amount), true);
+    }
+
     void TeleportToAtm(vector TeleportEndPoint)
     {
         GetRPCManager().SendRPC("KR_BANKING", "AdminTeleportToPosition", new Param1<vector>(TeleportEndPoint), true);
