@@ -102,12 +102,21 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
         if(type == CallType.Server)
         {
-			//we just save this in a new class in memory because they can read the memory & find out the positions.
-			KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
-			clientsettings.TimeInSecToRobATM = m_krserverconfig.TimeInSecToRobATM;
-            GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2< ref KR_BankingClientConfig, string >( clientsettings, sender.GetPlainId() ), true, sender);
+			SendConfigToClient(sender);
         }
     }
+
+	void InternalConfigReload()
+	{
+		m_krserverconfig = GetKR_BankingServerConfig();
+	}
+
+	void SendConfigToClient(PlayerIdentity identity)
+	{
+		KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
+		clientsettings.TimeInSecToRobATM = m_krserverconfig.TimeInSecToRobATM;
+        GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2< ref KR_BankingClientConfig, string >( clientsettings, identity.GetPlainId() ), true, identity);
+	}
 
     void DepositRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{

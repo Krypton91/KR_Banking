@@ -3,11 +3,13 @@ class BankingClientAdminManager extends PluginBase
     protected ref KR_AdminMenu                    m_AdminMenu;
     protected ref AdminPermissions                m_ClientPermissions;
     protected ref KR_BankingConfigManager         m_BankingServercfg;
+    ref ClanDataBaseManager                       m_LastRequestedClanData;
 
     void BankingClientAdminManager()
     {
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataResponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "AdminPlayerDataResponse", this, SingleplayerExecutionType.Client);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminClanDataReponse", this, SingleplayerExecutionType.Client);
         GetRPCManager().AddRPC("KR_BANKING", "AdminServerConfigResponse", this, SingleplayerExecutionType.Client);
     }
 
@@ -54,14 +56,29 @@ class BankingClientAdminManager extends PluginBase
         }
     }
 
+    //Callback from remote gets called after an admin requests clandata!
+    void AdminClanDataReponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        Param1<ref ClanDataBaseManager> data;
+        if(!ctx.Read(data)) return;
+        if(type == CallType.Client)
+        {
+            m_LastRequestedClanData = data.param1;
+            if(m_AdminMenu)
+                m_AdminMenu.UpdateClanDataCard();
+        }
+    }
+
     void InsertNewATM(string classname, bool canRob, vector position, vector orientation)
     {
         GetRPCManager().SendRPC("KR_BANKING", "AdminInsertATM", new Param4<string, bool, vector, vector>(classname, canRob, position, orientation), true);
     }
 
-    void SendConfigToRemote()
+    void SendConfigToRemote(ref KR_BankingConfigManager cfg)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateServerConfig", new Param1<ref KR_BankingConfigManager>(m_BankingServercfg), true);
+        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateServerConfig", new Param1<ref KR_BankingConfigManager>(cfg), true);
+        //Update Local config.
+        m_BankingServercfg = cfg;
     }
 
 
@@ -69,6 +86,11 @@ class BankingClientAdminManager extends PluginBase
     void GetServerSettings()
     {
         GetRPCManager().SendRPC("KR_BANKING", "AdminRequestServerSettings", null, true);
+    }
+
+    void RequestClanDataById(string ID)
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminRequestClanDataWithID", new Param1<string>(ID), true);
     }
 
     void UpdatePlayerlist()

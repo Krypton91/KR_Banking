@@ -72,11 +72,5 @@ static ref KR_AdminConfigManager GetKR_AdminConfig() {
         g_KR_AdminConfigManager = KR_AdminConfigManager.Load();
         g_KR_AdminConfigManager.Save();
     }
-    else
-    {
-        if(g_Game.IsClient() && !g_KR_AdminConfigManager)
-            //Request config from server!
-    }
-
     return g_KR_AdminConfigManager;
 };

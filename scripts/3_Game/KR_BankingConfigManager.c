@@ -28,6 +28,7 @@ class KR_BankingConfigManager
     ref Webhookservice m_DiscordWebhook;
     ref array<ref ATMPosition> ATM;
     ref array<ref CurrencySettings> BankingCurrency;
+    
     void KR_BankingConfigManager()
     {
         ATM = new ref array<ref ATMPosition>();

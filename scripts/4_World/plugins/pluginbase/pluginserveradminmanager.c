@@ -2,16 +2,16 @@ class BankingAdminManager extends PluginBase
 {
     void BankingAdminManager()
     {
-        Print("[Advanced Banking] -> Internal Admin Module starting....");
-        Print("Try to load Admins from json!");
-        Print(" Found: " + GetKR_AdminConfig().m_Admins.Count().ToString());
-        foreach(AdminUsers admin: GetKR_AdminConfig().m_Admins)
+        if(GetGame() && GetGame().IsServer())
         {
-            Print("Found Admin with name: " + admin.m_PlainID);
+            Print("[Advanced Banking] -> Internal Admin Module starting....");
+            Init();
         }
-        Print("Admin Module loadet!");
-        Print("============DEBUG END!! =============");
+    }
 
+    void Init()
+    {
+        Print("[Advanced Banking] -> Register RPCs");
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataRequest", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestPlayerdata", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestServerSettings", 	this, SingleplayerExecutionType.Server);
@@ -20,6 +20,9 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteATM", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminInsertATM", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminUpdateServerConfig", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminReloadConfig", 	this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminRequestClanDataWithID", this, SingleplayerExecutionType.Server);
+        Print("[Advanced Banking] -> RPCs Registered!");
     }
 
     void AdminDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -132,6 +135,38 @@ class BankingAdminManager extends PluginBase
             else
             {
                 GetBankingServerManager().SendNotification("You dont have enought permission to do that! Permission needed: m_CanUseServerConfig", sender, true);
+            }
+        }
+    }
+
+    void AdminReloadConfig(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanIgnoreNamePermission)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+                GetBankingServerManager().InternalConfigReload();
+                array<Man> allPlayers = new array<Man>;
+                GetGame().GetPlayers(allPlayers);
+                PlayerBase player;
+                foreach(Man curman : allPlayers)
+                {
+                    if(Class.CastTo(player, curman))
+                    {
+                        GetBankingServerManager().SendConfigToClient(player.GetIdentity());
+                    }
+                }
+                GetBankingServerManager().SendNotification("Config reloadet & sended to every connected client!", sender);
             }
         }
     }
@@ -268,6 +303,37 @@ class BankingAdminManager extends PluginBase
                 if(player)
                 {
                     player.SetPosition(data.param1);
+                }
+            }
+        }
+    }
+
+    void AdminRequestClanDataWithID(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+         if(type == CallType.Server)
+        {
+            Param1<string> data;
+            if(!ctx.Read(data)) return;
+            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            if(admin && admin.m_permissions.m_CanUseServerConfig)
+            {
+                if(!admin.m_permissions.m_CanUsePlayersClans)
+                {
+                    if(admin.m_Name != sender.GetName())
+                    {
+                        GetBankingServerManager().SendNotification("Action can only executed with name: " + admin.m_Name, sender, true);
+                        return;
+                    }
+                }
+
+                ClanDataBaseManager clanData = ClanDataBaseManager.LoadClanData(data.param1);
+                if(clanData)
+                {
+                    GetRPCManager().SendRPC("KR_BANKING", "AdminClanDataReponse", new Param1< ref ClanDataBaseManager >( clanData ), true, sender);
+                }
+                else
+                {
+                    //Reponse with empty data!
                 }
             }
         }

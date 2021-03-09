@@ -1350,7 +1350,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelWidgetClanManager {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
@@ -1387,7 +1387,7 @@ FrameWidgetClass rootFrame {
         }
         EditBoxWidgetClass EditBoxClansFind {
          visible 1
-         position 0.11 0.927
+         position 0.11739 0.83319
          size 0.873 0.064
          hexactpos 0
          vexactpos 0
@@ -1399,7 +1399,7 @@ FrameWidgetClass rootFrame {
         TextListboxWidgetClass TextListboxClans {
          color 0.502 0 0.3765 1
          position 0 0.047
-         size 0.993 0.873
+         size 0.993 0.604
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1409,6 +1409,36 @@ FrameWidgetClass rootFrame {
          colums "0"
          lines 12
          font "gui/fonts/metron-bold28"
+        }
+        TextWidgetClass TextWidget210 {
+         ignorepointer 1
+         position 0.02554 0.16609
+         size 0.52395 0.06511
+         halign center_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Search clan with ID:"
+         font "gui/fonts/metron-bold28"
+         "text halign" center
+         "text valign" center
+        }
+        ButtonWidgetClass BtnSearchClan {
+         visible 1
+         color 0.4314 0.051 0.3373 1
+         position 0.05549 0.90344
+         size 0.87303 0.06833
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         text "Search"
+         font "gui/fonts/metron22"
+         switch normal
         }
        }
       }
@@ -1595,7 +1625,7 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageWidget2 {
        ignorepointer 1
-       position -0.01217 0.85658
+       position -0.01492 0.77506
        size 0.1003 0.16151
        hexactpos 0
        vexactpos 0

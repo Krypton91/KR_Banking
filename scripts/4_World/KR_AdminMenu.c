@@ -103,6 +103,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected ButtonWidget              m_ResetAtmRobs;
     protected ButtonWidget              m_AddToAllPlayersButton;
     protected ButtonWidget              m_MiscButton;
+    protected ButtonWidget              m_BtnSearchClan;
 
 
 
@@ -204,6 +205,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_AddToAllPlayersButton         =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget3"));
             m_ResetAtmRobs                  =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("ButtonWidget4"));
             m_MiscButton                    =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnMisc"));
+            m_BtnSearchClan                 =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnSearchClan"));
 
 
             m_JoinClanButton                =   ButtonWidget.Cast(layoutRoot.FindAnyWidget("JoinClanButton"));
@@ -368,7 +370,7 @@ class KR_AdminMenu extends UIScriptedMenu
                 HandlePlayerDataSave();
                 break;
             case m_ReloadButton:
-                //handleConfigReload(); NOT IMPLEMENTED YET
+                GetRPCManager().SendRPC("KR_BANKING", "AdminReloadConfig", null, true);
                 break;
             case m_OpenInClanManagerButton:
                // handleShowPlayerClan(); NOT IMPLEMENTED YET
@@ -400,7 +402,7 @@ class KR_AdminMenu extends UIScriptedMenu
                 LoadAllATMs();
                 break;
             case m_BtnSaveServerConfig:
-                GetBankingClientAdminManager().SendConfigToRemote();
+                HandleRemoteConfigSave();
                 break;
             //New Functions from here on 09.03.2021
             case m_JoinClanButton:
@@ -421,12 +423,95 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_AddToAllPlayersButton:
                 HandleAddMoneyToAllPlayers();
                 break;
+            case m_BtnSearchClan:
+                SearchClan();
+                break;
         }
 
         return super.OnClick(w, x, y, button);
     }
 
+
+    void HandleRemoteConfigSave()
+    {
+        ref KR_BankingConfigManager cfg = new KR_BankingConfigManager;
+        cfg.ModVersion = GetBankingClientAdminManager().Getservercfg().ModVersion;
+        cfg.MenuDelay = GetBankingClientAdminManager().Getservercfg().MenuDelay;
+        cfg.startCurrency = m_StarterEdit.GetText().ToInt();
+        cfg.maxCurrency = m_MaxATMEdit.GetText().ToInt();
+        cfg.IsClanAccountActive = m_ClanAccountsActiveCheck.IsChecked();
+        cfg.CostsToCreateClan = m_ClanCreateCostsEdit.GetText().ToInt();
+        cfg.CostsToInviteAnPlayer = m_AddPlayerCosts.GetText().ToInt();
+        cfg.MaxClanAccountLimit = m_MaxClanStorageEdit.GetText().ToInt();
+        cfg.MaxPlayersInClan = m_MaxClanPlayerEdit.GetText().ToInt();
+        cfg.MinAmountToTransfer = m_MinTransferEdit.GetText().ToInt();
+        cfg.TransferfeesInProcent = m_TransferFeesEdit.GetText().ToInt();
+        cfg.IsRobEventActive = m_ATMRobActiveCheck.IsChecked();
+        cfg.MinPlayersForRob = m_MinPlayerForRobEdit.GetText().ToInt();
+        cfg.MinMoneyForRob = m_MinMoneyForRobEdit.GetText().ToInt();
+        cfg.MaxMoneyForRob = m_MaxMoneyForRobEdit.GetText().ToInt();
+        cfg.TimeInSecToRobATM = m_SecondsForRobEdit.GetText().ToInt();
+        cfg.RobMessagesActive = m_RobMessageActiveCheck.IsChecked();
+        cfg.PayCheckValue = m_PaycheckValueEdit.GetText().ToInt();
+        cfg.MinPlayersForPayCheck = m_PayCheckMinPlayersEdit.GetText().ToInt();
+        cfg.PayCheckMessage = m_PaycheckMessageActiveCheck.IsChecked();
+        cfg.CanAddToFullAcc = m_CanAddToFullAccCheck.IsChecked();
+        cfg.NeedsBankCardToOpenMenu = m_NeedBankCardToOpenCheck.IsChecked();
+
+        cfg.m_LoggingSettings = GetBankingClientAdminManager().Getservercfg().m_LoggingSettings;
+        
+        /* ServerLogs */
+        cfg.m_DiscordWebhook.m_UseWebhook = m_UseWebhookCheck.IsChecked();
+        cfg.m_DiscordWebhook.m_WebhookURL = m_WebHookUrlEdit.GetText();
+        cfg.m_DiscordWebhook.m_LogDepositToDiscord = m_LogDepositCheck.IsChecked();
+        cfg.m_DiscordWebhook.m_LogWithdrawToDiscord = m_LogWithdrawCheck.IsChecked();
+        cfg.m_DiscordWebhook.m_LogClanDepositToDiscord = m_LogClanDepositCheck.IsChecked();
+        cfg.m_DiscordWebhook.m_LogClanWithdrawToDiscord = m_LogClanWithdrawCheck.IsChecked();
+
+        cfg.ATM = GetBankingClientAdminManager().Getservercfg().ATM;
+        cfg.BankingCurrency = GetBankingClientAdminManager().Getservercfg().BankingCurrency;
+
+        
+        GetBankingClientAdminManager().SendConfigToRemote(cfg);
+    }
+
     //New Clan Manager functions here 08.03.2021 - Hier habe ich weiter gemacht wo du pennen gegangen bist - ist meistens nur die base - du musst den code noch reinmachen schnuggi
+
+    void SearchClan()
+    {
+        string searchTerm = m_ClansSearchBarEdit.GetText();
+        if(searchTerm && searchTerm != "")
+        {
+            GetBankingClientAdminManager().RequestClanDataById(searchTerm);
+        }
+        else
+        {
+            SetFocus(m_ClansSearchBarEdit);//Foucs widget hopefully server owner / admin see this :P
+            GetBankingClientManager().SendNotification("ID search param is empty please fill in a ID!");
+        }
+    }
+
+    void UpdateClanDataCard()
+    {
+        m_ClanOwnerID.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetOwnersID());
+        m_OnClanAtmEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetBankCredit().ToString());
+        m_ClanNameEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetName());
+        m_ClanTagEdit.SetText(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanTag());
+
+        m_ClanList.ClearItems();
+        m_ClanLogsList.ClearItems();
+
+        //Soo easy this system *_*
+        foreach(ClanMemberObject member : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers())
+        {
+            m_ClanList.AddItem(member.GetPlayerName(), NULL, 0);
+        }
+
+        foreach(string LogLine : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanLogs())
+        {
+            m_ClanLogsList.AddItem(LogLine, NULL, 0);
+        }
+    }
 
     void HandleJoinClan()
     {
