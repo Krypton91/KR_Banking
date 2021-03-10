@@ -134,19 +134,19 @@ class PluginKrBankingClientManager extends PluginBase
         m_AdminMenuNeedsAnUpdate = AdminRequest;
     }
 
-    void RequestRemoteToWitdraw(int ammount, int mode)
+    void RequestRemoteToWitdraw(int amount, int mode)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param2<int, int>(ammount, mode), true);
+        GetRPCManager().SendRPC("KR_BANKING", "WithdrawRequest", new Param2<int, int>(amount, mode), true);
     }
 
-    void RequestRemoteToDeposit(int ammount, int mode)
+    void RequestRemoteToDeposit(int amount, int mode)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "DepositRequest", new Param2<int, int>(ammount, mode), true);
+        GetRPCManager().SendRPC("KR_BANKING", "DepositRequest", new Param2<int, int>(amount, mode), true);
     }
 
-    void RequestRemoteForTransfer(string targetPlainID, int ammount)
+    void RequestRemoteForTransfer(string targetPlainID, int amount)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<string, int>(targetPlainID, ammount), true);
+        GetRPCManager().SendRPC("KR_BANKING", "TransferRequest", new Param2<string, int>(targetPlainID, amount), true);
     }
 
     void RequestRemoteLeaveClan()
