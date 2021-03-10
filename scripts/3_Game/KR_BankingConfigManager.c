@@ -129,7 +129,7 @@ class KR_BankingConfigManager
                 settings.CreateNewConfig();
             }
 
-            if(hasError)
+            if(hasError && !settings.IsConfigOutdated())
             {
                 bool WebSiteOpen = false;
                 while(true)
