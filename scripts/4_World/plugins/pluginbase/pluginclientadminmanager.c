@@ -122,25 +122,32 @@ class BankingClientAdminManager extends PluginBase
     void OpenBankingAdmin()
     {
         if(!IsBankingAdminDataRecived)
-        {
-            //return when admin data is not recived from remote, remote will open the menu self when the sender is an admin!
             return;
+
+        if(GetGame().GetUIManager().GetMenu() == NULL && m_AdminMenu == null)
+        {
+            m_AdminMenu = KR_AdminMenu.Cast(GetGame().GetUIManager().EnterScriptedMenu(KR_BANKING_ADMIN_MENU, null));
+            m_AdminMenu.SetIsAdminMenuOpened(true);
         }
         else
         {
-            //Open the Menu... 
-            if(GetGame().GetUIManager().GetMenu() == NULL && m_AdminMenu == null)
+            if(GetGame().GetUIManager().GetMenu() == NULL && !m_AdminMenu.IsAdminMenuOpen())
             {
-                m_AdminMenu = KR_AdminMenu.Cast(GetGame().GetUIManager().EnterScriptedMenu(KR_BANKING_ADMIN_MENU, null));
-                m_AdminMenu.SetIsAdminMenuOpened(true);
-            }
-            else
-            {
-                if(GetGame().GetUIManager().GetMenu() == NULL && !m_AdminMenu.IsAdminMenuOpen())
-                {
                     GetGame().GetUIManager().ShowScriptedMenu(m_AdminMenu, NULL);
                     m_AdminMenu.SetIsAdminMenuOpened(true);
-                }
+            }
+        }
+    }
+
+    void ChangeRobState(bool robstate, int ATMID)
+    {
+        for(int i = 0; i < m_BankingServercfg.ATM.Count(); i++)
+        {
+            if( i== ATMID)
+            {
+                m_BankingServercfg.ATM.Get(i).SetCanRobbed(robstate);
+                GetBankingClientManager().SendNotification("Sucesfully updated Rob state! Please wait for the next server restart!");
+                break;
             }
         }
     }
@@ -163,6 +170,9 @@ class BankingClientAdminManager extends PluginBase
 
     void RequestPlayerdata(int PlayerArrayIndex)
     {
+        if(!GetBankingClientManager().GetOnlinePlayers() || !GetBankingClientManager().GetOnlinePlayers().Get(PlayerArrayIndex) || !GetBankingClientManager().GetOnlinePlayers().Get(PlayerArrayIndex).plainid)
+            return;
+        
         string trgstid = GetBankingClientManager().GetOnlinePlayers().Get(PlayerArrayIndex).plainid;
         if(trgstid)
             GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param1<string>(trgstid), true);
@@ -176,11 +186,7 @@ class BankingClientAdminManager extends PluginBase
 
     void UpdateClanData(int newBankAmount, string clanname, string clantag)
     {
-        //Change ClanData...
-
         GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateClanData", new Param4<string, string, string, int>(m_LastRequestedClanData.GetClanID(), clanname, clantag, newBankAmount), true);
-        Print("Data Updated! sending remote request to update....");
-
     }
 
     ref KR_BankingConfigManager Getservercfg()

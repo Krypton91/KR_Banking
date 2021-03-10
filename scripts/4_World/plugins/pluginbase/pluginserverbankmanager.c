@@ -53,8 +53,7 @@ class PluginKRBankingManagerServer extends PluginBase
     {
         array<Man> onlinePlayers = new array<Man>();
         GetGame().GetPlayers(onlinePlayers);
-		if(m_krserverconfig.MinPlayersForPayCheck > onlinePlayers.Count())
-			return;
+
         if(onlinePlayers.Count() >= m_krserverconfig.MinPlayersForPayCheck)
         {
             for(int i = 0; i < onlinePlayers.Count(); i++)
@@ -63,6 +62,14 @@ class PluginKRBankingManagerServer extends PluginBase
                PlayerIdentity identity = tempPlayer.GetIdentity();
                if(tempPlayer && identity)
                {
+				   #ifdef TRADER
+				   if(tempPlayer.m_Trader_IsInSafezone && !m_krserverconfig.CanAddPayCheckInSafezone)
+				   {
+					   	SendNotification("You cannot earn money in safezone! paycheck skipped!", identity, true);
+				   		continue;
+				   }
+				   #endif
+
                    KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
                    if(playerdata)
                    {
@@ -73,18 +80,28 @@ class PluginKRBankingManagerServer extends PluginBase
                        }
 					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser && !m_krserverconfig.CanAddToFullAcc)
 					   {
-						   if(m_krserverconfig.PayCheckMessage)
+						   if(m_krserverconfig.IsPayCheckMessageActive)
 						   		SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
 						   continue;
 					   }
                        playerdata.DepositMoney(ammountTOAddForSpecialUser);
-					   if(m_krserverconfig.PayCheckMessage)
-					   		SendNotification(ammountTOAddForSpecialUser.ToString() + " Added to your Bank Account! Stay active to get more paychecks!", identity);
+					   if(m_krserverconfig.IsPayCheckMessageActive)
+					   		SendNotification(ReplacedPlaceHolderWithValue(m_krserverconfig.PayCheckMessage), identity);
                    }
                }
             }
         }
     }
+
+	string ReplacedPlaceHolderWithValue(string Placeholder)
+	{
+		if(Placeholder.Contains("%Amount%"))
+		{
+			Placeholder.Replace("%Amount%", m_krserverconfig.PayCheckValue.ToString());
+		}
+
+		return Placeholder;
+	}
 
     void PlayerDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
 	{
@@ -124,6 +141,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(!ctx.Read(data)) return;
         if(type == CallType.Server)
         {
+			if(IsNegativ(data.param1)) return;
             if(data.param2 == 1)
             {
                 DepositMoneyOnOwnBank(sender, data.param1);
@@ -1049,7 +1067,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		
 		while(player.GetInventory().FindFirstFreeLocationForNewEntity(currency.CurrencyName, FindInventoryLocationType.CARGO, il))
 		{
-			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(currency.CurrencyName))
+			if(Class.CastTo(currencyItem, player.GetHumanInventory().CreateInInventory(currency.CurrencyName)))
             {
 				BKcurrencyItemMaxQuantity = GetItemQuantityMax(currencyItem);
 				if(BKcurrencyItemMaxQuantity == 0)
@@ -1105,9 +1123,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				}
 				
 				if(BKquantityLeft == 0)
-				{
 					return 0;
-				}
 			}
 		}
 		return BKquantityLeft;
@@ -1207,6 +1223,7 @@ class PluginKRBankingManagerServer extends PluginBase
         return NULL;
     }
 
+	//!returns players bank amount!
     int GetPlayersBankAmount(PlayerIdentity identity)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
@@ -1226,16 +1243,15 @@ class PluginKRBankingManagerServer extends PluginBase
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
 
 		ItemBase currencyItem;
-		
 		foreach(EntityAI item : itemsArray)
 		{
 			if(Class.CastTo(currencyItem, item))
 			{
 				for (int i = 0; i < m_krserverconfig.BankingCurrency.Count(); i++)
 				{
-					if(item.GetType() == m_krserverconfig.BankingCurrency.Get(i).CurrencyName)
+					if(currencyItem.GetType() == m_krserverconfig.BankingCurrency.Get(i).CurrencyName)
 					{
-						currencyInInventory += GetItemAmount(item) * m_krserverconfig.BankingCurrency.Get(i).CurrencyValue;
+						currencyInInventory += GetItemAmount(currencyItem) * m_krserverconfig.BankingCurrency.Get(i).CurrencyValue;
 					}
 				}
 			}
@@ -1300,6 +1316,13 @@ class PluginKRBankingManagerServer extends PluginBase
             Print("[Advanced Banking] -> Sucesfully spawned ATM: " + ObjectName + " on: " + tempPos);
         }
     }
+
+	bool IsNegativ(int number)
+	{
+		if (number < 0)
+			return true;
+		return false;
+	}
 };
 
 /* Global Plugin Getter */ 

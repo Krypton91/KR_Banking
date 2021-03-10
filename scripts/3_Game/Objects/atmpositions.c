@@ -15,6 +15,11 @@ class ATMPosition
         RobMessage = robmessage;
     }
 
+    void SetCanRobbed(bool rob)
+    {
+        CanBeRobbed = rob;
+    }
+
     vector GetATMPosition()
     {
         return Position;

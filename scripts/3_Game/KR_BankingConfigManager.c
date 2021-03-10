@@ -20,7 +20,9 @@ class KR_BankingConfigManager
     bool    RobMessagesActive;
     int     PayCheckValue;
     int     PayCheckTickTime;
-    bool    PayCheckMessage;
+    bool    IsPayCheckMessageActive;
+    bool    CanAddPayCheckInSafezone;
+    string  PayCheckMessage;
     int     MinPlayersForPayCheck;
     bool    CanAddToFullAcc;
     bool    NeedsBankCardToOpenMenu;
@@ -39,6 +41,7 @@ class KR_BankingConfigManager
 
     void LoadDefaultSettings()
     {
+
         ModVersion = GetModVersion();
         MenuDelay = 1.0;
         startCurrency = 0;
@@ -58,7 +61,9 @@ class KR_BankingConfigManager
         RobMessagesActive = true;
         PayCheckValue = 500;
         PayCheckTickTime = 20;
-        PayCheckMessage = true;
+        IsPayCheckMessageActive = true;
+        CanAddPayCheckInSafezone = true;
+        PayCheckMessage = "%Amount% added to your bank account! stay active to earn more money!";
         MinPlayersForPayCheck = 1;
         CanAddToFullAcc = false;
         NeedsBankCardToOpenMenu = false;
@@ -120,7 +125,9 @@ class KR_BankingConfigManager
             Print("[Advanced Banking] -> Found Config Loading existing config...");
             bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
             if(settings && settings.IsConfigOutdated())
-                Error("Your Config is Outdated! Please Read AdvancedBanking Changelog!");
+            {
+                settings.CreateNewConfig();
+            }
 
             if(hasError)
             {
@@ -139,6 +146,31 @@ class KR_BankingConfigManager
             settings.LoadDefaultSettings();
         }
         return settings;
+    }
+
+    void CreateNewConfig()
+    {
+        if (!FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"))
+			MakeDirectory(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/");
+
+        string BKFileName = "OldConfig.AdvancedBanking";
+        int TryCount = 1;
+        while(FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"+ BKFileName))
+        {
+            BKFileName = TryCount.ToString() + BKFileName;
+            TryCount++;
+        }
+
+        CopyFile(m_BankingConfigPath, m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/" + BKFileName);
+        DeleteFile(m_BankingConfigPath);
+        ATM.Clear();
+        BankingCurrency.Clear();
+        LoadDefaultSettings();
+    }
+
+    void ConfigOutdated()
+    {
+        NotificationSystem.SendNotificationToPlayerIdentityExtended(null, 10, "BankingMod", "Server Config is outdated please inform the server admin to update it!", "KR_Banking/data/Logos/notificationbanking.edds");
     }
 
     int GetCorrectPayCheckTime()

@@ -263,20 +263,15 @@ class KR_AdminMenu extends UIScriptedMenu
 
             if(m_LastSelectedATMIndex != m_ATMspots.GetSelectedRow())
             {
-                //Update ROW
                 m_LastSelectedATMIndex = m_ATMspots.GetSelectedRow();
                 if(!GetBankingClientAdminManager().Getservercfg() || !GetBankingClientAdminManager().Getservercfg().ATM || !GetBankingClientAdminManager().Getservercfg().ATM.Get(m_ATMspots.GetSelectedRow())) return;
                 bool canSelectATMRobbed = GetBankingClientAdminManager().Getservercfg().ATM.Get(m_ATMspots.GetSelectedRow()).GetCanRobbed();
                 m_CanBeRobbedCheck.SetChecked(canSelectATMRobbed);
-                //Print("Updated checkbox new state: " + AMK.ToString());
             }
 
             if(m_LastSelectedATMIndex2 != m_AvaibleATMClassList.GetSelectedRow())
             {
                 m_LastSelectedATMIndex2 = m_AvaibleATMClassList.GetSelectedRow();
-
-                    //Im Dump idiot lol debug this 2hrs :(
-                //string previewClassName = GetBankingClientAdminManager().Getservercfg().ATM.Get(m_AvaibleATMClassList.GetSelectedRow()).ATMSName;
                 string previewClassName = m_ActiveATMClassNames.Get(m_LastSelectedATMIndex2);
                 UpdateItemPreview(previewClassName);
             }
@@ -289,13 +284,11 @@ class KR_AdminMenu extends UIScriptedMenu
         }
     }
 
-    //Gets triggert from PluginAdminClient, after RPC response from remote! :)
     void UpdatePlayerCard(int AmountOnBank, int BonusAmountOnBank, string PlayersName, string TargetsPlainID, string ClanID)
     {
         m_PlayerName.SetText(PlayersName);
         m_SteamIDBox.SetText(TargetsPlainID);
         m_LastTargetsSteamID = TargetsPlainID;
-        //m_LastTargetedClan   = TargetedClan;
         m_ClanIdBox.SetText(ClanID);
         m_AtmAmount.SetText(AmountOnBank.ToString());
         m_Bonus.SetText(BonusAmountOnBank.ToString());
@@ -324,13 +317,9 @@ class KR_AdminMenu extends UIScriptedMenu
 
             m_ItemPreviewWidget.SetItem( previewItem );
 			m_ItemPreviewWidget.SetModelPosition( Vector(0,0,0.5) );
-
 			float itemx, itemy;		
 			m_ItemPreviewWidget.GetPos(itemx, itemy);
-
 			m_ItemPreviewWidget.SetSize( 1.5, 1.5 );
-
-			// align to center 
 			m_ItemPreviewWidget.SetPos( -0.225, -0.225 );
 
     }
@@ -363,6 +352,7 @@ class KR_AdminMenu extends UIScriptedMenu
                 SwitchTab(3);
                 break;
             case m_MiscButton:
+                m_OnlinePlayers.SetText(GetBankingClientManager().GetOnlinePlayers().Count().ToString());
                 SwitchTab(4);
                 break;
             case m_BtnSavePlayerData:
@@ -427,6 +417,9 @@ class KR_AdminMenu extends UIScriptedMenu
             case m_BtnSearchClan:
                 SearchClan();
                 break;
+            case m_CanBeRobbedCheck:
+                GetBankingClientAdminManager().ChangeRobState(m_CanBeRobbedCheck.IsChecked(), m_ATMspots.GetSelectedRow());
+                break;
         }
 
         return super.OnClick(w, x, y, button);
@@ -455,7 +448,8 @@ class KR_AdminMenu extends UIScriptedMenu
         cfg.RobMessagesActive = m_RobMessageActiveCheck.IsChecked();
         cfg.PayCheckValue = m_PaycheckValueEdit.GetText().ToInt();
         cfg.MinPlayersForPayCheck = m_PayCheckMinPlayersEdit.GetText().ToInt();
-        cfg.PayCheckMessage = m_PaycheckMessageActiveCheck.IsChecked();
+        cfg.IsPayCheckMessageActive = m_PaycheckMessageActiveCheck.IsChecked();
+        cfg.CanAddPayCheckInSafezone = GetBankingClientAdminManager().Getservercfg().CanAddPayCheckInSafezone;
         cfg.CanAddToFullAcc = m_CanAddToFullAccCheck.IsChecked();
         cfg.NeedsBankCardToOpenMenu = m_NeedBankCardToOpenCheck.IsChecked();
 
@@ -704,7 +698,6 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void SyncServerSettings()
     {
-        GetBankingClientManager().SendNotification("Please wait a bit downloading server settings....");
         GetBankingClientAdminManager().GetServerSettings();
     }
 
@@ -729,7 +722,7 @@ class KR_AdminMenu extends UIScriptedMenu
         m_RobMessageActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().RobMessagesActive);
         m_PaycheckValueEdit.SetText(GetBankingClientAdminManager().Getservercfg().PayCheckValue.ToString());
         m_PayCheckMinPlayersEdit.SetText(GetBankingClientAdminManager().Getservercfg().MinPlayersForPayCheck.ToString());
-        m_PaycheckMessageActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().PayCheckMessage);
+        m_PaycheckMessageActiveCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().IsPayCheckMessageActive);
         m_CanAddToFullAccCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().CanAddToFullAcc);
         m_NeedBankCardToOpenCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().NeedsBankCardToOpenMenu);
 

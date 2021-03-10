@@ -115,7 +115,7 @@ class ActionRobATM: ActionContinuousBase
             AdvATM.SetSynchDirty();
         }
 
-        EntityAI item_in_Hands = EntityAI.Cast(action_data.m_MainItem);
+        EntityAI item_in_Hands = action_data.m_MainItem;
         if(item_in_Hands)
         {
             //float max = item_in_Hands.GetMaxHealth("","");
