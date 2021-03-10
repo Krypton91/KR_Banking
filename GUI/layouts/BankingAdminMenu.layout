@@ -89,7 +89,7 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnMisc {
        color 0.4314 0.051 0.3373 1
-       position -0.00418 0.09576
+       position 0.00128 0.05785
        size 1.00896 0.09032
        valign center_ref
        hexactpos 0
@@ -1350,7 +1350,7 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass PanelWidgetClanManager {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.21179 0.05705
      size 0.78798 0.94639
@@ -1363,8 +1363,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.014 0.07107
-       size 0.42307 0.90835
+       position 0.014 0.02577
+       size 0.42307 0.95365
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1399,7 +1399,7 @@ FrameWidgetClass rootFrame {
         TextListboxWidgetClass TextListboxClans {
          color 0.502 0 0.3765 1
          position 0 0.047
-         size 0.993 0.604
+         size 0.993 0.70022
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1461,7 +1461,7 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.00487 0.02551
+       position 0.00435 0.02551
        size 0.55077 0.57303
        halign right_ref
        hexactpos 0
@@ -1565,7 +1565,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "[RB]"
+         text "ERROR"
          font "gui/fonts/metron-bold28"
         }
         EditBoxWidgetClass ClanNameEdit {
@@ -1575,25 +1575,10 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "RanzBudeClan"
+         text "NO CLAN DATA LOADED"
          font "gui/fonts/metron-bold28"
         }
        }
-      }
-      ButtonWidgetClass BtnRefreshInfo0 {
-       visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.21954 0.44772
-       size 0.54569 0.06833
-       halign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       style Colorable
-       text "Refresh Data"
-       font "gui/fonts/metron22"
-       switch normal
       }
       TextWidgetClass TextWidget32 {
        ignorepointer 1
@@ -1636,16 +1621,6 @@ FrameWidgetClass rootFrame {
        "src alpha" 1
        "no wrap" 1
        stretch 1
-      }
-      CheckBoxWidgetClass ShowClanTagsOnlyCheck {
-       position 0.01454 0.02612
-       size 0.22195 0.038
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "Show Clan Tags Only"
-       font "gui/fonts/metron-bold28"
       }
       ButtonWidgetClass DeleteClanButton {
        visible 1

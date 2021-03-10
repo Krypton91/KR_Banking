@@ -76,13 +76,22 @@ class ClanDataBaseManager
     void RemoveMember(int index)
     {
         m_Members.Remove(index);
-        SaveClanData(this);
+        
+        if(GetGame().IsServer())
+            SaveClanData(this);
     }
 
     void SetPrefix(string Prefix)
     {
         m_Prefix = Prefix;
-        SaveClanData(this);
+        
+        if(GetGame().IsServer())
+            SaveClanData(this);
+    }
+
+    void SetMoney(int Amount)
+    {
+        m_BankAmount = Amount;
     }
 
     string GetClanTag()

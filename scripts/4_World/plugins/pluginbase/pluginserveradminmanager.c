@@ -27,6 +27,7 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteClan", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestMoneyDrop", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminResetAtmRobs", this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminUpdateClanData", this, SingleplayerExecutionType.Server);
         Print("[Advanced Banking] -> RPCs Registered!");
     }
 
@@ -496,6 +497,31 @@ class BankingAdminManager extends PluginBase
                 }
             }
             GetBankingServerManager().SendNotification(ResetCounter.ToString() + " ATMs have been resetted!", sender);
+        }
+    }
+
+    void AdminUpdateClanData(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            Param4<string, string, string, int> data;
+            if(!ctx.Read(data)) return;
+
+            ClanDataBaseManager editedClan = ClanDataBaseManager.LoadClanData(data.param1);
+            if(editedClan)
+            {
+                string newClanName  = data.param2;
+                string newClanTag   = data.param3;
+                int    Amount       = data.param4;
+                editedClan.SetName(newClanName);
+                editedClan.SetMoney(Amount);
+                editedClan.SetPrefix(newClanTag);//here is a json safe method in so thats why we call this at last! 
+                GetBankingServerManager().SendNotification("Sucesfully updated clan data!", sender);
+            }
+            else
+            {
+                Error("can`t load clandata (AdminMode)");
+            }
         }
     }
 

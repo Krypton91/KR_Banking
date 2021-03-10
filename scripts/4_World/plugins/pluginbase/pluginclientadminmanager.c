@@ -174,6 +174,15 @@ class BankingClientAdminManager extends PluginBase
             GetRPCManager().SendRPC("KR_BANKING", "AdminRequestPlayerdata", new Param1<string>(PlainID), true);
     }
 
+    void UpdateClanData(int newBankAmount, string clanname, string clantag)
+    {
+        //Change ClanData...
+
+        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateClanData", new Param4<string, string, string, int>(m_LastRequestedClanData.GetClanID(), clanname, clantag, newBankAmount), true);
+        Print("Data Updated! sending remote request to update....");
+
+    }
+
     ref KR_BankingConfigManager Getservercfg()
     {
         return m_BankingServercfg;

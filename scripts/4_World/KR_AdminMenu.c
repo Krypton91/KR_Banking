@@ -67,7 +67,6 @@ class KR_AdminMenu extends UIScriptedMenu
     protected CheckBoxWidget            m_LogWithdrawCheck;
     protected CheckBoxWidget            m_LogClanDepositCheck;
     protected CheckBoxWidget            m_LogClanWithdrawCheck;
-    protected CheckBoxWidget            m_ShowClanTagsOnlyCheck;
 
 
 
@@ -550,8 +549,8 @@ class KR_AdminMenu extends UIScriptedMenu
         string newClanName    = m_ClanNameEdit.GetText();
         string NewClanTag     = m_ClanTagEdit.GetText();
 
-       // MARIO HELP ME xD musst noch die funktion in plugin mugin richtig einfügen hab das nicht gecheckt, habe dir hier ne base gemacht :
-       // GetBankingClientAdminManager().RequestSaveClanData(m_LastTargetedClan, newBankAmount, newClanName, NewClanTag);
+        GetBankingClientAdminManager().UpdateClanData(newClanBankAmount, newClanName, NewClanTag);
+        Print("Updating Data in Plugin (Clientside)");
     }
 
     void HandleInsertNewAtm()
