@@ -467,14 +467,14 @@ class BankingAdminManager extends PluginBase
                 if(!GetKR_BankingServerConfig().ATM.Get(i).GetCanRobbed())
                     continue;
                 
-                vector ATMPosition = GetKR_BankingServerConfig().ATM.Get(i).GetPosition();
-                vector ATMOrientation = GetKR_BankingServerConfig().ATM.Get(i).GetATMDirectory();
+                vector tempATMPosition = GetKR_BankingServerConfig().ATM.Get(i).GetATMPosition();
+                vector tempATMOrientation = GetKR_BankingServerConfig().ATM.Get(i).GetATMDirectory();
                 array<Object> excluded_objects = new array<Object>;
 			    array<Object> nearby_objects = new array<Object>;
 
-                if(ATMPosition && ATMOrientation)
+                if(tempATMPosition && tempATMOrientation)
                 {
-                    if(GetGame().IsBoxColliding(ATMPosition, ATMOrientation, Vector(4,4,4), excluded_objects, nearby_objects))
+                    if(GetGame().IsBoxColliding(tempATMPosition, tempATMOrientation, Vector(4,4,4), excluded_objects, nearby_objects))
 			        {
                         for(int k = 0; k < nearby_objects.Count(); k++)
                         {
@@ -482,7 +482,8 @@ class BankingAdminManager extends PluginBase
                             if(Class.CastTo(AtmObj, nearby_objects.Get(k)))
                             {
                                 AtmObj.SetATMIsRobbed(false);
-                                AdvATM.SetSynchDirty();
+                                AtmObj.m_Banking_CanBeRobbed = true;
+                                AtmObj.SetSynchDirty();
                                 ResetCounter++;
                                 break;
                             }
@@ -494,9 +495,8 @@ class BankingAdminManager extends PluginBase
                     Error("ATM Position was empty! Cannot Handle Reset Rob!");
                 }
             }
-
+            GetBankingServerManager().SendNotification(ResetCounter.ToString() + " ATMs have been resetted!", sender);
         }
-
     }
 
     //!This returns the Admin Object of a user! if a user is no admin it returns null.
