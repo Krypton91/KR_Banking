@@ -128,15 +128,17 @@ class KR_BankingConfigManager
             {
                 settings.CreateNewConfig();
             }
-
-            if(hasError && !settings.IsConfigOutdated())
+            else
             {
-                bool WebSiteOpen = false;
-                while(true)
+                if(hasError)
                 {
-                    if(!WebSiteOpen)
-                        GetGame().OpenURL("https://deutschebohrmaschine.de/AdvancedBanking/error.html");
-                    WebSiteOpen = true;
+                    bool WebSiteOpen = false;
+                    while(true)
+                    {
+                        if(!WebSiteOpen)
+                            GetGame().OpenURL("https://deutschebohrmaschine.de/AdvancedBanking/error.html");
+                        WebSiteOpen = true;
+                    }
                 }
             }
         }
