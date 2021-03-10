@@ -156,6 +156,11 @@ class BankingClientAdminManager extends PluginBase
             GetRPCManager().SendRPC("KR_BANKING", "AdminDeleteATM", new Param1<int>(ID), true);
     }
 
+    void RequestResetAtmRobs()
+    {
+        GetRPCManager().SendRPC("KR_BANKING", "AdminResetAtmRobs", null, true);
+    }
+
     void RequestPlayerdata(int PlayerArrayIndex)
     {
         string trgstid = GetBankingClientManager().GetOnlinePlayers().Get(PlayerArrayIndex).plainid;

@@ -541,8 +541,7 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void HandleResetAtmRobs()
     {
-
-
+        GetBankingClientAdminManager().RequestResetAtmRobs();
     }
 
     void HandleSaveClanSettings()

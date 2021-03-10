@@ -26,6 +26,7 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminJoinClan", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminDeleteClan", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestMoneyDrop", this, SingleplayerExecutionType.Server);
+        GetRPCManager().AddRPC("KR_BANKING", "AdminResetAtmRobs", this, SingleplayerExecutionType.Server);
         Print("[Advanced Banking] -> RPCs Registered!");
     }
 
@@ -454,6 +455,48 @@ class BankingAdminManager extends PluginBase
                 }
             }
         }
+    }
+
+    void AdminResetAtmRobs(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
+    {
+        if(type == CallType.Server)
+        {
+            int ResetCounter = 0;
+            for(int i = 0; i < GetKR_BankingServerConfig().ATM.Count(); i++)
+            {
+                if(!GetKR_BankingServerConfig().ATM.Get(i).GetCanRobbed())
+                    continue;
+                
+                vector ATMPosition = GetKR_BankingServerConfig().ATM.Get(i).GetPosition();
+                vector ATMOrientation = GetKR_BankingServerConfig().ATM.Get(i).GetATMDirectory();
+                array<Object> excluded_objects = new array<Object>;
+			    array<Object> nearby_objects = new array<Object>;
+
+                if(ATMPosition && ATMOrientation)
+                {
+                    if(GetGame().IsBoxColliding(ATMPosition, ATMOrientation, Vector(4,4,4), excluded_objects, nearby_objects))
+			        {
+                        for(int k = 0; k < nearby_objects.Count(); k++)
+                        {
+                            KR_BankingATM AtmObj;
+                            if(Class.CastTo(AtmObj, nearby_objects.Get(k)))
+                            {
+                                AtmObj.SetATMIsRobbed(false);
+                                AdvATM.SetSynchDirty();
+                                ResetCounter++;
+                                break;
+                            }
+                        }
+			        }
+                }
+                else 
+                {
+                    Error("ATM Position was empty! Cannot Handle Reset Rob!");
+                }
+            }
+
+        }
+
     }
 
     //!This returns the Admin Object of a user! if a user is no admin it returns null.
