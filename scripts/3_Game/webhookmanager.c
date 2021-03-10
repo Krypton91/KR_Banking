@@ -51,7 +51,7 @@ class WebhookManager
 		
 		json += data.GetJSON();
 		json += "]}";
-		Print(json);
+		//Print(json);
 		return json;
 	}
 };

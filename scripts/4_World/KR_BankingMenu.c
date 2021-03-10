@@ -574,7 +574,6 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleTransferConfirm()
     {
         string TragetID = GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).plainid;
-        Print("Sending Remote RPC to transfer data: " + TragetID);
         GetBankingClientManager().RequestRemoteForTransfer(TragetID, m_TransferInputBox.GetText().ToInt());
         m_YesNoMessage.Show(false);
     }

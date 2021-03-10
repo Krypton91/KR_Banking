@@ -63,11 +63,8 @@ class PluginKRBankingManagerServer extends PluginBase
                if(tempPlayer && identity)
                {
 				   #ifdef TRADER
-				   if(tempPlayer.m_Trader_IsInSafezone && !m_krserverconfig.CanAddPayCheckInSafezone)
-				   {
-					   	SendNotification("You cannot earn money in safezone! paycheck skipped!", identity, true);
+				   if(tempPlayer.m_Trader_IsInSafezone && !m_krserverconfig.CanAddPayCheckInSafezone)//Skip players in safezone.
 				   		continue;
-				   }
 				   #endif
 
                    KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
@@ -93,6 +90,7 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
+	//!Replace Placeholders from ConfigEntry Todo add some more Placeholders here.
 	string ReplacedPlaceHolderWithValue(string Placeholder)
 	{
 		if(Placeholder.Contains("%Amount%"))
@@ -168,7 +166,6 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
 
 			if(!TargetsPlainID || !TransferAmount)
-			Print(m_krserverconfig.TransferfeesInProcent.ToString() + " % is fees for Transfers!");
 			int currentFeec =  Math.Floor((TransferAmount / 100) * m_krserverconfig.TransferfeesInProcent);//Use Floor because Math.Round dont work lol.
 			int AmountToTransfer = TransferAmount - currentFeec; //Amount with fees!
 			PlayerBase targetPlayer = RemoteFindPlayer(TargetsPlainID);
@@ -614,7 +611,6 @@ class PluginKRBankingManagerServer extends PluginBase
         if(playerdata)
         {
             int CorrectAmountToWitdraw;
-			Print("Input from client was: " + Amount.ToString());
 			if(Amount == 0)
 				CorrectAmountToWitdraw = playerdata.GetBankCredit();
 			else
@@ -624,11 +620,8 @@ class PluginKRBankingManagerServer extends PluginBase
             if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
                 CorrectAmountToWitdraw = playerdata.GetBankCredit();
 			
-            Print("DEBUG for Widtraw Input to Witraw was: " + CorrectAmountToWitdraw.ToString());
-			Print("Currency on Bank Account: " + playerdata.GetBankCredit().ToString());
             int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
 			int finalAmount = CorrectAmountToWitdraw - sillNeeded; 
-			Print("Final Amount was: " + finalAmount.ToString());
 			playerdata.WitdrawMoney(finalAmount);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
 
@@ -1311,7 +1304,6 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(m_krserverconfig.ATM.Get(i).GetCanRobbed())
 					AdvATMS.m_Banking_CanBeRobbed = true;
-				Print("[Advanced Banking] -> ATM Was an Correct ATM!");
 			}
             Print("[Advanced Banking] -> Sucesfully spawned ATM: " + ObjectName + " on: " + tempPos);
         }

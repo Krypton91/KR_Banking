@@ -363,7 +363,6 @@ class KR_AdminMenu extends UIScriptedMenu
                 break;
             case m_OpenInClanManagerButton:
                 string stttttt = GetBankingClientManager().GetOnlinePlayers().Get(m_PlayersList.GetSelectedRow()).plainid;
-                Print("Requesting Clandata from player with id: " + stttttt);
                 GetBankingClientAdminManager().RequestClanDataById(stttttt);
                 SwitchTab(3);
                 break;
@@ -542,9 +541,7 @@ class KR_AdminMenu extends UIScriptedMenu
         int newClanBankAmount = m_OnClanAtmEdit.GetText().ToInt();
         string newClanName    = m_ClanNameEdit.GetText();
         string NewClanTag     = m_ClanTagEdit.GetText();
-
         GetBankingClientAdminManager().UpdateClanData(newClanBankAmount, newClanName, NewClanTag);
-        Print("Updating Data in Plugin (Clientside)");
     }
 
     void HandleInsertNewAtm()

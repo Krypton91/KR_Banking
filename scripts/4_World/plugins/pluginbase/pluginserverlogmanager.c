@@ -60,6 +60,10 @@ class PluginBankingLogManagerServer extends PluginBase
         {
             Print(GetTimeStamp() + " | " + "[Advanced Banking]-> " + Message);
         }
+        else if(GetCurrentLogMode() == 0)
+        {
+            
+        }
         else
         {
             Error(GetCurrentLogMode().ToString() + " is not a valid LogMode! Please read install Guide on steam!");

@@ -12,7 +12,6 @@ class BankingAdminManager extends PluginBase
 
     void Init()
     {
-        Print("[Advanced Banking] -> Register RPCs");
         GetRPCManager().AddRPC("KR_BANKING", "AdminDataRequest", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestPlayerdata", 	this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestServerSettings", 	this, SingleplayerExecutionType.Server);
@@ -28,7 +27,6 @@ class BankingAdminManager extends PluginBase
         GetRPCManager().AddRPC("KR_BANKING", "AdminRequestMoneyDrop", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminResetAtmRobs", this, SingleplayerExecutionType.Server);
         GetRPCManager().AddRPC("KR_BANKING", "AdminUpdateClanData", this, SingleplayerExecutionType.Server);
-        Print("[Advanced Banking] -> RPCs Registered!");
     }
 
     void AdminDataRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -259,7 +257,6 @@ class BankingAdminManager extends PluginBase
                 if(Class.CastTo(AdvATMS, SpawnedATM))
                 {
                     AdvATMS.m_Banking_CanBeRobbed = data.param2;
-                    Print("[Advanced Banking] -> ATM Was an Correct ATM!");
                 }
             }
         }
