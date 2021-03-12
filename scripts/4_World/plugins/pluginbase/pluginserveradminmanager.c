@@ -258,6 +258,7 @@ class BankingAdminManager extends PluginBase
                 {
                     AdvATMS.m_Banking_CanBeRobbed = data.param2;
                 }
+                GetWebhookManager().AdminLog(sender, " Inserted an new ATM at position: " + SpawnedATM.GetPosition().ToString());
             }
         }
     }

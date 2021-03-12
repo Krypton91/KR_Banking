@@ -18,7 +18,7 @@ class PluginKRBankingManagerServer extends PluginBase
         InitPayCheck();
 		m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
 
-		GetWebhookManager().POST("Advanced Banking", "Webhook connected to this channel!");
+		//GetWebhookManager().POST("Advanced Banking", "Webhook connected to this channel!");
     }
 
     protected void RegisterServersideRPCs()
@@ -627,7 +627,8 @@ class PluginKRBankingManagerServer extends PluginBase
 
 
 			if(m_krserverconfig.m_DiscordWebhook.m_LogWithdrawToDiscord)
-				GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " withdrawed " + finalAmount + " from own account.");
+				GetWebhookManager().PlayerLog(identity, "Withdrawed " + finalAmount.ToString() + " ₽ from his own Account.");
+				//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " withdrawed " + finalAmount + " from own account.");
 
 			if(m_krserverconfig.m_LoggingSettings.m_LogWithdraw)
 				GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " withdrawed " + finalAmount + " from own account.");
@@ -660,7 +661,8 @@ class PluginKRBankingManagerServer extends PluginBase
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 
 					if(m_krserverconfig.m_DiscordWebhook.m_LogClanWithdrawToDiscord)
-						GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " withdrawed " + FinallyAmount + " from clan account.");
+						GetWebhookManager().PlayerLog(identity, " Withdrawed " +  FinallyAmount.ToString() + " ₽ from Clan Account with id: " + clanDB.GetClanID());
+						//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " withdrawed " + FinallyAmount + " from clan account.");
 
 					if(m_krserverconfig.m_LoggingSettings.m_LogClanWithdraw)
 						GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " withdrawed " + FinallyAmount + " from clan account.");
@@ -705,7 +707,8 @@ class PluginKRBankingManagerServer extends PluginBase
 				GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
 
 				if(m_krserverconfig.m_DiscordWebhook.m_LogDepositToDiscord)
-					GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Deposited " + SumToInsert + " on own account.");
+					GetWebhookManager().PlayerLog(identity, "Deposited " + SumToInsert.ToString() + " ₽ to his own Account.");
+					//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Deposited " + SumToInsert + " on own account.");
 				
 				if(m_krserverconfig.m_LoggingSettings.m_LogDepositOwnBank)
 					GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Deposited " + SumToInsert + " on own account.");
@@ -757,7 +760,8 @@ class PluginKRBankingManagerServer extends PluginBase
 						RemoveCurrencyFromPlayer(player, SumToInsert);
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 						if(m_krserverconfig.m_DiscordWebhook.m_LogClanDepositToDiscord)
-							GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " deposited " + SumToInsert + " on clan account.");
+							GetWebhookManager().PlayerLog(identity, " Deposited " +  SumToInsert.ToString() + " ₽ to Clan Account with id: " + clanDB.GetClanID());
+							//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " deposited " + SumToInsert + " on clan account.");
 
 						if(m_krserverconfig.m_LoggingSettings.m_LogClanDeposit)
 							GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " deposited " + SumToInsert + " on clan account.");

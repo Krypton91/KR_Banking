@@ -1,19 +1,18 @@
 class Webhookservice
 {
-    bool    m_UseWebhook;
-    string  m_WebhookURL;
+    bool    m_UseWebhook = false;
+    string  m_WebhookURL = "Here the full URL!";
     bool    m_LogDepositToDiscord;
     bool    m_LogWithdrawToDiscord;
     bool    m_LogClanDepositToDiscord;
     bool    m_LogClanWithdrawToDiscord;
-    
-    void Webhookservice(bool UseWebhook = false, string WebhookURL = "HERE THE URL", bool LogDepositToDiscord = false, bool LogWithdrawToDiscord = false, bool LogClanDepositToDiscord = false, bool LogClanWithdrawToDiscord = false)
-    {
-        m_UseWebhook = UseWebhook;
-        m_WebhookURL = WebhookURL;
-        m_LogDepositToDiscord = LogDepositToDiscord;
-        m_LogWithdrawToDiscord = LogWithdrawToDiscord;
-        m_LogClanDepositToDiscord = LogClanDepositToDiscord;
-        m_LogClanWithdrawToDiscord = LogClanWithdrawToDiscord;
-    }
+    bool    m_LogClanCreateToDiscord;
+    bool    m_LogClanInviteMemberToDiscord;
+    bool    m_LogClanRemoveMemberToDiscord;
+    bool    m_LogClanUpdatePermissionToDiscord;
+    bool    m_LogClanKickMemberToDiscord;
+    bool    m_AdminLogUpdateServerConfig;
+    bool    m_AdminLogUpdatePlayerData;
+    bool    m_AdminLogUpdateClanData;
+    bool    m_AdminLogUseMisc;
 };
