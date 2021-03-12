@@ -25,7 +25,6 @@ modded class MissionGameplay
 				else if(!IsBankingAdminDataRecived)
 				{
 					GetRPCManager().SendRPC("KR_BANKING", "AdminDataRequest", null, true);
-					GetBankingClientManager().SendNotification("Please wait for server response....");
 				}
             }
 		}

@@ -49,7 +49,7 @@ class BankingAdminManager extends PluginBase
                     return;
                 }
             }
-            //GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2< ref AdminPermissions, bool >( null, false ), true, sender);
+            GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2< ref AdminPermissions, bool >( null, false ), true, sender);
         }
     }
 
