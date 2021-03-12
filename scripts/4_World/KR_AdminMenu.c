@@ -454,6 +454,19 @@ class KR_AdminMenu extends UIScriptedMenu
 
         cfg.m_LoggingSettings = GetBankingClientAdminManager().Getservercfg().m_LoggingSettings;
         
+        //Hotfix for Paycheck Message is gone. 
+        cfg.PayCheckMessage = GetBankingClientAdminManager().Getservercfg().PayCheckMessage;
+
+        //Hotfix for Webhook
+        cfg.m_DiscordWebhook.m_LogClanCreateToDiscord = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanCreateToDiscord;
+        cfg.m_DiscordWebhook.m_LogClanInviteMemberToDiscord = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanInviteMemberToDiscord;
+        cfg.m_DiscordWebhook.m_LogClanRemoveMemberToDiscord = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanRemoveMemberToDiscord;
+        cfg.m_DiscordWebhook.m_LogClanUpdatePermissionToDiscord = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_LogClanKickMemberToDiscord;
+        cfg.m_DiscordWebhook.m_AdminLogUpdateServerConfig = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_AdminLogUpdateServerConfig;
+        cfg.m_DiscordWebhook.m_AdminLogUpdatePlayerData = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_AdminLogUpdatePlayerData;
+        cfg.m_DiscordWebhook.m_AdminLogUpdateClanData = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_AdminLogUpdateClanData;
+        cfg.m_DiscordWebhook.m_AdminLogUseMisc = GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_AdminLogUseMisc;
+        
         /* ServerLogs */
         cfg.m_DiscordWebhook.m_UseWebhook = m_UseWebhookCheck.IsChecked();
         cfg.m_DiscordWebhook.m_WebhookURL = m_WebHookUrlEdit.GetText();
@@ -521,7 +534,6 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void RefreshClanInfo()
     {
-
 
     }
 

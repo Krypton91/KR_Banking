@@ -112,8 +112,10 @@ class BankingAdminManager extends PluginBase
                 {
                     targetdata.UpdateCurrency(data.param2, false);
                     targetdata.UpdateBonus(data.param3, true);
-                    GetBankingServerManager().SendNotification("Sucesfully Update Playerdata from: " + targetdata.GetName(), sender, true);
-                    //GetRPCManager().SendRPC("KR_BANKING", "AdminPlayerDataResponse", new Param5< int, int, string, string, string >( targetdata.GetBankCredit(), targetdata.GetBonusAmount(), targetdata.GetName(), targetdata.GetSteamID(), targetdata.GetClanID()), true, sender);
+                    GetBankingServerManager().SendNotification("Sucesfully Update Playerdata from: " + targetdata.GetName(), sender);
+
+                    if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdatePlayerData)
+                        GetWebhookManager().AdminLog(sender, " Admin Updated player data from player: " + targetdata.GetName() + " with id: " + targetsPlainId);
                 }
                 else
                 {
@@ -175,6 +177,7 @@ class BankingAdminManager extends PluginBase
         }
     }
 
+    //function ready!
     void AdminDeleteATM(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -209,11 +212,12 @@ class BankingAdminManager extends PluginBase
                             if(Class.CastTo(atm, nerbyobj))
                             {
                                 //Found an ATM on this position!
+                                if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateServerConfig)
+                                    GetWebhookManager().AdminLog(sender, " Deleted ATM: " + atm.GetType() + " on position: " + atm.GetPosition().ToString());
+                                
                                 GetGame().ObjectDelete(atm);
                                 GetKR_BankingServerConfig().RemoveATMWithIndex(data.param1);
                                 GetBankingServerManager().SendNotification("ATM Deleted!", sender, true);
-                                //Send him an RPC back with new Config data
-                                //GetRPCManager().SendRPC("KR_BANKING", "AdminServerConfigResponse", new Param1< ref KR_BankingConfigManager >( GetKR_BankingServerConfig() ), true, sender);
                                 return;
                             }
                         }
@@ -231,6 +235,7 @@ class BankingAdminManager extends PluginBase
         }
     }
 
+    //function ready!
     void AdminInsertATM(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -258,11 +263,14 @@ class BankingAdminManager extends PluginBase
                 {
                     AdvATMS.m_Banking_CanBeRobbed = data.param2;
                 }
-                GetWebhookManager().AdminLog(sender, " Inserted an new ATM at position: " + SpawnedATM.GetPosition().ToString());
+
+                if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateServerConfig)
+                    GetWebhookManager().AdminLog(sender, " Inserted an new ATM at position: " + SpawnedATM.GetPosition().ToString());
             }
         }
     }
 
+    //Function Ready
     void AdminUpdateServerConfig(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -280,11 +288,15 @@ class BankingAdminManager extends PluginBase
                         return;
                     }
                 }
+
+                if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateServerConfig)
+                   GetWebhookManager().AdminLog(sender, " Updated Server config.");
                 GetKR_BankingServerConfig().SetConfig(data.param1);
             }
         }
     }
 
+    //function ready
     void AdminRequestMoneyDrop(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -320,10 +332,14 @@ class BankingAdminManager extends PluginBase
                         }
                     }
                 }
+
+                if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUseMisc)
+                   GetWebhookManager().AdminLog(sender, " Maked an money drop with amount: " + data.param1);
             }
         }
     }
 
+    //Function ready
     void AdminTeleportToPosition(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -346,6 +362,9 @@ class BankingAdminManager extends PluginBase
                 if(player)
                 {
                     player.SetPosition(data.param1);
+
+                    if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateServerConfig)
+                        GetWebhookManager().AdminLog(sender, " Admin used Teleport to ATM command to Position: " + player.GetPosition().ToString());
                 }
             }
         }
@@ -379,6 +398,7 @@ class BankingAdminManager extends PluginBase
         }
     }
 
+    //Function ready!
     void AdminJoinClan(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         if(type == CallType.Server)
@@ -409,6 +429,9 @@ class BankingAdminManager extends PluginBase
                         perms.GiveClanOwner();
                         GetBankingServerManager().AddClanMember(clandata, perms, sender.GetPlainId(), sender.GetName());
                         GetBankingServerManager().SendNotification("Sucesfully joined clan!", sender);
+
+                        if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateClanData)
+                            GetWebhookManager().AdminLog(sender, " Admin joined clan: " + clandata.GetClanID());
                     }
                 }
             }
@@ -449,6 +472,9 @@ class BankingAdminManager extends PluginBase
                             }
                         }
                     }
+                    if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateClanData)
+                        GetWebhookManager().AdminLog(sender, " Admin deleted clan: " + clandata.GetClanID());
+                    
                     clandata.DeleteClan();
                     GetBankingServerManager().SendNotification("Sucesfully deleted clan!", sender);
                 }
@@ -495,6 +521,9 @@ class BankingAdminManager extends PluginBase
                 }
             }
             GetBankingServerManager().SendNotification(ResetCounter.ToString() + " ATMs have been resetted!", sender);
+
+            if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUseMisc)
+                GetWebhookManager().AdminLog(sender, " Admin reseted all robbed ATMS! (" + ResetCounter.ToString() + ")");
         }
     }
 
@@ -515,6 +544,9 @@ class BankingAdminManager extends PluginBase
                 editedClan.SetMoney(Amount);
                 editedClan.SetPrefix(newClanTag);//here is a json safe method in so thats why we call this at last! 
                 GetBankingServerManager().SendNotification("Sucesfully updated clan data!", sender);
+
+                if(GetKR_BankingServerConfig().m_DiscordWebhook.m_AdminLogUpdateClanData)
+                    GetWebhookManager().AdminLog(sender, " Admin Updated clandata from clan: " + editedClan.GetClanID());
             }
             else
             {

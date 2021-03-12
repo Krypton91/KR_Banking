@@ -281,6 +281,9 @@ class PluginKRBankingManagerServer extends PluginBase
 
 					if(m_krserverconfig.m_LoggingSettings.m_LogCreateClanAccount)
 						GetBankingLogManager().Log("Player: " + sender.GetPlainId() + " Created Clan: " + usersNewClan.GetName());
+
+					if(m_krserverconfig.m_DiscordWebhook.m_LogClanCreateToDiscord)
+						GetWebhookManager().PlayerLog(sender, " Created an clan account with id: " + usersNewClan.GetClanID());
 				}
 			}
 			else
@@ -429,9 +432,13 @@ class PluginKRBankingManagerServer extends PluginBase
 									clandata.RemoveMember(n);
 									targetPlayer.SetClan("NONE");
 									PlayerBase t_player = RemoteFindPlayer(data.param1);
-									GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-									SendNotification("Succesfully kicked: " + t_player.GetIdentity().GetName(), sender);
-									SendNotification("You have been kicked from" + clandata.GetName() + "by" + sender.GetName(), t_player.GetIdentity());
+									//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
+									SendNotification("Succesfully kicked: " + data.param1, sender);
+									if(t_player)
+										SendNotification("You have been kicked from" + clandata.GetName() + "by" + sender.GetName(), t_player.GetIdentity());
+
+									if(m_krserverconfig.m_DiscordWebhook.m_LogClanKickMemberToDiscord)
+										GetWebhookManager().PlayerLog(sender, " kicked member: " + data.param1 + " from clan: " + clandata.GetName());
 									break;
 								}
 							}
@@ -496,6 +503,10 @@ class PluginKRBankingManagerServer extends PluginBase
 							{
 								clandata.GetClanMembers().Get(i).SetPermission(data.param1);
 								clandata.SaveClanData(clandata);
+
+								if(m_krserverconfig.m_DiscordWebhook.m_LogClanUpdatePermissionToDiscord)
+									GetWebhookManager().PlayerLog(sender, " updated Permissions for member: " + data.param2 + " from clan: " + clandata.GetName());
+								
 								break;
 							}
 						}
@@ -503,6 +514,11 @@ class PluginKRBankingManagerServer extends PluginBase
 						PlayerBase t_player = RemoteFindPlayer(data.param2);
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
 						SendNotification("Succesfully Updated Permissions for: " + data.param2, sender);
+
+						if(m_krserverconfig.m_LoggingSettings.m_LogUpdatePermission)
+							GetBankingLogManager().Log("Player: " + data.param2 + " PermissionsUpdated! from clan: " + clandata.GetName());
+						
+
 						if(!t_player) return;
 						//Sync new clan data to both players!
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
@@ -510,9 +526,6 @@ class PluginKRBankingManagerServer extends PluginBase
 						//Update the player data!
 						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
 						SendNotification("Your Clan Account Permissions have been changed!", t_player.GetIdentity());
-
-						if(m_krserverconfig.m_LoggingSettings.m_LogUpdatePermission)
-							GetBankingLogManager().Log("Player: " + data.param2 + " PermissionsUpdated! from clan: " + clandata.GetName());
 					}
 					else
 					{
@@ -708,7 +721,6 @@ class PluginKRBankingManagerServer extends PluginBase
 
 				if(m_krserverconfig.m_DiscordWebhook.m_LogDepositToDiscord)
 					GetWebhookManager().PlayerLog(identity, "Deposited " + SumToInsert.ToString() + " ₽ to his own Account.");
-					//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " Deposited " + SumToInsert + " on own account.");
 				
 				if(m_krserverconfig.m_LoggingSettings.m_LogDepositOwnBank)
 					GetBankingLogManager().Log("Player: " + identity.GetPlainId() + " Deposited " + SumToInsert + " on own account.");
