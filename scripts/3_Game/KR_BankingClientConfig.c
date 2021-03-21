@@ -10,6 +10,8 @@ class KR_BankingClientConfig
     int     CostsToCreateClan;
     int     MaxClanAccountLimit;
     int     TimeInSecToRobATM;
+    int     ServersMaxCurrency;
+    protected bool m_MaxCurrencyUpdated;
 
     void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, ref array<ref CurrencySettings> ServersCurrency, int coststocreateclan, int MaxClanAmount, bool clanAcc)
     {
@@ -21,6 +23,7 @@ class KR_BankingClientConfig
         CostsToCreateClan = coststocreateclan;
         MaxClanAccountLimit = MaxClanAmount;
         IsClanAccountActive = clanAcc;
+        ServersMaxCurrency = mxcur;
     }
 
     bool hasConfigfromServer()
@@ -31,5 +34,24 @@ class KR_BankingClientConfig
     void UpdatehasConfig(bool state)
     {
         ConfigRecvied = state;
+    }
+
+    protected bool NeedsMaxCurrencyAnUpdate(int Limit)
+    {
+        if(!m_MaxCurrencyUpdated)
+            return true;
+        int NewMax = MaxCurrency + Limit;
+        if(NewMax != ServersMaxCurrency)
+            return true;
+        
+        return false;
+    }
+
+    void IncreaseMaxLimit(int NewLimit)
+    {
+
+        if(NewLimit == 0 || NewLimit < MaxCurrency || !NeedsMaxCurrencyAnUpdate(NewLimit)) return;
+        MaxCurrency += NewLimit;
+        m_MaxCurrencyUpdated = true;
     }
 }

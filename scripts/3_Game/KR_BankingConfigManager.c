@@ -104,7 +104,7 @@ class KR_BankingConfigManager
 
     void AddATM(string classname, bool canRob, vector Position, vector Orientation)
     {
-        ATM.Insert(new ref ATMPosition(classname, Position, Orientation, true, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
+        ATM.Insert(new ref ATMPosition(classname, Position, Orientation, canRob, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
         Save();
     }
 

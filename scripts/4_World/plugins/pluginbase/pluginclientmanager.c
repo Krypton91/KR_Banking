@@ -35,10 +35,12 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param2<int, string> data;
+            Param3<int, string, int> data;
             if ( !ctx.Read( data ) ) return;
             m_PlayersCurrency = data.param1;
             m_ClanID          = data.param2;
+            m_clientSettings.IncreaseMaxLimit(data.param3);
+
         }
     }
 

@@ -17,8 +17,6 @@ class PluginKRBankingManagerServer extends PluginBase
         SpawnATMs();
         InitPayCheck();
 		m_chars = { "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a", "b", "c", "d", "e","f","g","h","i","j","k","l","m","n","o","o","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9" };
-
-		//GetWebhookManager().POST("Advanced Banking", "Webhook connected to this channel!");
     }
 
     protected void RegisterServersideRPCs()
@@ -108,7 +106,7 @@ class PluginKRBankingManagerServer extends PluginBase
             KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId(), sender.GetName());
             if(playerdata)
             {
-                GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string>( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, sender);
+                GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param3< int, string, int>( playerdata.GetBankCredit(), playerdata.GetClanID(), playerdata.GetBonusAmount() ), true, sender);
             }
         }
     }
