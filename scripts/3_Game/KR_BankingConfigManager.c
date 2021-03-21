@@ -170,11 +170,6 @@ class KR_BankingConfigManager
         LoadDefaultSettings();
     }
 
-    void ConfigOutdated()
-    {
-        NotificationSystem.SendNotificationToPlayerIdentityExtended(null, 10, "BankingMod", "Server Config is outdated please inform the server admin to update it!", "KR_Banking/data/Logos/notificationbanking.edds");
-    }
-
     int GetCorrectPayCheckTime()
     {
         return PayCheckTickTime * 60000;

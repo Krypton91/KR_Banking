@@ -99,13 +99,13 @@ class ActionRobATM: ActionContinuousBase
         GetGame().GetPlayers(onlinePlayers);
         if(onlinePlayers.Count() < GetKR_BankingServerConfig().MinPlayersForRob)
         {
-            GetBankingServerManager().SendNotification("Sorry but player population is to low!", action_data.m_Player.GetIdentity());
+            GetBankingServerManager().SendNotification("#AB_PlayerPopulationIsToLow", action_data.m_Player.GetIdentity());
             return;
         }
         
         int Money = Math.RandomInt(GetKR_BankingServerConfig().MinMoneyForRob, GetKR_BankingServerConfig().MaxMoneyForRob);
         GetBankingServerManager().AddCurrencyToPlayer(action_data.m_Player, Money);
-        GetBankingServerManager().SendNotification("You sucessfully robbed this atm you received: " + Money + " ruble!", action_data.m_Player.GetIdentity());
+        GetBankingServerManager().SendNotification("#AB_SucesfullyRob " + Money + " ruble!", action_data.m_Player.GetIdentity());
 
         KR_BankingATM AdvATM;
         if(Class.CastTo(AdvATM, action_data.m_Target.GetObject()))

@@ -205,27 +205,27 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_WithdrawOwnAccBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
 
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
-                HandleWitdrawMoneyFromBank(1);
+                HandleWitdrawMoneyFromBank(BankType.OWNBANK);
                 break;
             case m_DepositOwnAccBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
 
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
-                HandleDepositMoney(1);
+                HandleDepositMoney(BankType.OWNBANK);
                 break;
             case m_YesConfirmBtn:
                 if(m_UICooldownTimer > 0)
                 {
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -237,17 +237,17 @@ class KR_BankingMenu extends UIScriptedMenu
             case m_BtnSendTransfer:
                 if(m_UICooldownTimer > 0)
                 {
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                CreateYesNoMessage("Transfer Check","Are you sure you want to transfer " + m_TransferInputBox.GetText() + " to " +  GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).name + " ?");
+                CreateYesNoMessage("Transfer Check","#AB_TransferConfirm " + m_TransferInputBox.GetText() + " to " +  GetBankingClientManager().GetOnlinePlayers().Get(m_LastPlayerIndexTransfer).name + " ?");
                 break;
             case m_BtnFinallyCreate:
                 if(m_UICooldownTimer > 0)
                 {
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
@@ -258,23 +258,23 @@ class KR_BankingMenu extends UIScriptedMenu
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                HandleDepositMoney(2);
+                HandleDepositMoney(BankType.CLANBANK);
                 break;
             case m_WithdrawClan:
                 if(m_UICooldownTimer > 0)
                 {
                     //not that fast Todo: send Notify...
-                    GetBankingClientManager().SendNotification("Not that fast bro!");
+                    GetBankingClientManager().SendNotification("#AB_NotThatFast");
                     break;
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                HandleWitdrawMoneyFromBank(2);
+                HandleWitdrawMoneyFromBank(BankType.CLANBANK);
                 break;
             case m_BtnClanSettings:
                 OpenClanSettings();
@@ -444,7 +444,7 @@ class KR_BankingMenu extends UIScriptedMenu
         }
         else
         {
-            GetBankingClientManager().SendNotification("Please Insert ClanName & Clan Tag!");
+            GetBankingClientManager().SendNotification("#AB_InsertClanNameAndTag");
         }
     }
 
@@ -454,7 +454,7 @@ class KR_BankingMenu extends UIScriptedMenu
 
         if(rowIndex == -1)
         {
-            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            GetBankingClientManager().SendNotification("#AB_NoPlayerSelected");
             return;
         }
 
@@ -469,7 +469,7 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         if(rowIndex == -1)
         {
-            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            GetBankingClientManager().SendNotification("#AB_NoPlayerSelected");
             return;
         }
 
@@ -484,7 +484,7 @@ class KR_BankingMenu extends UIScriptedMenu
     {
         if(rowIndex == -1)
         {
-            GetBankingClientManager().SendNotification("No Player Selected in List!");
+            GetBankingClientManager().SendNotification("#AB_NoPlayerSelected");
             return;
         }
 
@@ -599,13 +599,13 @@ class KR_BankingMenu extends UIScriptedMenu
         string ClanTag      = m_EditBoxClanTag.GetText();
         if(ClanTag.Length() > 4)
         {
-            GetBankingClientManager().SendNotification("ClanTag length can not be longer as 4 chars!");
+            GetBankingClientManager().SendNotification("#AB_ClanTagIsToLong");
             return;
         }
 
         if(ClanTag == "" || ClansName == "" || ClansName == "Clan Name" || ClanTag == "Clan Tag")
         {
-            GetBankingClientManager().SendNotification("Please Insert a valid ClanName & Tag!");
+            GetBankingClientManager().SendNotification("#AB_ClanTagOrNameIsNotValid");
             return 
         }
 
@@ -696,7 +696,7 @@ class KR_BankingMenu extends UIScriptedMenu
                     m_PriceToCreate.SetColor(ARGB(255, 255, 0, 0));
                 }
             }
-            m_PriceToCreate.SetText("Price: " + PriceToCreateClan.ToString());
+            m_PriceToCreate.SetText("#AB_Price " + PriceToCreateClan.ToString());
             m_PanelNewClan.Show(true);
             m_ClanBankAccountTab.Show(false);
         }

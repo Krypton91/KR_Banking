@@ -94,7 +94,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Editor
-       text "Bank Account"
+       text "#AB_BankAccount"
       }
       ButtonWidgetClass BtnTabClanBank {
        color 0.5608 0.0706 0.0706 1
@@ -105,7 +105,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Editor
-       text "Clan Account"
+       text "#AB_ClanAccount"
       }
       ButtonWidgetClass BtnTabTransfer {
        visible 1
@@ -116,12 +116,12 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Editor
-       text "Player Transfer"
+       text "#AB_PlayerTransferBtn"
       }
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 1
+     visible 0
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -260,7 +260,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "WITHDRAW"
+           text "#AB_WITHDRAW"
            font "gui/fonts/metron-bold22"
           }
           ButtonWidgetClass btnWitdraw0 {
@@ -287,7 +287,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "DEPOSIT"
+           text "#AB_DEPOSIT"
            font "gui/fonts/metron-bold22"
           }
          }
@@ -493,7 +493,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "WITHDRAW"
+           text "#AB_WITHDRAW"
            font "gui/fonts/metron-bold22"
           }
           ButtonWidgetClass btnDepositClan {
@@ -506,7 +506,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "DEPOSIT"
+           text "#AB_DEPOSIT"
            font "gui/fonts/metron-bold22"
           }
          }
@@ -551,7 +551,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Colorable
-       text "Clan Settings"
+       text "#AB_ClanSettings"
        font "gui/fonts/metron-bold22"
       }
       TextListboxWidgetClass TextListboxLogs {
@@ -565,7 +565,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PDABodyTransfer {
-     visible 0
+     visible 1
      disabled 0
      ignorepointer 1
      position 0.00954 0.05958
@@ -626,8 +626,8 @@ FrameWidgetClass MainRoot {
        {
         EditBoxWidgetClass EditBoxWidget1 {
          color 0.502 0 0 1
-         position 0.14711 0.12675
-         size 0.70804 0.73141
+         position 0.17588 0.10932
+         size 0.63923 0.73141
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -649,7 +649,7 @@ FrameWidgetClass MainRoot {
        {
         ButtonWidgetClass btnSend {
          color 0.502 0 0 1
-         size 0.41659 0.98413
+         size 0.61043 0.98413
          halign center_ref
          valign center_ref
          hexactpos 0
@@ -657,7 +657,7 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          style Colorable
-         text "Send"
+         text "#AB_Send"
          font "gui/fonts/metron-bold22"
         }
        }
@@ -673,14 +673,18 @@ FrameWidgetClass MainRoot {
       }
       TextWidgetClass TextWidget7 {
        ignorepointer 1
-       position 0.03371 0.81533
-       size 0.992 0.074
+       position 0.00378 0.81457
+       size 0.34494 0.074
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "Value:"
-       font "gui/fonts/metron-bold48"
+       text "#AB_Amount"
+       font "gui/fonts/metron48"
+       "size to text h" 0
+       "size to text v" 1
+       "text halign" right
+       "text valign" center
       }
      }
     }
@@ -763,7 +767,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "No"
+           text "#AB_NO"
            font "gui/fonts/metron-bold28"
           }
           ButtonWidgetClass ButtonWidget3 {
@@ -775,7 +779,7 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "Yes"
+           text "#AB_YES"
            font "gui/fonts/metron-bolditalic28"
           }
          }
@@ -836,7 +840,7 @@ FrameWidgetClass MainRoot {
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "Clan Members"
+       text "#AB_ClanMembers"
        font "gui/fonts/metron-bold28"
        "exact text" 0
        "size to text h" 1
@@ -861,27 +865,27 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          style Colorable
-         text "Kick"
+         text "#AB_KICK"
          font "gui/fonts/metron-bold28"
         }
         ButtonWidgetClass ButtonEdit0 {
          color 0.502 0 0 1
-         position 0.12461 0.00104
-         size 0.23175 0.18673
+         position 0.02235 0.00104
+         size 0.33401 0.18673
          halign right_ref
          hexactpos 0
          vexactpos 0
          hexactsize 0
          vexactsize 0
          style Colorable
-         text "Add"
+         text "#AB_Add"
          font "gui/fonts/metron-bold28"
         }
         PanelWidgetClass PanelPerms {
          visible 1
          ignorepointer 1
          position 0.2329 0.0033
-         size 0.30597 0.98387
+         size 0.35291 0.98387
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -894,7 +898,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Can Withdraw"
+           text "#AB_CanWitdraw"
            font "gui/fonts/metron-bold28"
           }
           CheckBoxWidgetClass CheckBoxDeposit {
@@ -905,7 +909,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Can Deposit"
+           text "#AB_CanDeposit"
            font "gui/fonts/metron-bold28"
           }
           CheckBoxWidgetClass CheckBoxInvite {
@@ -916,7 +920,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Can Invite"
+           text "#AB_CanInviteMember"
            font "gui/fonts/metron-bold28"
           }
           CheckBoxWidgetClass CheckBoxKick {
@@ -927,7 +931,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Can Kick"
+           text "#AB_CanKickMember"
            font "gui/fonts/metron-bold28"
           }
           CheckBoxWidgetClass CheckBoxPermission {
@@ -939,19 +943,20 @@ FrameWidgetClass MainRoot {
            hexactsize 0
            vexactsize 0
            scaled 1
-           text "Can Edit Permission"
+           text "#AB_CanEditPermissions"
            font "gui/fonts/metron-bold28"
           }
           ButtonWidgetClass ButtonWidget0 {
            color 0 0.502 0.1255 1
-           position 0.21868 0.79651
-           size 0.516 0.17684
+           size 0.68599 0.17684
+           halign center_ref
+           valign bottom_ref
            hexactpos 0
            vexactpos 0
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "Save"
+           text "#AB_Save"
            font "gui/fonts/metron-bold48"
           }
          }
@@ -960,7 +965,7 @@ FrameWidgetClass MainRoot {
          visible 1
          ignorepointer 1
          position 0 0
-         size 0.45577 0.79901
+         size 0.40756 0.79901
          halign right_ref
          valign bottom_ref
          hexactpos 0
@@ -1002,7 +1007,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Clan Name"
+           text "#AB_ClanName"
            font "gui/fonts/metron-bold28"
            "exact text" 0
            "size to text h" 1
@@ -1019,7 +1024,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "Clan Tag"
+           text "#AB_ClanTag"
            font "gui/fonts/metron-bold28"
            "exact text" 0
            "size to text h" 1
@@ -1029,14 +1034,15 @@ FrameWidgetClass MainRoot {
           }
           ButtonWidgetClass BtnSave {
            color 0 0.502 0.1255 1
-           position 0.23612 0.7336
-           size 0.51803 0.21589
+           size 0.59154 0.21098
+           halign center_ref
+           valign bottom_ref
            hexactpos 0
            vexactpos 0
            hexactsize 0
            vexactsize 0
            style Colorable
-           text "Save"
+           text "#AB_Save"
            font "gui/fonts/metron-bold48"
           }
          }
@@ -1053,7 +1059,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Colorable
-       text "Back"
+       text "#AB_Back"
        font "gui/fonts/metron-bold48"
       }
       PanelWidgetClass PanelLeaveConfirm {
@@ -1134,7 +1140,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Colorable
-       text "Leave"
+       text "#AB_Leave"
        font "gui/fonts/metron-bold28"
       }
      }
@@ -1157,7 +1163,7 @@ FrameWidgetClass MainRoot {
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "You don't have a Clan Account yet!"
+       text "#AB_NewClanLine1"
        font "gui/fonts/metron-bold28"
        "size to text h" 1
        "size to text v" 0
@@ -1172,7 +1178,7 @@ FrameWidgetClass MainRoot {
        hexactsize 0
        vexactsize 0
        style Colorable
-       text "Yes!"
+       text "#AB_YES"
        font "gui/fonts/metron-bold58"
       }
       PanelWidgetClass PanelPrice {
@@ -1269,7 +1275,7 @@ FrameWidgetClass MainRoot {
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "Do you want to create one now?"
+       text "#AB_NewClanLine2"
        font "gui/fonts/metron-bold28"
        "size to text h" 1
       }

@@ -5,3 +5,9 @@ const protected static string m_BankingConfigDIR = "KR_BANKING";
 const protected static string m_BankingConfigPath = m_BankingProfileDIR + m_BankingConfigDIR + "/" + "server-config.json";
 bool IsBankingAdminDataRecived = false; //This sure client has this data already from remote!
 bool IsBankingAdmin = false;//This goes to true if a player has admin on the bank!
+
+enum BankType
+{
+    OWNBANK,
+    CLANBANK
+};

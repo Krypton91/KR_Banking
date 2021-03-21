@@ -76,7 +76,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					   if(m_krserverconfig.maxCurrency < playerdata.GetBankCredit() + ammountTOAddForSpecialUser && !m_krserverconfig.CanAddToFullAcc)
 					   {
 						   if(m_krserverconfig.IsPayCheckMessageActive)
-						   		SendNotification("Error with adding Paycheck Bank is already full!", identity, true);
+						   		SendNotification("#AB_BankAlreadyFullPayCheckError", identity, true);
 						   continue;
 					   }
                        playerdata.DepositMoney(ammountTOAddForSpecialUser);
@@ -138,7 +138,7 @@ class PluginKRBankingManagerServer extends PluginBase
         if(type == CallType.Server)
         {
 			if(IsNegativ(data.param1)) return;
-            if(data.param2 == 1)
+            if(data.param2 == BankType.OWNBANK)
             {
                 DepositMoneyOnOwnBank(sender, data.param1);
             }
@@ -159,7 +159,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			int TransferAmount = data.param2;
 			if(TransferAmount < m_krserverconfig.MinAmountToTransfer)
 			{
-				SendNotification("Minimum amount to transfer is: " + m_krserverconfig.MinAmountToTransfer, sender, true);
+				SendNotification("#AB_ErrorMinAmountNotReachedTransfer " + m_krserverconfig.MinAmountToTransfer, sender, true);
 				return;
 			}
 
@@ -169,7 +169,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			PlayerBase targetPlayer = RemoteFindPlayer(TargetsPlainID);
 			if(!targetPlayer || sender.GetPlainId() == TargetsPlainID)
 			{
-				SendNotification("This player is currently not available for transfers!", sender, true);
+				SendNotification("#AB_PlayerNotAvaibleForTransfers", sender, true);
 				return;
 			}
 
@@ -193,18 +193,18 @@ class PluginKRBankingManagerServer extends PluginBase
 							//Target can store this transfer!
 							playerdata.WitdrawMoney(AmountToTransfer);
 							targetdata.DepositMoney(AmountToTransfer);
-							SendNotification("Sucessfully transfered: " + AmountToTransfer + " to player: " + targetPlayer.GetIdentity().GetName(), sender);
-							SendNotification("Sucessfully received: " + AmountToTransfer + " from player: " + sender.GetName(), targetPlayer.GetIdentity());
+							SendNotification("#AB_TransferSucess " + AmountToTransfer + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
+							SendNotification("#AB_TransferRecived " + AmountToTransfer + " #AB_FromPlayer " + sender.GetName(), targetPlayer.GetIdentity());
 
 						}
 						else
 						{
-							SendNotification("This target is currently not available for transfers!", sender, true);
+							SendNotification("#AB_PlayerNotAvaibleForTransfers", sender, true);
 						}
 					}
 					else
 					{
-						SendNotification("It Looks like this player has no bank account!", sender, true);
+						SendNotification("#AB_PlayerHasNoBankAccount", sender, true);
 					}
 				}
 			}
@@ -217,7 +217,7 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<int, int> data;
             if(!ctx.Read(data)) return;
-            if(data.param2 == 1)
+            if(data.param2 == BankType.OWNBANK)
             {
                 WitdrawMoneyFromBankAccount(sender, data.param1);
             }
@@ -226,10 +226,6 @@ class PluginKRBankingManagerServer extends PluginBase
 				WitdrawMoneyFromClanBankAccount(sender, data.param1);
 			}
         }
-		else
-		{
-			Error("FATAL RPC ERROR CLIENT TRYED TO CALL SERVERSIDE CODE!");
-		}
     }
 
 	void PlayerListRequst(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -257,7 +253,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 			if(CurrencyOnPlayer < m_krserverconfig.CostsToCreateClan)
 			{
-				SendNotification("You dont have " + m_krserverconfig.CostsToCreateClan + " in your Inventory!", sender, true);
+				SendNotification("#AB_YouDontHave " + m_krserverconfig.CostsToCreateClan + " #AB_InYourInventory", sender, true);
 				return;
 			}
 
@@ -275,7 +271,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					playerdata.SetClan(ClanID);
 					GetRPCManager().SendRPC("KR_BANKING","UIQuitRequest", null, true, sender);
 					usersNewClan.SetPrefix(data.param2);
-					SendNotification("Sucesfully created clan with name: " + usersNewClan.GetName(), sender);
+					SendNotification("#AB_SucesfullyCreatedClan " + usersNewClan.GetName(), sender);
 
 					if(m_krserverconfig.m_LoggingSettings.m_LogCreateClanAccount)
 						GetBankingLogManager().Log("Player: " + sender.GetPlainId() + " Created Clan: " + usersNewClan.GetName());
@@ -327,7 +323,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(targetPlayer.GetClanID() != "NONE")
 				{
-					SendNotification("This player is already in a clan!", sender, true);
+					SendNotification("#AB_ErrorPlayerHasAlreadyAnClan", sender, true);
 					return;
 				}
 
@@ -342,12 +338,12 @@ class PluginKRBankingManagerServer extends PluginBase
 						ref ClanMemberObject user = clandata.GetMemberByPlainId(sender.GetPlainId());
 						if(!user || !user.GetPermission().m_CanInvite)
 						{
-							SendNotification("Sorry but you dont have the required rights to do so!", sender, true);
+							SendNotification("#AB_NotEnoughtPermissions", sender, true);
 							return;
 						}
 						if(clandata.GetMemberCount() >= m_krserverconfig.MaxPlayersInClan && m_krserverconfig.MaxPlayersInClan != -1)
 						{
-							SendNotification("Your Clan Already reached the max Amount of Players!", sender, true);
+							SendNotification("#AB_ClanMaxPlayerLimitReached", sender, true);
 							return;
 						}
 
@@ -361,12 +357,12 @@ class PluginKRBankingManagerServer extends PluginBase
 
 						//Update the player data!
 						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-						SendNotification("Succesfully invited: " + t_player.GetIdentity().GetName(), sender);
-						SendNotification("You got an invite from clan: " + clandata.GetName() + " from player: " + sender.GetName(), t_player.GetIdentity());
+						SendNotification("#AB_InvitedToClan: " + t_player.GetIdentity().GetName(), sender);
+						SendNotification("#AB_YouGotAnInviteFromClan " + clandata.GetName() + " #AB_FromPlayer " + sender.GetName(), t_player.GetIdentity());
 					}
 					else
 					{
-						SendNotification("You dont have enough money on you money needed: " + m_krserverconfig.CostsToInviteAnPlayer.ToString(), sender, true);
+						SendNotification("#AB_YouDontHave: " + m_krserverconfig.CostsToInviteAnPlayer.ToString() + " #AB_InYourInventory", sender, true);
 					}
 				}
 				else
@@ -389,7 +385,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			if(!ctx.Read(data)) return;
 			if(sender.GetPlainId() == data.param1)
 			{
-				SendNotification("You cant kick yourself, please use the leave function!", sender, true);
+				SendNotification("#AB_CanNotKickSelf", sender, true);
 				return;
 			}
 			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param1);
@@ -398,7 +394,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(targetPlayer.GetClanID() != SendersData.GetClanID())
 				{
-					SendNotification("This Player is not in your Clan!!", sender, true);
+					SendNotification("#AB_ThisPlayerIsNotInYourClan", sender, true);
 					return;
 				}
 
@@ -418,7 +414,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					{
 						if(data.param1 == clandata.GetOwnersID())
 						{
-							SendNotification("You can not kick the clan Owner! Leave the clan if you dont like him!", sender, true);
+							SendNotification("#AB_CanNotKickOwner", sender, true);
 							return;
 						}
 						else
@@ -431,9 +427,9 @@ class PluginKRBankingManagerServer extends PluginBase
 									targetPlayer.SetClan("NONE");
 									PlayerBase t_player = RemoteFindPlayer(data.param1);
 									//GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-									SendNotification("Succesfully kicked: " + data.param1, sender);
+									SendNotification("#AB_SucessKicked " + data.param1, sender);
 									if(t_player)
-										SendNotification("You have been kicked from" + clandata.GetName() + "by" + sender.GetName(), t_player.GetIdentity());
+										SendNotification("#AB_YouHaveBeenKicked " + clandata.GetName() + " #AB_FromPlayer " + sender.GetName(), t_player.GetIdentity());
 
 									if(m_krserverconfig.m_DiscordWebhook.m_LogClanKickMemberToDiscord)
 										GetWebhookManager().PlayerLog(sender, " kicked member: " + data.param1 + " from clan: " + clandata.GetName());
@@ -444,18 +440,16 @@ class PluginKRBankingManagerServer extends PluginBase
 					}
 					else
 					{
-						SendNotification("Sorry but you dont have permissions to kick others!", sender);
+						SendNotification("#AB_NotEnoughtPermissions", sender);
 					}
 				}
 				else
 				{
-					SendNotification("Remote Error, Cant Load Clan data!", sender, true);
 					Error("Cant Load Clan data of player: " + sender.GetName() + " please report this to the Banking Dev Team!");
 				}
 			}
 			else
 			{
-				SendNotification("Something went wrong with playerdata load!", sender, true);
 				Error("Error cant load Internal Playerdata");
 			}
 		}
@@ -473,7 +467,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			{
 				if(targetPlayer.GetClanID() != playerdata.GetClanID())
 				{
-					SendNotification("This player is not in your clan!", sender, true);
+					SendNotification("#AB_ThisPlayerIsNotInYourClan", sender, true);
 					return;
 				}
 
@@ -485,13 +479,13 @@ class PluginKRBankingManagerServer extends PluginBase
 					{
 						if(!sendersPermissions.m_CanEdit)
 						{
-							SendNotification("Error following permissions are missing: CanEdit", sender, true);
+							SendNotification("#AB_NotEnoughtPermissions", sender, true);
 							return;
 						}
 
 						if(data.param2 == clandata.GetOwnersID())
 						{
-							SendNotification("You really think you can do that? NOPE!!", sender, true);
+							SendNotification("#AB_TryToModifyClanOwnersPermission", sender, true);
 							return;
 						}
 
@@ -511,7 +505,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 						PlayerBase t_player = RemoteFindPlayer(data.param2);
 						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
-						SendNotification("Succesfully Updated Permissions for: " + data.param2, sender);
+						SendNotification("#AB_PermissionsUpdated " + data.param2, sender);
 
 						if(m_krserverconfig.m_LoggingSettings.m_LogUpdatePermission)
 							GetBankingLogManager().Log("Player: " + data.param2 + " PermissionsUpdated! from clan: " + clandata.GetName());
@@ -523,17 +517,15 @@ class PluginKRBankingManagerServer extends PluginBase
 
 						//Update the player data!
 						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
-						SendNotification("Your Clan Account Permissions have been changed!", t_player.GetIdentity());
+						SendNotification("#AB_PermissionsHasBeenChanged", t_player.GetIdentity());
 					}
 					else
 					{
-						SendNotification("Permission ERROR CANT FIND Your Permissions!", sender);
 						Error("[Advanced Banking] -> Cant find Permissions from: " + sender.GetPlainId());
 					}
 				}
 				else
 				{
-					SendNotification("It Looks like you have no clan lol!", sender, true);
 					Error("[Advanced Banking] -> Internal Clan data can not be loaded! Please report this to the Dev Team!");
 				}
 			}
@@ -561,9 +553,9 @@ class PluginKRBankingManagerServer extends PluginBase
 						bool wasDeleted = RemoteHandleLeaderLeave(clandata, sender.GetPlainId());
 
 						if(wasDeleted)
-							SendNotification("You Successfully deleted your clan!", sender);
+							SendNotification("#AB_ClanDeleted", sender);
 						else
-							SendNotification("Something went wrong!", sender);
+							SendNotification("#AB_SomethingWentWrong", sender);
 				}
 				else
 				{
@@ -572,9 +564,9 @@ class PluginKRBankingManagerServer extends PluginBase
 					senderdata.SetClan("NONE");
 
 					if(memberLeaved)
-							SendNotification("Successfully leaved the clan: " + clandata.GetName(), sender);
+							SendNotification("#AB_SucesfullyLeavedClan " + clandata.GetName(), sender);
 						else
-							SendNotification("Something went wrong!", sender);
+							SendNotification("#AB_SomethingWentWrong", sender);
 				}
 				GetRPCManager().SendRPC("KR_BANKING","UIQuitRequest", null, true, sender);
 			}
@@ -601,12 +593,12 @@ class PluginKRBankingManagerServer extends PluginBase
 					clandata.SetName(data.param1);
 					clandata.SetPrefix(data.param2);
 					clandata.SaveClanData(clandata);
-					SendNotification("Succesfully Updated ClanName to: " + clandata.GetName(), sender);
-					SendNotification("Succesfully Updated ClanTag to: " 	+ clandata.GetName(), sender);
+					SendNotification("#AB_ClanNameUpdated " + clandata.GetName(), sender);
+					SendNotification("#AB_ClanTagUpdated " 	+ clandata.GetName(), sender);
 				}
 				else
 				{
-					SendNotification("This is only available for the Clan Leader.", sender, true);
+					SendNotification("#AB_NotEnoughtPermissions", sender, true);
 				}
 			}
 			else
@@ -662,7 +654,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
 					if(!user || !user.GetPermission().m_CanWithdraw)
 					{
-						SendNotification("Sorry but you cant do that!", identity, true);
+						SendNotification("#AB_NotEnoughtPermissions", identity, true);
 						return;
 					}
 					int stillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Amount);
@@ -680,7 +672,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				}
 				else
 				{
-					SendNotification("Sorry but you dont have enough money on the clan account!", identity, true);
+					SendNotification("#AB_NotEnoughtMoneyOnAccount", identity, true);
 				}
 			}
 			else
@@ -725,7 +717,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			}
 			else
 			{
-				SendNotification("You dont have enought money in your inventory!", identity, true);
+				SendNotification("#AB_NotEnoughtMoneyInInventory", identity, true);
 			}
         }
 		else
@@ -745,7 +737,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
 				if(!user || !user.GetPermission().m_CanDeposit)
 				{
-					SendNotification("Sorry but you cant do that!", identity, true);
+					SendNotification("#AB_NotEnoughtPermissions", identity, true);
 					return;
 				}
 
@@ -778,12 +770,12 @@ class PluginKRBankingManagerServer extends PluginBase
 					}
 					else
 					{
-						SendNotification("Not enough money in inventory!", identity, true);
+						SendNotification("#AB_NotEnoughtMoneyInInventory", identity, true);
 					}
 				}
 				else
 				{
-					SendNotification("Max Clan Limit reached", identity, true);
+					SendNotification("#AB_ClanMaxPlayerLimitReached", identity, true);
 				}
 			}
 			else
