@@ -128,6 +128,11 @@ class KR_AdminMenu extends UIScriptedMenu
     protected vector                    m_PreviewWidgetOrientation;	
     protected string                    m_LastTargetsSteamID;
 
+    protected bool                      m_IsSearching;
+
+
+    protected ref array<ref SearchFilterObject> m_TempSearchList;
+
     override Widget Init ()
     {
 
@@ -240,6 +245,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_MapWidget                     =   MapWidget.Cast(layoutRoot.FindAnyWidget("MapWidget0"));
 
             m_ActiveATMClassNames = new ref TStringArray();
+            m_TempSearchList = new ref array<ref SearchFilterObject>;
             m_IsAdminMenuInitialized = true;
         }
 
@@ -257,8 +263,15 @@ class KR_AdminMenu extends UIScriptedMenu
         {
             if(m_LastSelectedPlayerIndex != m_PlayersList.GetSelectedRow())
             {
-                m_LastSelectedPlayerIndex = m_PlayersList.GetSelectedRow();
-                GetBankingClientAdminManager().RequestPlayerdata(m_LastSelectedPlayerIndex);
+                if(!m_IsSearching)
+                {
+                    m_LastSelectedPlayerIndex = m_PlayersList.GetSelectedRow();
+                    GetBankingClientAdminManager().RequestPlayerdata(m_LastSelectedPlayerIndex);
+                }
+                else
+                {
+                    GetBankingClientAdminManager().RequestPlayerdataWithId(m_TempSearchList.Get(m_LastSelectedPlayerIndex).steam64ID);
+                }
             }
 
             if(m_LastSelectedATMIndex != m_ATMspots.GetSelectedRow())
@@ -511,9 +524,9 @@ class KR_AdminMenu extends UIScriptedMenu
         m_ClanLogsList.ClearItems();
 
         //Soo easy this system *_*
-        foreach(ClanMemberObject member : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers())
+        for(int i = 0; i < GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Count(); i++)
         {
-            m_ClanList.AddItem(member.GetPlayerName(), NULL, 0);
+            m_ClanList.AddItem(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Get(i).GetPlayerName(), NULL, 0)
         }
 
         foreach(string LogLine : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanLogs())
@@ -569,21 +582,24 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void SearchPlayer()
     {
+        m_IsSearching = true;
         string searchTerm = m_SearchPlayerInListBox.GetText();
         if(searchTerm == ""){
+            m_IsSearching = false;
             InvokePlayerList();
         }
         searchTerm.ToLower();
         m_PlayersList.ClearItems();
-
+        m_TempSearchList.Clear();
         for(int i = 0; i < GetBankingClientManager().GetOnlinePlayers().Count(); i++)
         {
             string trgname = GetBankingClientManager().GetOnlinePlayers().Get(i).name;
             trgname.ToLower();
             if(trgname.Contains(searchTerm))
             {
-                //Add 
+                //Add the name to the list & safe the data to a temp class,
                 m_PlayersList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
+                m_TempSearchList.Insert(new ref SearchFilterObject(i, GetBankingClientManager().GetOnlinePlayers().Get(i).plainid));
             }
         }
     }
