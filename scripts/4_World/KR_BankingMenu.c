@@ -544,11 +544,11 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleWitdrawMoneyFromBank(int mode)
     {
         int parsedMoney;
-        if(mode == 1)
+        if(mode == BankType.OWNBANK)
         {
             parsedMoney = m_OwnAccInputBox.GetText().ToInt();
         }
-        else if(mode == 2)
+        else if(mode == BankType.CLANBANK)
         {
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
@@ -559,11 +559,11 @@ class KR_BankingMenu extends UIScriptedMenu
     void HandleDepositMoney(int mode)
     {
         int parsedMoney;
-        if(mode == 1)
+        if(mode == BankType.OWNBANK)
         {
             parsedMoney = m_OwnAccInputBox.GetText().ToInt();
         }
-        else if(mode == 2)
+        else if(mode == BankType.CLANBANK)
         {
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }

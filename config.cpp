@@ -29,7 +29,7 @@ class CfgMods
 		credits = "Krypton91";
 		author = "Krypton91";
 		authorID = "76561198796326626";
-		version = "2.1";
+		version = "2.11";
 		extra = 0;
 		type = "mod";
 		inputs = "KR_Banking\data\inputs.xml";
