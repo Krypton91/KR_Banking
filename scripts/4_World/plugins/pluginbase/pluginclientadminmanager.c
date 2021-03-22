@@ -56,7 +56,7 @@ class BankingClientAdminManager extends PluginBase
         }
     }
 
-    //Callback from remote gets called after an admin requests clandata!
+    //callis response gets called after an admin requests clandata!
     void AdminClanDataReponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
         Param1<ref ClanDataBaseManager> data;

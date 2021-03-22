@@ -82,6 +82,8 @@ class PluginKrBankingClientManager extends PluginBase
 
             m_OwnClan = data.param1;
             m_OwnClan.SetMembers(data.param1.GetClanMembers());
+            if(m_BankingMenu)
+                m_BankingMenu.LoadClanLogs();
         }
     }
 

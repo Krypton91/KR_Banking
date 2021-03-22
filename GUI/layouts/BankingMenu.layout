@@ -121,7 +121,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PanelBankAcc {
-     visible 0
+     visible 1
      ignorepointer 1
      position 0.00003 0.14132
      size 0.99935 0.85878
@@ -565,7 +565,7 @@ FrameWidgetClass MainRoot {
      }
     }
     PanelWidgetClass PDABodyTransfer {
-     visible 1
+     visible 0
      disabled 0
      ignorepointer 1
      position 0.00954 0.05958

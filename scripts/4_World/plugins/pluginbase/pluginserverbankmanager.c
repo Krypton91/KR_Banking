@@ -5,10 +5,13 @@ class PluginKRBankingManagerServer extends PluginBase
 	autoptr TStringArray m_chars = new TStringArray();
     void PluginKRBankingManagerServer()
     {
-        if(!m_krserverconfig)
-            m_krserverconfig = GetKR_BankingServerConfig();
+		if(GetGame().IsServer() && GetGame().IsMultiplayer())
+		{
+			if(!m_krserverconfig)
+				m_krserverconfig = GetKR_BankingServerConfig();
 
-        Init();
+			Init();
+		}
     }
 
     void Init()
