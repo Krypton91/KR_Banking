@@ -191,14 +191,14 @@ class PluginKRBankingManagerServer extends PluginBase
 					{
 						//Check if target can store this transfer!
 						int TargetsMaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(targetdata);
-						if(targetdata.GetBankCredit() < TargetsMaxPlaceAbleAmount)
+						int NewPlaceAbleAmount = targetdata.GetBankCredit() + AmountToTransfer;
+						if(NewPlaceAbleAmount < TargetsMaxPlaceAbleAmount)
 						{
 							//Target can store this transfer!
-							playerdata.WitdrawMoney(AmountToTransfer);
+							playerdata.WitdrawMoney(TransferAmount);
 							targetdata.DepositMoney(AmountToTransfer);
-							SendNotification("#AB_TransferSucess " + AmountToTransfer + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
+							SendNotification("#AB_TransferSucess " + TransferAmount + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
 							SendNotification("#AB_TransferRecived " + AmountToTransfer + " #AB_FromPlayer " + sender.GetName(), targetPlayer.GetIdentity());
-
 						}
 						else
 						{
@@ -572,6 +572,7 @@ class PluginKRBankingManagerServer extends PluginBase
 							SendNotification("#AB_SomethingWentWrong", sender);
 				}
 				GetRPCManager().SendRPC("KR_BANKING","UIQuitRequest", null, true, sender);
+				GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
 			}
 			else
 			{

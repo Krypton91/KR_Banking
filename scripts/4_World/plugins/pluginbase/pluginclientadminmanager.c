@@ -29,7 +29,8 @@ class BankingClientAdminManager extends PluginBase
             m_ClientPermissions = data.param1;
             IsBankingAdminDataRecived = true;
             IsBankingAdmin = data.param2;//We set this variable from remote.
-            OpenBankingAdmin();
+            if(IsBankingAdmin)
+                OpenBankingAdmin();
         }
     }
 
