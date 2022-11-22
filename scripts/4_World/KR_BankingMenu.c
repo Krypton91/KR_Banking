@@ -122,8 +122,8 @@ class KR_BankingMenu extends UIScriptedMenu
             m_CloseUiBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("CloseInvi"));
             m_BankAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabBank"));
             m_ClanAccBtn                    = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabClanBank"));
-            m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdraw"));
-            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWitdrawClan"));
+            m_WithdrawOwnAccBtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWithdraw"));
+            m_WithdrawClan                  = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnWithdrawClan"));
             m_DepositOwnAccBtn              = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDeposit"));
             m_DepositClanAccbtn             = ButtonWidget.Cast(layoutRoot.FindAnyWidget("btnDepositClan"));
             m_TransferBtn                   = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnTabTransfer"));
@@ -210,7 +210,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 }
 
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
-                HandleWitdrawMoneyFromBank(BankType.OWNBANK);
+                HandleWithdrawMoneyFromBank(BankType.OWNBANK);
                 break;
             case m_DepositOwnAccBtn:
                 if(m_UICooldownTimer > 0)
@@ -274,7 +274,7 @@ class KR_BankingMenu extends UIScriptedMenu
                 }
                 m_UICooldownTimer = GetBankingClientManager().GetClientSettings().InteractDelay;
 
-                HandleWitdrawMoneyFromBank(BankType.CLANBANK);
+                HandleWithdrawMoneyFromBank(BankType.CLANBANK);
                 break;
             case m_BtnClanSettings:
                 OpenClanSettings();
@@ -541,7 +541,7 @@ class KR_BankingMenu extends UIScriptedMenu
         }
     }
 
-    void HandleWitdrawMoneyFromBank(int mode)
+    void HandleWithdrawMoneyFromBank(int mode)
     {
         int parsedMoney;
         if(mode == BankType.OWNBANK)
@@ -553,7 +553,7 @@ class KR_BankingMenu extends UIScriptedMenu
             parsedMoney = m_ClanAccInputBox.GetText().ToInt();
         }
 
-        GetBankingClientManager().RequestRemoteToWitdraw(parsedMoney, mode);
+        GetBankingClientManager().RequestRemoteToWithdraw(parsedMoney, mode);
     }
     
     void HandleDepositMoney(int mode)
