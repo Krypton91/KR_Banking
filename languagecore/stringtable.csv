@@ -2,7 +2,7 @@ Language,original,english,czech,german,russian,polish,hungarian,italian,spanish,
 AB_PlayerTransferBtn,Player Transfer,Player Transfer,Přenos hráče,Überweisung,Переводы игрокам,Transfer gracza,Player Transfer,Trasferimento del giocatore,Transferencia de jugador,Transfert de joueur,球員轉會,プレーヤーの転送,Transferir para jogador,球员转会,
 AB_BankAccount,Bank Account,Bank Account,Bankovní účet,Bank Konto,Банковский счет,Konto bankowe,Bankszámla,Conto bancario,Cuenta bancaria,Compte bancaire,銀行賬戶,銀行口座,Conta bancária,银行账户
 AB_ClanAccount,Clan Account,Clan Account,Klanový účet,Clan Konto,Клановый счет,Clan bankowe,Klánszámla,Account del clan,Cuenta del clan,Compte de clan,家族賬戶,クランアカウント,Conta do clan,家族账户
-AB_WITHDRAW,Witdraw,Witdraw,Ustoupit,Abheben,Снять,Wycofać,Visszavonás,Ritira,Retirar,Retirer,提取,撤回,Sacar,提取
+AB_WITHDRAW,Withdraw,Withdraw,Ustoupit,Abheben,Снять,Wycofać,Visszavonás,Ritira,Retirar,Retirer,提取,撤回,Sacar,提取
 AB_DEPOSIT,Deposit,Deposit,Vklad,Einzahlen,Положить,Kaucja,Letét,Depositare,Depositar,Déposer,訂金,預り金,Depositar,订金
 AB_ClanSettings,Clan Settings,Clan Settings,Nastavení klanu,Clan Einstellungen,Настройки клана,Ustawienia klanu,A klán beállításai,Impostazioni del clan,Configuración del clan,Paramètres de clan,戰隊設置,クラン設定,Configurações clan,战队设置
 AB_Amount,Amount,Amount,Množství,Betrag,Количество,Ilość,Összeg,Quantità,Cantidad,Montant,數量,量,Quantia,数量
@@ -14,7 +14,7 @@ AB_KICK,Kick,Kick,Kop,Entfernen,Исключить,kopnięcie,Rúgás,Calcio,Pat
 AB_Leave,Leave,Leave,Odejít,Verlassen,Покинуть,Pozostawiać,Elhagy,Partire,Salir,Laisser,離開,去る,Sair,离开
 AB_Back,Back,Back,Zadní,Zurück,Назад,Z powrotem,Vissza,Indietro,atrás,Retour,後退,バック,Voltar,后退
 AB_ClanMembers,Clan Members,Clan Members,Členové klanu,Clan Mitglieder,Участники клана,Członkowie klanu,Klán tagok,Membri del clan,Miembros del clan,Membres du clan,氏族成員,クランメンバー,Membros do clan,氏族成员
-AB_CanWitdraw,Can Witdraw,Can Witdraw,Může odstoupit,Kann Abheben,Можно снять,Może wycofać,Visszavonhat,Può ritirarsi,Puede retirarse,Peut retirer,可以提款,撤回できます,Pode sacar,可以提款
+AB_CanWithdraw,Can Withdraw,Can Withdraw,Může odstoupit,Kann Abheben,Можно снять,Może wycofać,Visszavonhat,Può ritirarsi,Puede retirarse,Peut retirer,可以提款,撤回できます,Pode sacar,可以提款
 AB_CanDeposit,Can Deposit,Can Deposit,Může vložit,Kann Einzahlen,Можно положить,Może zdeponować,Lehet letétbe helyezni,Può depositare,Puede depositar,Peut déposer,可以存款,デポジットできます,Pode depositar,可以邀请会员
 AB_CanInviteMember,Can Invite Member,Can Invite Member,Může pozvat člena,Kann Spieler einladen,Можно пригласить участника,Może zaprosić członka,Meghívhatja a tagot,Può invitare un membro,Puede invitar a un miembro,Peut inviter un membre,可以邀請會員,メンバーを招待できます,Pode convidar membro,可以邀请会员
 AB_CanKickMember,Can Kick Member,Can Kick Member,Může kopnout člena,Kann Spieler Kicken,Можно исключить участника,Może wyrzucić członka,Rúghatja a tagot,Può calciare un membro,Can Kick Member,Peut exclure un membre du clan,可以踢會員,メンバーを蹴ることができます,Pode expulsar membro,可以踢会员

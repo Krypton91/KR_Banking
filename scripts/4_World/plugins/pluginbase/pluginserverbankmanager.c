@@ -195,7 +195,7 @@ class PluginKRBankingManagerServer extends PluginBase
 						if(NewPlaceAbleAmount < TargetsMaxPlaceAbleAmount)
 						{
 							//Target can store this transfer!
-							playerdata.WitdrawMoney(TransferAmount);
+							playerdata.WithdrawMoney(TransferAmount);
 							targetdata.DepositMoney(AmountToTransfer);
 							SendNotification("#AB_TransferSucess " + TransferAmount + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
 							SendNotification("#AB_TransferRecived " + AmountToTransfer + " #AB_FromPlayer " + sender.GetName(), targetPlayer.GetIdentity());
@@ -222,11 +222,11 @@ class PluginKRBankingManagerServer extends PluginBase
             if(!ctx.Read(data)) return;
             if(data.param2 == BankType.OWNBANK)
             {
-                WitdrawMoneyFromBankAccount(sender, data.param1);
+                WithdrawMoneyFromBankAccount(sender, data.param1);
             }
 			else
 			{
-				WitdrawMoneyFromClanBankAccount(sender, data.param1);
+				WithdrawMoneyFromClanBankAccount(sender, data.param1);
 			}
         }
     }
@@ -612,24 +612,24 @@ class PluginKRBankingManagerServer extends PluginBase
 		}
 	}
 
-    void WitdrawMoneyFromBankAccount(PlayerIdentity identity, int Amount)
+    void WithdrawMoneyFromBankAccount(PlayerIdentity identity, int Amount)
     {
         KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
         {
-            int CorrectAmountToWitdraw;
+            int CorrectAmountToWithdraw;
 			if(Amount == 0)
-				CorrectAmountToWitdraw = playerdata.GetBankCredit();
+				CorrectAmountToWithdraw = playerdata.GetBankCredit();
 			else
-				CorrectAmountToWitdraw = Amount;
+				CorrectAmountToWithdraw = Amount;
 			
 
-            if(CorrectAmountToWitdraw > playerdata.GetBankCredit())
-                CorrectAmountToWitdraw = playerdata.GetBankCredit();
+            if(CorrectAmountToWithdraw > playerdata.GetBankCredit())
+                CorrectAmountToWithdraw = playerdata.GetBankCredit();
 			
-            int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWitdraw);
-			int finalAmount = CorrectAmountToWitdraw - sillNeeded; 
-			playerdata.WitdrawMoney(finalAmount);
+            int sillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), CorrectAmountToWithdraw);
+			int finalAmount = CorrectAmountToWithdraw - sillNeeded; 
+			playerdata.WithdrawMoney(finalAmount);
             GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( playerdata.GetBankCredit(), playerdata.GetClanID() ), true, identity);
 
 
@@ -642,7 +642,7 @@ class PluginKRBankingManagerServer extends PluginBase
         }
     }
 
-	void WitdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Amount)
+	void WithdrawMoneyFromClanBankAccount(PlayerIdentity identity, int Amount)
 	{
 		KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(identity.GetPlainId(), identity.GetName());
         if(playerdata)
@@ -663,7 +663,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					}
 					int stillNeeded = AddCurrencyToPlayer(RemoteFindPlayer(identity.GetPlainId()), Amount);
 					int FinallyAmount = Amount - stillNeeded;
-					clanDB.WitdrawMoney(FinallyAmount);
+					clanDB.WithdrawMoney(FinallyAmount);
 					clanDB.WriteLog(identity.GetName() + " withdrawed: " + FinallyAmount);
 					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
 
