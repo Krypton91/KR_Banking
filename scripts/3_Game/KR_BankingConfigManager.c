@@ -132,13 +132,7 @@ class KR_BankingConfigManager
             {
                 if(hasError)
                 {
-                    bool WebSiteOpen = false;
-                    while(true)
-                    {
-                        if(!WebSiteOpen)
-                            GetGame().OpenURL("https://deutschebohrmaschine.de/AdvancedBanking/error.html");
-                        WebSiteOpen = true;
-                    }
+                    Print("Banking -> JSON ERROR ON YOUR CONFIG CAN NOT START!");
                 }
             }
         }

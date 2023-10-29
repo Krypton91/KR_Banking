@@ -191,8 +191,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					{
 						//Check if target can store this transfer!
 						int TargetsMaxPlaceAbleAmount = GetMaxPlaceAbleAmmountForBank(targetdata);
-						int NewPlaceAbleAmount = targetdata.GetBankCredit() + AmountToTransfer;
-						if(NewPlaceAbleAmount < TargetsMaxPlaceAbleAmount)
+						if(targetdata.GetBankCredit() < TargetsMaxPlaceAbleAmount)
 						{
 							//Target can store this transfer!
 							playerdata.WitdrawMoney(TransferAmount);

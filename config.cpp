@@ -22,14 +22,14 @@ class CfgMods
 	{
 		dir = "KR_Banking";
 		picture = "";
-		action = "https://DeutscheBohrmaschine.de";
+		action = "https://github.com/Krypton91/KR_Banking";
 		hideName = 1;
 		hidePicture = 1;
 		name = "Advanced Banking";
 		credits = "Krypton91";
 		author = "Krypton91";
 		authorID = "76561198796326626";
-		version = "2.11";
+		version = "2.12";
 		extra = 0;
 		type = "mod";
 		inputs = "KR_Banking\data\inputs.xml";
@@ -64,14 +64,14 @@ class CfgVehicles
 	class KR_BankingATM: HouseNoDestruct
 	{
 		scope=1;
-		model="\KR_Banking\data\ATM\KR_BankingATM.p3d";
+		model="KR_Banking\data\ATM\KR_BankingATM.p3d";
 		hiddenSelections[]=
 		{
 			"zybtek"
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_co.paa"
+			"KR_Banking\data\ATM\data\ATM_co.paa"
 		};
 	};
 
@@ -80,7 +80,7 @@ class CfgVehicles
 		scope=1;
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_co.paa"
+			"KR_Banking\data\ATM\data\ATM_co.paa"
 		};
 	};
 	class KR_ATMRusty: KR_BankingATM
@@ -92,7 +92,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_co1.paa"
+			"KR_Banking\data\ATM\data\ATM_co1.paa"
 		};
 	};
 	class KR_ATMRed: KR_BankingATM
@@ -104,7 +104,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_cored.paa"
+			"KR_Banking\data\ATM\data\ATM_cored.paa"
 		};
 	};
 	class KR_ATMBlue: KR_BankingATM
@@ -116,7 +116,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_coblue.paa"
+			"KR_Banking\data\ATM\data\ATM_coblue.paa"
 		};
 	};
 	class KR_ATMGreen: KR_BankingATM
@@ -128,7 +128,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_cogreen.paa"
+			"KR_Banking\data\ATM\data\ATM_cogreen.paa"
 		};
 	};
 	class KR_ATMYellow: KR_BankingATM
@@ -152,7 +152,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_coorange.paa"
+			"KR_Banking\data\ATM\data\ATM_coorange.paa"
 		};
 	};
 	class KR_ATMBlackWhite: KR_BankingATM
@@ -164,7 +164,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_cobw.paa"
+			"KR_Banking\data\ATM\data\ATM_cobw.paa"
 		};
 	};
 	class KR_ATMBlack: KR_BankingATM
@@ -176,7 +176,7 @@ class CfgVehicles
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATM\data\ATM_coblack.paa"
+			"KR_Banking\data\ATM\data\ATM_coblack.paa"
 		};
 	};
 	class KR_BankingCard: KeyCard_Base
@@ -184,18 +184,18 @@ class CfgVehicles
 		scope=2;
 		displayName="Banking Card";
 		descriptionShort="For Logging in into ATM";
-		model="\KR_Banking\data\ATMCard\KR_BankingCard.p3d";
+		model="KR_Banking\data\ATMCard\KR_BankingCard.p3d";
 		hiddenSelections[]=
 		{
 			"zbytek"
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"\KR_Banking\data\ATMCard\data\ATMCard_co.paa"
+			"KR_Banking\data\ATMCard\data\ATMCard_co.paa"
 		};
 	};
 };
-//MoneyDropSoundset
+
 class CfgSoundShaders
 {
 	class MoneyDrop_SoundShaders

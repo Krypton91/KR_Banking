@@ -47,13 +47,7 @@ class KR_AdminConfigManager
             bool hasError = BankingJsonFileLoader<KR_AdminConfigManager>.JsonLoadFile("$profile:KR_BANKING/Admins.json", settings);
             if(hasError)
             {
-                bool WebSiteOpen = false;
-                while(true)
-                {
-                    if(!WebSiteOpen)
-                        GetGame().OpenURL("https://deutschebohrmaschine.de/AdvancedBanking/error.html");
-                    WebSiteOpen = true;
-                }
+                Print("JSON ERROR IN YOUR CONFIG CAN NOT START MOD!");
             }
         }
         else
