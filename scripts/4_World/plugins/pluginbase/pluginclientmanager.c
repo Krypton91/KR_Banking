@@ -138,7 +138,7 @@ class PluginKrBankingClientManager extends PluginBase
         m_AdminMenuNeedsAnUpdate = AdminRequest;
     }
 
-    void RequestRemoteToWitdraw(int amount, int mode)
+    void RequestRemoteToWithdraw(int amount, int mode)
     {
         GetRPCManager().SendRPC("KR_BANKING", "WithdrawRequest", new Param2<int, int>(amount, mode), true);
     }

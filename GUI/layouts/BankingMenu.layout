@@ -250,7 +250,7 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          {
-          ButtonWidgetClass btnWitdraw {
+          ButtonWidgetClass btnWithdraw {
            color 0.502 0 0 1
            position 0 -0.00394
            size 0.41659 0.98413
@@ -263,7 +263,7 @@ FrameWidgetClass MainRoot {
            text "#AB_WITHDRAW"
            font "gui/fonts/metron-bold22"
           }
-          ButtonWidgetClass btnWitdraw0 {
+          ButtonWidgetClass btnWithdraw0 {
            color 0.502 0 0 1
            size 0.41659 0.98413
            halign right_ref
@@ -483,7 +483,7 @@ FrameWidgetClass MainRoot {
          hexactsize 0
          vexactsize 0
          {
-          ButtonWidgetClass btnWitdrawClan {
+          ButtonWidgetClass btnWithdrawClan {
            color 0.502 0 0 1
            position 0 -0.00394
            size 0.41659 0.98413
@@ -898,7 +898,7 @@ FrameWidgetClass MainRoot {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           text "#AB_CanWitdraw"
+           text "#AB_CanWithdraw"
            font "gui/fonts/metron-bold28"
           }
           CheckBoxWidgetClass CheckBoxDeposit {

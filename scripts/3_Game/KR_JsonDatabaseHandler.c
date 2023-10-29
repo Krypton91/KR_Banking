@@ -52,9 +52,9 @@ class KR_JsonDatabaseHandler
             SavePlayerData(this);
     }
 
-    void WitdrawMoney(int moneyToWitdraw)
+    void WithdrawMoney(int moneyToWithdraw)
     {
-        m_OwnedCurrency = m_OwnedCurrency - moneyToWitdraw;
+        m_OwnedCurrency = m_OwnedCurrency - moneyToWithdraw;
         SavePlayerData(this);
     }
 

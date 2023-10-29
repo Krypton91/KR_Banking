@@ -106,7 +106,7 @@ class ClanDataBaseManager
     }
 
     //BE SURE CLANDATA GETS SAVED FROM LOGS!
-    void WitdrawMoney(int Money)
+    void WithdrawMoney(int Money)
     {
         m_BankAmount -= Money;
     }
