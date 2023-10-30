@@ -33,10 +33,10 @@ class KR_BankingConfigManager
     
     void KR_BankingConfigManager()
     {
-        ATM = new ref array<ref ATMPosition>();
-        BankingCurrency = new ref array<ref CurrencySettings>();
-        m_LoggingSettings = new ref LogSettings();
-        m_DiscordWebhook = new ref Webhookservice();
+        ATM = new array<ref ATMPosition>();
+        BankingCurrency = new array<ref CurrencySettings>();
+        m_LoggingSettings = new LogSettings();
+        m_DiscordWebhook = new Webhookservice();
     }
 
     void LoadDefaultSettings()
@@ -108,7 +108,7 @@ class KR_BankingConfigManager
         Save();
     }
 
-    void SetConfig(ref KR_BankingConfigManager newConfig)
+    void SetConfig(KR_BankingConfigManager newConfig)
     {
         this = newConfig;
         g_KR_BankingConfigManager = newConfig;
@@ -117,7 +117,7 @@ class KR_BankingConfigManager
 
     static ref KR_BankingConfigManager Load()
     {
-        ref KR_BankingConfigManager settings = new KR_BankingConfigManager();
+        KR_BankingConfigManager settings = new KR_BankingConfigManager();
         if(!FileExist(m_BankingConfigDIR))
             MakeDirectory(m_BankingConfigDIR);
         if(FileExist(m_BankingConfigPath))
@@ -187,8 +187,10 @@ class KR_BankingConfigManager
 
 
 static ref KR_BankingConfigManager g_KR_BankingConfigManager;
-static ref KR_BankingConfigManager GetKR_BankingServerConfig() {
-    if (g_Game.IsServer() && !g_KR_BankingConfigManager) {
+static KR_BankingConfigManager GetKR_BankingServerConfig() 
+{
+    if (g_Game.IsServer() && !g_KR_BankingConfigManager) 
+    {
         g_KR_BankingConfigManager = KR_BankingConfigManager.Load();
         g_KR_BankingConfigManager.Save();
     }

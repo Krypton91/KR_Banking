@@ -244,8 +244,8 @@ class KR_AdminMenu extends UIScriptedMenu
 
             m_MapWidget                     =   MapWidget.Cast(layoutRoot.FindAnyWidget("MapWidget0"));
 
-            m_ActiveATMClassNames = new ref TStringArray();
-            m_TempSearchList = new ref array<ref SearchFilterObject>;
+            m_ActiveATMClassNames = new TStringArray();
+            m_TempSearchList = new array<ref SearchFilterObject>;
             m_IsAdminMenuInitialized = true;
         }
 
@@ -440,7 +440,7 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void HandleRemoteConfigSave()
     {
-        ref KR_BankingConfigManager cfg = new KR_BankingConfigManager;
+        KR_BankingConfigManager cfg = new KR_BankingConfigManager;
         cfg.ModVersion = GetBankingClientAdminManager().Getservercfg().ModVersion;
         cfg.MenuDelay = GetBankingClientAdminManager().Getservercfg().MenuDelay;
         cfg.startCurrency = m_StarterEdit.GetText().ToInt();
