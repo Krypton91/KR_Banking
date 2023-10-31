@@ -22,7 +22,7 @@ class BankingClientAdminManager extends PluginBase
     //======= ADMIN RPC Handle =========
     void AdminDataResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        Param2<ref AdminPermissions, bool> data;
+        Param2<AdminPermissions, bool> data;
         if(!ctx.Read(data)) return;
         if(type == CallType.Client)
         {
@@ -47,7 +47,7 @@ class BankingClientAdminManager extends PluginBase
 
     void AdminServerConfigResponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        Param1<ref KR_BankingConfigManager> data;
+        Param1<KR_BankingConfigManager> data;
         if(!ctx.Read(data)) return;
         if(type == CallType.Client)
         {
@@ -60,7 +60,7 @@ class BankingClientAdminManager extends PluginBase
     //callis response gets called after an admin requests clandata!
     void AdminClanDataReponse(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        Param1<ref ClanDataBaseManager> data;
+        Param1<ClanDataBaseManager> data;
         if(!ctx.Read(data)) return;
         if(type == CallType.Client)
         {
@@ -75,9 +75,9 @@ class BankingClientAdminManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "AdminInsertATM", new Param4<string, bool, vector, vector>(classname, canRob, position, orientation), true);
     }
 
-    void SendConfigToRemote(ref KR_BankingConfigManager cfg)
+    void SendConfigToRemote(KR_BankingConfigManager cfg)
     {
-        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateServerConfig", new Param1<ref KR_BankingConfigManager>(cfg), true);
+        GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateServerConfig", new Param1<KR_BankingConfigManager>(cfg), true);
         //Update Local config.
         m_BankingServercfg = cfg;
     }
@@ -190,17 +190,17 @@ class BankingClientAdminManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "AdminUpdateClanData", new Param4<string, string, string, int>(m_LastRequestedClanData.GetClanID(), clanname, clantag, newBankAmount), true);
     }
 
-    ref KR_BankingConfigManager Getservercfg()
+    KR_BankingConfigManager Getservercfg()
     {
         return m_BankingServercfg;
     }
 
-    void UpdateClientsServerCFGData(ref KR_BankingConfigManager cfg)
+    void UpdateClientsServerCFGData(KR_BankingConfigManager cfg)
     {
         m_BankingServercfg = cfg;
     }
 
-    ref AdminPermissions GetAdminPermissions()
+    AdminPermissions GetAdminPermissions()
     {
         return m_ClientPermissions;
     }

@@ -45,11 +45,11 @@ class BankingAdminManager extends PluginBase
                             return;
                         }
                     }
-                    GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2< ref AdminPermissions, bool >( admin.m_permissions, true ), true, sender);
+                    GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2<AdminPermissions, bool >( admin.m_permissions, true ), true, sender);
                     return;
                 }
             }
-            GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2< ref AdminPermissions, bool >( null, false ), true, sender);
+            GetRPCManager().SendRPC("KR_BANKING", "AdminDataResponse", new Param2<AdminPermissions, bool >( null, false ), true, sender);
         }
     }
 
@@ -96,7 +96,7 @@ class BankingAdminManager extends PluginBase
             Param3<string, int, int> data;
             if(!ctx.Read(data)) return;
             string targetsPlainId = data.param1;
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUsePlayersBankData)
             {
                 if(!admin.m_permissions.m_CanIgnoreNamePermission)
@@ -133,10 +133,10 @@ class BankingAdminManager extends PluginBase
     {
         if(type == CallType.Server)
         {
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUseServerConfig)
             {
-                GetRPCManager().SendRPC("KR_BANKING", "AdminServerConfigResponse", new Param1< ref KR_BankingConfigManager >( GetKR_BankingServerConfig() ), true, sender);
+                GetRPCManager().SendRPC("KR_BANKING", "AdminServerConfigResponse", new Param1<KR_BankingConfigManager >( GetKR_BankingServerConfig() ), true, sender);
             }
             else
             {
@@ -184,7 +184,7 @@ class BankingAdminManager extends PluginBase
         {
             Param1<int> data;
             if(!ctx.Read(data)) return;
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUseServerConfig)
             {
                 if(!admin.m_permissions.m_CanIgnoreNamePermission)
@@ -196,7 +196,7 @@ class BankingAdminManager extends PluginBase
                     }
                 }
 
-                ref ATMPosition CurrentATM;
+                ATMPosition CurrentATM;
                 CurrentATM = GetKR_BankingServerConfig().ATM.Get(data.param1);
                 if(CurrentATM)
                 {
@@ -277,7 +277,7 @@ class BankingAdminManager extends PluginBase
         {
             Param1<ref KR_BankingConfigManager> data;
             if(!ctx.Read(data)) return;
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUseServerConfig)
             {
                 if(!admin.m_permissions.m_CanIgnoreNamePermission)
@@ -346,7 +346,7 @@ class BankingAdminManager extends PluginBase
         {
             Param1<vector> data;
             if(!ctx.Read(data)) return;
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUseServerConfig)
             {
                 if(!admin.m_permissions.m_CanIgnoreNamePermission)
@@ -376,7 +376,7 @@ class BankingAdminManager extends PluginBase
         {
             Param1<string> data;
             if(!ctx.Read(data)) return;
-            ref AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
+            AdminUsers admin = GetAdminByPlainId(sender.GetPlainId());
             if(admin && admin.m_permissions.m_CanUseServerConfig)
             {
                 if(!admin.m_permissions.m_CanUsePlayersClans)
@@ -392,7 +392,7 @@ class BankingAdminManager extends PluginBase
                 ClanDataBaseManager clanData = ClanDataBaseManager.LoadClanData(targetPlayer.GetClanID());
                 if(clanData)
                 {
-                    GetRPCManager().SendRPC("KR_BANKING", "AdminClanDataReponse", new Param1< ref ClanDataBaseManager >( clanData ), true, sender);
+                    GetRPCManager().SendRPC("KR_BANKING", "AdminClanDataReponse", new Param1<ClanDataBaseManager >( clanData ), true, sender);
                 }
             }
         }

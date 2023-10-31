@@ -18,8 +18,8 @@ class ClanDataBaseManager
         m_ClanID = ClanID;
         m_OwnersPlainID = OwnersPlainID;
         m_ClanName = ClanName;
-        m_Members = new ref array<ref ClanMemberObject>;
-        m_ClanLogs = new ref TStringArray();
+        m_Members = new array<ref ClanMemberObject>;
+        m_ClanLogs = new TStringArray();
         m_BankAmount = 0;
     }
 
@@ -66,10 +66,11 @@ class ClanDataBaseManager
         SaveClanData(this);
     }
 
-    void SetMembers(ref array<ref ClanMemberObject> members)
+    void SetMembers(array<ref ClanMemberObject> members)
     {
         if(!m_Members)
-            new ref array<ref ClanMemberObject>;
+            new array<ref ClanMemberObject>;
+        
         m_Members = members;
     }
 
@@ -175,7 +176,7 @@ class ClanDataBaseManager
         return m_OwnersPlainID;
     }
 
-    ref ClanMemberObject GetMemberByPlainId(string id)
+    ClanMemberObject GetMemberByPlainId(string id)
     {
         for(int i = 0; i < m_Members.Count(); i++)
         {
@@ -185,7 +186,7 @@ class ClanDataBaseManager
         return null;
     }
 
-    ref array<ref ClanMemberObject> GetClanMembers()
+    array<ref ClanMemberObject> GetClanMembers()
     {
         return m_Members;
     }
