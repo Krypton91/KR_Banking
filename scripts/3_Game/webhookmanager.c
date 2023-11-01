@@ -5,6 +5,7 @@ class WebhookManager
 	ref BankingDiscordObject_Body dataBody;
 	ref BankingDiscordObject_Body admindataBody;
 	ref BankingDiscordObject_Thumbnail dataThumb;
+
 	void WebhookManager()
 	{
 		if(GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
@@ -18,14 +19,14 @@ class WebhookManager
 		}
 	}
 	
-	bool POST(string alias, string Message)
+	bool POST(string alias, string message)
 	{
 		if(!GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 		{
 			return false;
 		}
 		dataBody.SetField("title", "Log Entry");
-		dataBody.SetField("description", Message);
+		dataBody.SetField("description", message);
 		dataThumb.SetField("url", "https://media.discordapp.net/attachments/757674333480157184/813195126674554951/brand-logo-maker-with-abstract-graphics-1519a.png?width=675&height=675");
 		data.m_body = dataBody;
 		data.m_thumbnail = dataThumb;
@@ -47,10 +48,11 @@ class WebhookManager
 		return false;
 	}
 
-	void PlayerLog(ref PlayerIdentity identity, string action)
+	void PlayerLog(PlayerIdentity identity, string action)
 	{
 		if(!GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 			return;
+
 		dataBody.SetField("title", "Log Entry");
 		string Message = "**Player:** [" + identity.GetName() + "](http://steamcommunity.com/profiles/" + identity.GetPlainId() + ") | Steam64: " + identity.GetPlainId() + "\\n\\n__**Action: **__ \\n" + action;
 		dataBody.SetField("description", Message);
@@ -67,16 +69,18 @@ class WebhookManager
 			{
 				clCore = CreateRestApi();
 			}
+			
 			RestContext ctx = clCore.GetRestContext(m_alias.Get("Advanced Banking"));
 			ctx.SetHeader("application/json");
 			ctx.POST(cbx1, "", WrapData(data));
 		}
 	}
 
-	void AdminLog(ref PlayerIdentity identity, string action)
+	void AdminLog(PlayerIdentity identity, string action)
 	{
 		if(!GetKR_BankingServerConfig().m_DiscordWebhook.m_UseWebhook)
 			return;
+
 		admindataBody.SetField("title", "**ADMIN LOG**");
 		string Message = "**Admin:** [" + identity.GetName() + "](http://steamcommunity.com/profiles/" + identity.GetPlainId() + ") | Steam64: " + identity.GetPlainId() + "\\n\\n__**Admin activity: **__ \\n" + action;
 		admindataBody.SetField("description", Message);
@@ -99,13 +103,12 @@ class WebhookManager
 		}
 	}
 
-	private string WrapData(ref BankingDiscordJSON data)
+	private string WrapData(BankingDiscordJSON webhookData)
 	{
 		string json = "{\"embeds\":[";
 		
-		json += data.GetJSON();
+		json += webhookData.GetJSON();
 		json += "]}";
-		//Print(json);
 		return json;
 	}
 };
@@ -118,7 +121,7 @@ class WebhookRestCB : RestCallback
 };
 
 static ref WebhookManager g_WebhookManager;
-static ref WebhookManager GetWebhookManager()
+static WebhookManager GetWebhookManager()
 {
 	if (!g_WebhookManager)
 	{

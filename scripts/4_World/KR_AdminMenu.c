@@ -526,7 +526,7 @@ class KR_AdminMenu extends UIScriptedMenu
         //Soo easy this system *_*
         for(int i = 0; i < GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Count(); i++)
         {
-            m_ClanList.AddItem(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Get(i).GetPlayerName(), NULL, 0)
+            m_ClanList.AddItem(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Get(i).GetPlayerName(), NULL, 0);
         }
 
         foreach(string LogLine : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanLogs())
@@ -802,7 +802,7 @@ class KR_AdminMenu extends UIScriptedMenu
 		Close();
 	}
 
-    bool OnMouseButtonDown(Widget w, int x, int y, int button)
+    override bool OnMouseButtonDown(Widget w, int x, int y, int button)
 	{
 		super.OnMouseButtonDown(w, x, y, button);
 		

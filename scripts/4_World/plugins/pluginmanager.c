@@ -4,7 +4,7 @@ modded class PluginManager
 	//=================================
 	// Init
 	//=================================
-	void Init()
+	override void Init()
 	{	
 		super.Init();
 		//----------------------------------------------------------------------
@@ -12,7 +12,7 @@ modded class PluginManager
 		//----------------------------------------------------------------------
 		//				Module Class Name 						Client	Server
 		//----------------------------------------------------------------------
-		if(GetGame().IsServer() && !GetGame().IsClient() && GetGame().IsMultiplayer())
+		if(GetGame().IsDedicatedServer())
 		{
 			RegisterPlugin( "PluginKRBankingManagerServer",			false, 	true );
 			RegisterPlugin( "PluginBankingLogManagerServer",		false, 	true );
