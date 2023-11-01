@@ -40,17 +40,17 @@ class CfgMods
 			class gameScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/3_Game"};
+                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/3_Game"};
             };
 			class worldScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/4_World"};
+                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/4_World"};
             };
 			class missionScriptModule
             {
                 value = "";
-                files[] = {"KR_Banking/scripts/5_Mission"};
+                files[] = {"KR_Banking/scripts/common", "KR_Banking/scripts/5_Mission"};
             };
         };
 	};
