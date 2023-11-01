@@ -118,9 +118,11 @@ class ActionRobATM: ActionContinuousBase
         EntityAI item_in_Hands = action_data.m_MainItem;
         if(item_in_Hands)
         {
-            //float max = item_in_Hands.GetMaxHealth("","");
 			item_in_Hands.SetHealth( "", "", GameConstants.DAMAGE_RUINED_VALUE ); //RUINED!
         }
+
+        if(GetKR_BankingServerConfig().m_DiscordWebhook.m_LogPlayerATMRobbery)
+			GetWebhookManager().PlayerLog(action_data.m_Player.GetIdentity(), " robbed ATM at: " + AdvATM.GetPosition().ToString() + " and got " + Money + " of the rob!");
 	}
 
     override bool ActionConditionContinue( ActionData action_data )
