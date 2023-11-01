@@ -14,13 +14,13 @@ class KR_AdminConfigManager
         Save();
     }
 
-    ref AdminPermissions CreatePermissions(bool CanUseServerConfig = false, bool CanUsePlayersBankData = false, bool CanUsePlayersClans = false, bool CanUseMiscServer = false, bool CanAddAdmins = false)
+    AdminPermissions CreatePermissions(bool CanUseServerConfig = false, bool CanUsePlayersBankData = false, bool CanUsePlayersClans = false, bool CanUseMiscServer = false, bool CanAddAdmins = false)
     {
         AdminPermissions newPermissions = new AdminPermissions(CanUseServerConfig, CanUsePlayersBankData, CanUsePlayersClans, CanUseMiscServer, CanAddAdmins);
         return newPermissions;
     }
 
-    void AddAdmin(string PlainID, string Name, ref AdminPermissions perms, bool shouldSafe = true)
+    void AddAdmin(string PlainID, string Name, AdminPermissions perms, bool shouldSafe = true)
     {
         m_Admins.Insert(new ref AdminUsers(PlainID, Name, perms));
 
@@ -36,9 +36,9 @@ class KR_AdminConfigManager
         BankingJsonFileLoader<KR_AdminConfigManager>.JsonSaveFile("$profile:KR_BANKING/Admins.json", this);
     }
 
-    static ref KR_AdminConfigManager Load()
+    static KR_AdminConfigManager Load()
     {
-        ref KR_AdminConfigManager settings = new KR_AdminConfigManager();
+        KR_AdminConfigManager settings = new KR_AdminConfigManager();
         if(!FileExist(m_BankingConfigDIR))
             MakeDirectory(m_BankingConfigDIR);
         if(FileExist("$profile:KR_BANKING/Admins.json"))
@@ -61,8 +61,10 @@ class KR_AdminConfigManager
 
 
 static ref KR_AdminConfigManager g_KR_AdminConfigManager;
-static ref KR_AdminConfigManager GetKR_AdminConfig() {
-    if (g_Game.IsServer() && !g_KR_AdminConfigManager) {
+static KR_AdminConfigManager GetKR_AdminConfig() 
+{
+    if (g_Game.IsServer() && !g_KR_AdminConfigManager) 
+    {
         g_KR_AdminConfigManager = KR_AdminConfigManager.Load();
         g_KR_AdminConfigManager.Save();
     }

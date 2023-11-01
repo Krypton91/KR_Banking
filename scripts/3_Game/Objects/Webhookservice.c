@@ -11,6 +11,8 @@ class Webhookservice
     bool    m_LogClanRemoveMemberToDiscord;
     bool    m_LogClanUpdatePermissionToDiscord;
     bool    m_LogClanKickMemberToDiscord;
+    bool    m_LogPlayerMoneyTransefer;
+    bool    m_LogPlayerATMRobbery;
     bool    m_AdminLogUpdateServerConfig;
     bool    m_AdminLogUpdatePlayerData;
     bool    m_AdminLogUpdateClanData;

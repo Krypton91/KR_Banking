@@ -244,8 +244,8 @@ class KR_AdminMenu extends UIScriptedMenu
 
             m_MapWidget                     =   MapWidget.Cast(layoutRoot.FindAnyWidget("MapWidget0"));
 
-            m_ActiveATMClassNames = new ref TStringArray();
-            m_TempSearchList = new ref array<ref SearchFilterObject>;
+            m_ActiveATMClassNames = new TStringArray();
+            m_TempSearchList = new array<ref SearchFilterObject>;
             m_IsAdminMenuInitialized = true;
         }
 
@@ -440,7 +440,7 @@ class KR_AdminMenu extends UIScriptedMenu
 
     void HandleRemoteConfigSave()
     {
-        ref KR_BankingConfigManager cfg = new KR_BankingConfigManager;
+        KR_BankingConfigManager cfg = new KR_BankingConfigManager;
         cfg.ModVersion = GetBankingClientAdminManager().Getservercfg().ModVersion;
         cfg.MenuDelay = GetBankingClientAdminManager().Getservercfg().MenuDelay;
         cfg.startCurrency = m_StarterEdit.GetText().ToInt();
@@ -526,7 +526,7 @@ class KR_AdminMenu extends UIScriptedMenu
         //Soo easy this system *_*
         for(int i = 0; i < GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Count(); i++)
         {
-            m_ClanList.AddItem(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Get(i).GetPlayerName(), NULL, 0)
+            m_ClanList.AddItem(GetBankingClientAdminManager().m_LastRequestedClanData.GetClanMembers().Get(i).GetPlayerName(), NULL, 0);
         }
 
         foreach(string LogLine : GetBankingClientAdminManager().m_LastRequestedClanData.GetClanLogs())
@@ -802,7 +802,7 @@ class KR_AdminMenu extends UIScriptedMenu
 		Close();
 	}
 
-    bool OnMouseButtonDown(Widget w, int x, int y, int button)
+    override bool OnMouseButtonDown(Widget w, int x, int y, int button)
 	{
 		super.OnMouseButtonDown(w, x, y, button);
 		

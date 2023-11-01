@@ -1,8 +1,9 @@
 class PluginKRBankingManagerServer extends PluginBase
 {
     protected ref KR_BankingConfigManager m_krserverconfig;
-	protected ref array<ref bankingplayerlistobj> m_BankingPlayers = new ref array<ref bankingplayerlistobj>;
-	autoptr TStringArray m_chars = new TStringArray();
+	protected ref array<ref bankingplayerlistobj> m_BankingPlayers;
+	autoptr TStringArray m_chars;
+
     void PluginKRBankingManagerServer()
     {
 		if(GetGame().IsServer() && GetGame().IsMultiplayer())
@@ -16,6 +17,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
     void Init()
     {
+		m_BankingPlayers = new array<ref bankingplayerlistobj>;
         RegisterServersideRPCs();
         SpawnATMs();
         InitPayCheck();
@@ -131,7 +133,7 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		KR_BankingClientConfig clientsettings = new KR_BankingClientConfig(m_krserverconfig.maxCurrency, m_krserverconfig.MenuDelay, m_krserverconfig.IsRobEventActive, m_krserverconfig.NeedsBankCardToOpenMenu, m_krserverconfig.BankingCurrency, m_krserverconfig.CostsToCreateClan, m_krserverconfig.MaxClanAccountLimit, m_krserverconfig.IsClanAccountActive);
 		clientsettings.TimeInSecToRobATM = m_krserverconfig.TimeInSecToRobATM;
-        GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2< ref KR_BankingClientConfig, string >( clientsettings, identity.GetPlainId() ), true, identity);
+        GetRPCManager().SendRPC("KR_BANKING", "ServerConfigResponse", new Param2<KR_BankingClientConfig, string >( clientsettings, identity.GetPlainId() ), true, identity);
 	}
 
     void DepositRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -198,6 +200,9 @@ class PluginKRBankingManagerServer extends PluginBase
 							targetdata.DepositMoney(AmountToTransfer);
 							SendNotification("#AB_TransferSucess " + TransferAmount + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
 							SendNotification("#AB_TransferRecived " + AmountToTransfer + " #AB_FromPlayer " + sender.GetName(), targetPlayer.GetIdentity());
+
+							if(m_krserverconfig.m_DiscordWebhook.m_LogPlayerMoneyTransefer)
+								GetWebhookManager().PlayerLog(sender, " transfered " + TransferAmount + " to reciver: " + targetPlayer.GetIdentity().GetName() + "<" + targetPlayer.GetIdentity().GetPlainId() + ">");
 						}
 						else
 						{
@@ -219,6 +224,8 @@ class PluginKRBankingManagerServer extends PluginBase
         {
             Param2<int, int> data;
             if(!ctx.Read(data)) return;
+			if(IsNegativ(data.param1)) return;
+
             if(data.param2 == BankType.OWNBANK)
             {
                 WithdrawMoneyFromBankAccount(sender, data.param1);
@@ -235,7 +242,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		if(type == CallType.Server)
         {
             UpdatePlayerList();
-			GetRPCManager().SendRPC("KR_BANKING", "PlayeristResponse", new Param1< ref array<ref bankingplayerlistobj> >( m_BankingPlayers ), true, sender);
+			GetRPCManager().SendRPC("KR_BANKING", "PlayeristResponse", new Param1<array<ref bankingplayerlistobj>>( m_BankingPlayers ), true, sender);
         }
 		else
 		{
@@ -259,7 +266,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				return;
 			}
 
-			ref ClanDataBaseManager usersNewClan = RegisterNewClan(data.param1, sender.GetPlainId());
+			ClanDataBaseManager usersNewClan = RegisterNewClan(data.param1, sender.GetPlainId());
 			if(usersNewClan)
 			{
 				PermissionObject perms = new PermissionObject();
@@ -300,7 +307,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				if(clanDB)
 				{
 					//clanDB.CheckName(sender.GetName(), sender.GetPlainId());
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, sender);
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clanDB ), true, sender);
 				}
 			}
 		}
@@ -337,7 +344,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					int CurrencyOnPlayer = GetPlayerCurrencyAmount(player);
 					if(CurrencyOnPlayer >= m_krserverconfig.CostsToInviteAnPlayer)
 					{
-						ref ClanMemberObject user = clandata.GetMemberByPlainId(sender.GetPlainId());
+						ClanMemberObject user = clandata.GetMemberByPlainId(sender.GetPlainId());
 						if(!user || !user.GetPermission().m_CanInvite)
 						{
 							SendNotification("#AB_NotEnoughtPermissions", sender, true);
@@ -354,8 +361,8 @@ class PluginKRBankingManagerServer extends PluginBase
 						PermissionObject perms = new PermissionObject();
 						AddClanMember(clandata, perms, data.param1, targetPlayer.GetName());
 						//Sync new clan data to both players!
-						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
-						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clandata ), true, t_player.GetIdentity());
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clandata ), true, sender);
 
 						//Update the player data!
 						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
@@ -461,7 +468,7 @@ class PluginKRBankingManagerServer extends PluginBase
 	{
 		if(type == CallType.Server)
 		{	
-			Param2<ref PermissionObject, string> data;
+			Param2<PermissionObject, string> data;
 			if(!ctx.Read(data)) return;
 			KR_JsonDatabaseHandler targetPlayer = KR_JsonDatabaseHandler.LoadPlayerData(data.param2);
 			KR_JsonDatabaseHandler playerdata = KR_JsonDatabaseHandler.LoadPlayerData(sender.GetPlainId());
@@ -506,7 +513,7 @@ class PluginKRBankingManagerServer extends PluginBase
 						}
 
 						PlayerBase t_player = RemoteFindPlayer(data.param2);
-						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clandata ), true, sender);
 						SendNotification("#AB_PermissionsUpdated " + data.param2, sender);
 
 						if(m_krserverconfig.m_LoggingSettings.m_LogUpdatePermission)
@@ -515,7 +522,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 						if(!t_player) return;
 						//Sync new clan data to both players!
-						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, t_player.GetIdentity());
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clandata ), true, t_player.GetIdentity());
 
 						//Update the player data!
 						GetRPCManager().SendRPC("KR_BANKING", "PlayerDataResponse", new Param2< int, string >( targetPlayer.GetBankCredit(), targetPlayer.GetClanID() ), true, t_player.GetIdentity());
@@ -571,7 +578,7 @@ class PluginKRBankingManagerServer extends PluginBase
 							SendNotification("#AB_SomethingWentWrong", sender);
 				}
 				GetRPCManager().SendRPC("KR_BANKING","UIQuitRequest", null, true, sender);
-				GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clandata ), true, sender);
+				GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clandata ), true, sender);
 			}
 			else
 			{
@@ -654,7 +661,7 @@ class PluginKRBankingManagerServer extends PluginBase
 				
  				if(Amount <= clanDB.GetBankCredit())
 				{
-					ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+					ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
 					if(!user || !user.GetPermission().m_CanWithdraw)
 					{
 						SendNotification("#AB_NotEnoughtPermissions", identity, true);
@@ -664,7 +671,7 @@ class PluginKRBankingManagerServer extends PluginBase
 					int FinallyAmount = Amount - stillNeeded;
 					clanDB.WithdrawMoney(FinallyAmount);
 					clanDB.WriteLog(identity.GetName() + " withdrawed: " + FinallyAmount);
-					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
+					GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clanDB ), true, identity);
 
 					if(m_krserverconfig.m_DiscordWebhook.m_LogClanWithdrawToDiscord)
 						GetWebhookManager().PlayerLog(identity, " Withdrawed " +  FinallyAmount.ToString() + " ₽ from Clan Account with id: " + clanDB.GetClanID());
@@ -737,7 +744,7 @@ class PluginKRBankingManagerServer extends PluginBase
 			ClanDataBaseManager clanDB = ClanDataBaseManager.LoadClanData(playerdata.GetClanID());
 			if(clanDB)
 			{
-				ref ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
+				ClanMemberObject user = clanDB.GetMemberByPlainId(identity.GetPlainId());
 				if(!user || !user.GetPermission().m_CanDeposit)
 				{
 					SendNotification("#AB_NotEnoughtPermissions", identity, true);
@@ -763,7 +770,7 @@ class PluginKRBankingManagerServer extends PluginBase
 						clanDB.DepositMoney(SumToInsert);
 						clanDB.WriteLog(identity.GetName() + " deposited: " + SumToInsert);
 						RemoveCurrencyFromPlayer(player, SumToInsert);
-						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1< ref ClanDataBaseManager >( clanDB ), true, identity);
+						GetRPCManager().SendRPC("KR_BANKING", "ClanSyncRespose", new Param1<ClanDataBaseManager>( clanDB ), true, identity);
 						if(m_krserverconfig.m_DiscordWebhook.m_LogClanDepositToDiscord)
 							GetWebhookManager().PlayerLog(identity, " Deposited " +  SumToInsert.ToString() + " ₽ to Clan Account with id: " + clanDB.GetClanID());
 							//GetWebhookManager().POST("Advanced Banking", "Player: " + identity.GetPlainId() + " deposited " + SumToInsert + " on clan account.");
@@ -823,7 +830,7 @@ class PluginKRBankingManagerServer extends PluginBase
 
 	/* ======== CLAN SECTION ===========*/
 	//!Creates a new clan & returns the clan after creating (Important: will return null if creation failed.)
-	ref  ClanDataBaseManager RegisterNewClan(string ClanName, string ClanOwnersID)
+	ClanDataBaseManager RegisterNewClan(string ClanName, string ClanOwnersID)
 	{
 		//string ClanName, string ClanID, string ownersPlainID
 		string ClanID = GenerateRandomClanID();
@@ -841,7 +848,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		return clanDB;
 	}
 
-	void AddClanMember(ref ClanDataBaseManager clan, ref PermissionObject permissions, string SteamID, string MemberName)
+	void AddClanMember(ClanDataBaseManager clan, PermissionObject permissions, string SteamID, string MemberName)
 	{
 		if(!clan || !permissions) return;
 
@@ -851,7 +858,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		clan.AddMember(SteamID, MemberName, permissions);
 	}
 
-	bool RemoteHandleLeaderLeave(ref ClanDataBaseManager clan, string LeaderID)
+	bool RemoteHandleLeaderLeave(ClanDataBaseManager clan, string LeaderID)
 	{
 		if(!clan || !LeaderID) return false;
 
@@ -882,7 +889,7 @@ class PluginKRBankingManagerServer extends PluginBase
 	}
 
 	//!returns true if remove process is done!
-	bool RemoteHandleMemberLeave(ref ClanDataBaseManager clan, string MemberID)
+	bool RemoteHandleMemberLeave(ClanDataBaseManager clan, string MemberID)
 	{
 		if(!clan || !MemberID) return false;
 
@@ -902,7 +909,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		@PARAM 1 (ClanDataBaseManager ref clandata)
 		@PARAM 2 (Plain ID Member to search)
 	*/	
-	ref PermissionObject GetMemberPermission(ref ClanDataBaseManager clan, string MemberID)
+	PermissionObject GetMemberPermission(ClanDataBaseManager clan, string MemberID)
 	{
 		for(int i = 0; i < clan.GetClanMembers().Count(); i++)
 		{
@@ -1033,7 +1040,7 @@ class PluginKRBankingManagerServer extends PluginBase
 		local int BKaddableQuantity;
 		local int BKcurrencyItemMaxQuantity;
 		InventoryLocation il = new InventoryLocation();
-		ref CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
+		CurrencySettings currency = GetKR_BankingServerConfig().BankingCurrency.Get(CurrencyArrayIndex);
 		array<EntityAI> invArray = new array<EntityAI>;
 		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, invArray);
 		ItemBase currencyItem;

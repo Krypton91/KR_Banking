@@ -48,7 +48,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param2<ref KR_BankingClientConfig, string> data;
+            Param2<KR_BankingClientConfig, string> data;
             if ( !ctx.Read( data ) ) return;
             m_clientSettings = new KR_BankingClientConfig(data.param1.MaxCurrency, data.param1.InteractDelay, data.param1.isRobActive, data.param1.isBankCardNeeded, data.param1.BankingCurrency, data.param1.CostsToCreateClan, data.param1.MaxClanAccountLimit, data.param1.IsClanAccountActive);
             m_PlainID = data.param2;
@@ -61,7 +61,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param1<ref array<ref bankingplayerlistobj>> data;
+            Param1<array<ref bankingplayerlistobj>> data;
             if ( !ctx.Read( data ) ) return;
             if(m_BankingPlayers)
                 m_BankingPlayers.Clear();
@@ -77,7 +77,7 @@ class PluginKrBankingClientManager extends PluginBase
     {
         if(type == CallType.Client)
         {
-            Param1<ref ClanDataBaseManager> data;
+            Param1<ClanDataBaseManager> data;
             if (!ctx.Read(data)) return;
 
             m_OwnClan = data.param1;
@@ -177,7 +177,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanUpdate", new Param2<string, string>(Name, Tag), true);
     }
 
-    ref ClanDataBaseManager GetClientsClanData()
+    ClanDataBaseManager GetClientsClanData()
     {
         return m_OwnClan;
     }
@@ -187,7 +187,7 @@ class PluginKrBankingClientManager extends PluginBase
         return m_clientSettings.BankingCurrency;
     }
 
-    ref KR_BankingClientConfig GetClientSettings()
+    KR_BankingClientConfig GetClientSettings()
     {
         return m_clientSettings;
     }
@@ -227,7 +227,7 @@ class PluginKrBankingClientManager extends PluginBase
 		return currencyAmount;
 	}
 
-    ref array<ref bankingplayerlistobj> GetOnlinePlayers()
+    array<ref bankingplayerlistobj> GetOnlinePlayers()
     {
         return m_BankingPlayers;
     }
