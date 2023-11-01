@@ -70,6 +70,19 @@ class KR_JsonDatabaseHandler
         SavePlayerData(this);
     }
 
+    bool WitdrawMoney(int amount)
+    {
+        if(amount > m_OwnedCurrency)
+        {
+            return false;
+        }
+
+        m_OwnedCurrency = m_OwnedCurrency - amount;
+        SavePlayerData(this);
+
+        return true;
+    }
+
     static KR_JsonDatabaseHandler LoadPlayerData(string Steam_ID, string username = "", bool IsSearchOnly = false)
     {
         if(Steam_ID == "")
