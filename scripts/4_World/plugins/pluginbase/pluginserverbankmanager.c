@@ -200,6 +200,9 @@ class PluginKRBankingManagerServer extends PluginBase
 							targetdata.DepositMoney(AmountToTransfer);
 							SendNotification("#AB_TransferSucess " + TransferAmount + " #AB_ToPlayer " + targetPlayer.GetIdentity().GetName(), sender);
 							SendNotification("#AB_TransferRecived " + AmountToTransfer + " #AB_FromPlayer " + sender.GetName(), targetPlayer.GetIdentity());
+
+							if(m_krserverconfig.m_DiscordWebhook.m_LogPlayerMoneyTransefer)
+								GetWebhookManager().PlayerLog(sender, " transfered " + TransferAmount + " to reciver: " + targetPlayer.GetIdentity().GetName() + "<" + targetPlayer.GetIdentity().GetPlainId() + ">");
 						}
 						else
 						{
