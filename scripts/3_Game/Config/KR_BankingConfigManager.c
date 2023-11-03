@@ -37,6 +37,33 @@ class KR_BankingConfigManager
         BankingCurrency = new array<ref CurrencySettings>();
         m_LoggingSettings = new LogSettings();
         m_DiscordWebhook = new Webhookservice();
+
+        if(!FileExist(m_BankingConfigDIR))
+            MakeDirectory(m_BankingConfigDIR);
+
+        if(FileExist(m_BankingConfigPath))
+        {
+            Print("[Advanced Banking] -> Found Config Loading existing config...");
+            bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, this);
+            if(!hasError)
+            {
+                KR_BankingMigrationModule migrationService = new KR_BankingMigrationModule();
+                migrationService.CheckConfig(this);
+            }
+            else
+            {
+                for(int i = 0; i < 100; i++)
+                {
+                    Print("[Advanced Banking] -> Server config json contains an error, please fix it!");
+                    Error("[Advanced Banking] -> Server config json contains an error, please fix it!");
+                }
+            }
+        }
+        else
+        {
+            Print("[Advanced Banking] -> No Config Found Try to write default config...");
+            LoadDefaultSettings();
+        }
     }
 
     void LoadDefaultSettings()
@@ -83,6 +110,8 @@ class KR_BankingConfigManager
         BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble1", 1));
 
         Save();
+
+
     }
 
     void Save()
@@ -115,66 +144,10 @@ class KR_BankingConfigManager
         Save();
     }
 
-    static ref KR_BankingConfigManager Load()
-    {
-        KR_BankingConfigManager settings = new KR_BankingConfigManager();
-        if(!FileExist(m_BankingConfigDIR))
-            MakeDirectory(m_BankingConfigDIR);
-        if(FileExist(m_BankingConfigPath))
-        {
-            Print("[Advanced Banking] -> Found Config Loading existing config...");
-            bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
-            if(settings && settings.IsConfigOutdated())
-            {
-                settings.CreateNewConfig();
-            }
-            else
-            {
-                if(hasError)
-                {
-                    Print("Banking -> JSON ERROR ON YOUR CONFIG CAN NOT START!");
-                }
-            }
-        }
-        else
-        {
-            Print("[Advanced Banking] -> No Config Found Try to write default config...");
-            settings.LoadDefaultSettings();
-        }
-        return settings;
-    }
-
-    void CreateNewConfig()
-    {
-        if (!FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"))
-			MakeDirectory(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/");
-
-        string BKFileName = "OldConfig.AdvancedBanking";
-        int TryCount = 1;
-        while(FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"+ BKFileName))
-        {
-            BKFileName = TryCount.ToString() + BKFileName;
-            TryCount++;
-        }
-
-        CopyFile(m_BankingConfigPath, m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/" + BKFileName);
-        DeleteFile(m_BankingConfigPath);
-        ATM.Clear();
-        BankingCurrency.Clear();
-        LoadDefaultSettings();
-    }
-
     int GetCorrectPayCheckTime()
     {
         return PayCheckTickTime * 60000;
     }
-
-    bool IsConfigOutdated() 
-    {
-		if(this.ModVersion != GetModVersion())
-			return true;
-		return false;
-	}
 
     protected string GetModVersion()
     {
@@ -191,7 +164,7 @@ static KR_BankingConfigManager GetKR_BankingServerConfig()
 {
     if (g_Game.IsServer() && !g_KR_BankingConfigManager) 
     {
-        g_KR_BankingConfigManager = KR_BankingConfigManager.Load();
+        g_KR_BankingConfigManager = new KR_BankingConfigManager();
         g_KR_BankingConfigManager.Save();
     }
     return g_KR_BankingConfigManager;
