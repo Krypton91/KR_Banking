@@ -62,7 +62,7 @@ class ClanDataBaseManager
 
     void AddMember(string PlainID, string PlayerName, PermissionObject Permission)
     {
-        m_Members.Insert(new ref ClanMemberObject(PlainID, PlayerName, Permission));
+        m_Members.Insert(new ClanMemberObject(PlainID, PlayerName, Permission));
         SaveClanData(this);
     }
 

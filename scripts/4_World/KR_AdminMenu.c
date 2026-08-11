@@ -58,6 +58,7 @@ class KR_AdminMenu extends UIScriptedMenu
     protected EditBoxWidget             m_OnClanAtmEdit;
     protected EditBoxWidget             m_ClansSearchBarEdit;
     protected EditBoxWidget             m_AddToAllPlayersEdit;
+    protected EditBoxWidget             m_PayCheckTickTimeEdit;
 
 
 
@@ -175,6 +176,7 @@ class KR_AdminMenu extends UIScriptedMenu
             m_MaxMoneyForRobEdit            =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("MaxMoneyRob"));
             m_SecondsForRobEdit             =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("SecondsRob"));
             m_PaycheckValueEdit             =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PaycheckValue"));
+            m_PayCheckTickTimeEdit          =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PayCheckTickTime"));
             m_PayCheckMinPlayersEdit        =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PaycheckMinPlayers"));
             m_WebHookUrlEdit                =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("WebhookLink"));
             m_AtmAmount                     =   EditBoxWidget.Cast(layoutRoot.FindAnyWidget("BankOnAtm"));
@@ -256,6 +258,9 @@ class KR_AdminMenu extends UIScriptedMenu
     {
         super.Update(timeslice);
 
+        if (GetUApi() && GetUApi().GetInputByID(UAUIBack).LocalPress())
+            CloseAdminMenu();
+        
         if(m_UICooldownTimer > 0)
             m_UICooldownTimer -= timeslice;
         
@@ -459,6 +464,7 @@ class KR_AdminMenu extends UIScriptedMenu
         cfg.TimeInSecToRobATM = m_SecondsForRobEdit.GetText().ToInt();
         cfg.RobMessagesActive = m_RobMessageActiveCheck.IsChecked();
         cfg.PayCheckValue = m_PaycheckValueEdit.GetText().ToInt();
+        cfg.PayCheckTickTime = m_PayCheckTickTimeEdit.GetText().ToInt();
         cfg.MinPlayersForPayCheck = m_PayCheckMinPlayersEdit.GetText().ToInt();
         cfg.IsPayCheckMessageActive = m_PaycheckMessageActiveCheck.IsChecked();
         cfg.CanAddPayCheckInSafezone = GetBankingClientAdminManager().Getservercfg().CanAddPayCheckInSafezone;
@@ -599,7 +605,7 @@ class KR_AdminMenu extends UIScriptedMenu
             {
                 //Add the name to the list & safe the data to a temp class,
                 m_PlayersList.AddItem(" " + GetBankingClientManager().GetOnlinePlayers().Get(i).name, NULL, 0);
-                m_TempSearchList.Insert(new ref SearchFilterObject(i, GetBankingClientManager().GetOnlinePlayers().Get(i).plainid));
+                m_TempSearchList.Insert(new SearchFilterObject(i, GetBankingClientManager().GetOnlinePlayers().Get(i).plainid));
             }
         }
     }
@@ -751,6 +757,8 @@ class KR_AdminMenu extends UIScriptedMenu
         m_CanAddToFullAccCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().CanAddToFullAcc);
         m_NeedBankCardToOpenCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().NeedsBankCardToOpenMenu);
 
+        m_PayCheckTickTimeEdit.SetText(GetBankingClientAdminManager().Getservercfg().PayCheckTickTime.ToString());
+
         /* Server Log Settings */
         m_UseWebhookCheck.SetChecked(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_UseWebhook);
         m_WebHookUrlEdit.SetText(GetBankingClientAdminManager().Getservercfg().m_DiscordWebhook.m_WebhookURL);
@@ -809,7 +817,7 @@ class KR_AdminMenu extends UIScriptedMenu
 		if (w == m_ItemPreviewWidget)
 		{
 			GetGame().GetDragQueue().Call(this, "UpdateRotation");
-			g_Game.GetMousePos(m_PreviewWidgetRotationX, m_PreviewWidgetRotationY);
+			GetMousePos(m_PreviewWidgetRotationX, m_PreviewWidgetRotationY);
 			return true;
 		}
 		return false;

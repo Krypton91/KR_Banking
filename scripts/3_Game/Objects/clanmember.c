@@ -11,12 +11,12 @@ class ClanMemberObject
         SetPermission(Permission);
     }
 
-    void SetPermission(ref PermissionObject Permissions)
+    void SetPermission(PermissionObject Permissions)
     {
         m_permissions = Permissions;
     }
 
-    ref PermissionObject GetPermission()
+    PermissionObject GetPermission()
     {
         return m_permissions;
     } 

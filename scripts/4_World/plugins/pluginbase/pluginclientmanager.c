@@ -75,16 +75,20 @@ class PluginKrBankingClientManager extends PluginBase
 
     void ClanSyncRespose(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
     {
-        if(type == CallType.Client)
-        {
-            Param1<ClanDataBaseManager> data;
-            if (!ctx.Read(data)) return;
+        if (type != CallType.Client)
+            return;
 
-            m_OwnClan = data.param1;
-            m_OwnClan.SetMembers(data.param1.GetClanMembers());
-            if(m_BankingMenu)
-                m_BankingMenu.LoadClanLogs();
-        }
+        Param1<ClanDataBaseManager> data;
+        if (!ctx.Read(data)) return;
+
+        if (!data.param1)
+            return;
+
+        m_OwnClan = data.param1;
+        m_OwnClan.SetMembers(data.param1.GetClanMembers());
+
+        if (m_BankingMenu)
+            m_BankingMenu.RefreshClanUI();
     }
 
     void UIQuitRequest(CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target)
@@ -165,7 +169,7 @@ class PluginKrBankingClientManager extends PluginBase
         GetRPCManager().SendRPC("KR_BANKING", "ClanCreateRequest", new Param2<string, string>(Clanname, ClanTag), true);
     }
 
-    void RequestEditPermission(ref PermissionObject newPermission, string TargetsSteamID)
+    void RequestEditPermission(PermissionObject newPermission, string TargetsSteamID)
     {
         if(!newPermission || !TargetsSteamID) return;
 

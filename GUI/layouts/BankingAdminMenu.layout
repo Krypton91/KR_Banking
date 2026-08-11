@@ -1,5 +1,5 @@
 FrameWidgetClass rootFrame {
- size 0.82448 0.76441
+ size 0.824 0.764
  halign center_ref
  valign center_ref
  hexactpos 0
@@ -11,7 +11,7 @@ FrameWidgetClass rootFrame {
    visible 1
    ignorepointer 1
    position 0 0
-   size 1.00148 1.00585
+   size 1.001 1.006
    halign center_ref
    valign center_ref
    hexactpos 0
@@ -23,8 +23,8 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelTabControlBody {
      visible 1
      ignorepointer 1
-     position 0.00015 0.06022
-     size 0.2115 0.9464
+     position 0 0.06
+     size 0.212 0.946
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -32,9 +32,9 @@ FrameWidgetClass rootFrame {
      style rover_sim_black
      {
       ButtonWidgetClass BtnServerS {
-       color 0.4314 0.051 0.3373 1
-       position -0.004 -0.21306
-       size 1.01368 0.09032
+       color 0.431 0.051 0.337 1
+       position -0.004 -0.213
+       size 1.014 0.09
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -47,8 +47,8 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass Logo {
        ignorepointer 1
-       position -0.02009 -0.00736
-       size 0.81103 0.35282
+       position -0.02 -0.007
+       size 0.811 0.353
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -57,12 +57,12 @@ FrameWidgetClass rootFrame {
        imageTexture "{65D80F1245E7483A}KR_Banking/GUI/textures/AdvancedBankingLogo.edds"
        mode blend
        "src alpha" 1
-       stretch 1
+       "stretch mode" stretch_w_h
       }
       ButtonWidgetClass BtnPlManager {
-       color 0.4314 0.051 0.3373 1
-       position -0.00175 -0.12328
-       size 1.00976 0.0921
+       color 0.431 0.051 0.337 1
+       position -0.002 -0.123
+       size 1.01 0.092
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -74,9 +74,9 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       ButtonWidgetClass BtnClManager {
-       color 0.4314 0.051 0.3373 1
-       position -0.00163 -0.03219
-       size 1.00896 0.09032
+       color 0.431 0.051 0.337 1
+       position -0.002 -0.032
+       size 1.009 0.09
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -88,9 +88,9 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       ButtonWidgetClass BtnMisc {
-       color 0.4314 0.051 0.3373 1
-       position 0.00128 0.05785
-       size 1.00896 0.09032
+       color 0.431 0.051 0.337 1
+       position 0.001 0.058
+       size 1.009 0.09
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -106,8 +106,8 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelTabServerSettings {
      visible 0
      ignorepointer 1
-     position 0.211 0.05705
-     size 0.78798 0.94639
+     position 0.211 0.057
+     size 0.788 0.946
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -118,7 +118,7 @@ FrameWidgetClass rootFrame {
        ignorepointer 1
        color 0 0 0 1
        position 0.014 0.028
-       size 0.42307 0.58292
+       size 0.423 0.583
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -126,9 +126,9 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         ButtonWidgetClass BtnClManager0 {
-         color 0.4314 0.051 0.3373 1
-         position -0.00092 -0.00156
-         size 1.0002 0.10604
+         color 0.431 0.051 0.337 1
+         position -0.001 -0.002
+         size 1 0.106
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -140,9 +140,9 @@ FrameWidgetClass rootFrame {
          switch normal
         }
         TextListboxWidgetClass AtmSpotList {
-         color 0.502 0 0.3765 1
-         position 0.00538 0.109
-         size 0.98829 0.29373
+         color 0.502 0 0.377 1
+         position 0.005 0.109
+         size 0.988 0.294
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -151,9 +151,9 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold16"
         }
         ButtonWidgetClass InsertNewSpawnHere {
-         color 0.4392 0 0.3294 1
-         position 0.14771 0.80405
-         size 0.67526 0.082
+         color 0.439 0 0.329 1
+         position 0.148 0.804
+         size 0.675 0.082
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -163,8 +163,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         CheckBoxWidgetClass CanBeRobbed {
-         position 0.00726 0.41045
-         size 0.39149 0.07746
+         position 0.007 0.41
+         size 0.391 0.077
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -173,9 +173,9 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         ButtonWidgetClass DeleteBtn {
-         color 0.4392 0 0.3294 1
-         position 0.61698 0.4088
-         size 0.37561 0.07687
+         color 0.439 0 0.329 1
+         position 0.617 0.409
+         size 0.376 0.077
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -185,9 +185,9 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         ButtonWidgetClass ShowATMOnMap {
-         color 0.4392 0 0.3294 1
-         position 0.46289 0.89983
-         size 0.51013 0.082
+         color 0.439 0 0.329 1
+         position 0.463 0.9
+         size 0.51 0.082
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -197,9 +197,9 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         ButtonWidgetClass TeleportToATM {
-         color 0.4392 0 0.3294 1
-         position 0.02573 0.89943
-         size 0.4272 0.082
+         color 0.439 0 0.329 1
+         position 0.026 0.899
+         size 0.427 0.082
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -214,8 +214,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.01449 0.61071
-       size 0.42307 0.37123
+       position 0.014 0.611
+       size 0.423 0.371
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -224,9 +224,9 @@ FrameWidgetClass rootFrame {
        {
         ButtonWidgetClass BtnClManager1 {
          visible 1
-         color 0.4314 0.051 0.3373 1
-         position 0.00153 0.00896
-         size 0.99991 0.08484
+         color 0.431 0.051 0.337 1
+         position 0.002 0.009
+         size 1 0.085
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -238,8 +238,8 @@ FrameWidgetClass rootFrame {
          switch normal
         }
         CheckBoxWidgetClass UseWebhook {
-         position 0.01065 0.11475
-         size 0.39837 0.13755
+         position 0.011 0.115
+         size 0.398 0.138
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -249,8 +249,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget25 {
          ignorepointer 1
-         position 0.32013 0.341
-         size 0.34387 0.10542
+         position 0.32 0.341
+         size 0.344 0.105
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -271,8 +271,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         CheckBoxWidgetClass Log1 {
-         position 0.01498 0.65589
-         size 0.39837 0.13755
+         position 0.015 0.656
+         size 0.398 0.138
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -281,8 +281,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         CheckBoxWidgetClass Log2 {
-         position 0.01498 0.81274
-         size 0.39837 0.13755
+         position 0.015 0.813
+         size 0.398 0.138
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -291,8 +291,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         CheckBoxWidgetClass Log3 {
-         position 0.4479 0.65589
-         size 0.48495 0.13755
+         position 0.448 0.656
+         size 0.485 0.138
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -301,8 +301,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         CheckBoxWidgetClass Log4 {
-         position 0.4479 0.81203
-         size 0.52175 0.13755
+         position 0.448 0.812
+         size 0.522 0.138
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -316,8 +316,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.44066 0.02796
-       size 0.54833 0.80474
+       position 0.441 0.028
+       size 0.548 0.805
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -325,9 +325,9 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         ButtonWidgetClass BtnClManager2 {
-         color 0.4314 0.051 0.3373 1
-         position -0.00042 0
-         size 1.00078 0.04921
+         color 0.431 0.051 0.337 1
+         position 0 0
+         size 1.001 0.049
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -340,8 +340,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget4 {
          ignorepointer 1
-         position 0.1419 0.05137
-         size 0.31257 0.04799
+         position 0.142 0.051
+         size 0.313 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -351,8 +351,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget6 {
          ignorepointer 1
-         position 0.15636 0.10169
-         size 0.30037 0.04799
+         position 0.156 0.102
+         size 0.3 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -362,8 +362,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget7 {
          ignorepointer 1
-         position 0.15726 0.15173
-         size 0.2956 0.04799
+         position 0.157 0.152
+         size 0.296 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -373,8 +373,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget8 {
          ignorepointer 1
-         position 0.09754 0.19973
-         size 0.36603 0.04799
+         position 0.098 0.2
+         size 0.366 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -384,8 +384,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget9 {
          ignorepointer 1
-         position 0.109 0.24733
-         size 0.36132 0.04799
+         position 0.109 0.247
+         size 0.361 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -395,8 +395,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget10 {
          ignorepointer 1
-         position 0.10582 0.29434
-         size 0.3645 0.04799
+         position 0.106 0.294
+         size 0.364 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -406,8 +406,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget11 {
          ignorepointer 1
-         position 0.11072 0.34087
-         size 0.3744 0.04799
+         position 0.111 0.341
+         size 0.374 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -417,8 +417,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget12 {
          ignorepointer 1
-         position 0.18378 0.38758
-         size 0.29421 0.04799
+         position 0.184 0.388
+         size 0.294 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -428,8 +428,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget13 {
          ignorepointer 1
-         position 0.17002 0.4332
-         size 0.32444 0.04799
+         position 0.17 0.433
+         size 0.324 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -439,8 +439,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget14 {
          ignorepointer 1
-         position 0.13678 0.47958
-         size 0.34352 0.04437
+         position 0.137 0.48
+         size 0.344 0.044
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -450,8 +450,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget15 {
          ignorepointer 1
-         position 0.08488 0.52467
-         size 0.36833 0.04799
+         position 0.085 0.525
+         size 0.368 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -461,8 +461,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget16 {
          ignorepointer 1
-         position 0.07704 0.57105
-         size 0.39437 0.04799
+         position 0.077 0.571
+         size 0.394 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -472,8 +472,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget17 {
          ignorepointer 1
-         position 0.07073 0.61632
-         size 0.39691 0.04799
+         position 0.071 0.616
+         size 0.397 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -483,8 +483,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget18 {
          ignorepointer 1
-         position 0.12492 0.66179
-         size 0.31425 0.04799
+         position 0.125 0.662
+         size 0.314 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -494,8 +494,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget19 {
          ignorepointer 1
-         position 0.08284 0.70767
-         size 0.44462 0.04799
+         position 0.083 0.708
+         size 0.445 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -505,8 +505,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget20 {
          ignorepointer 1
-         position 0.14706 0.75354
-         size 0.36232 0.04799
+         position 0.147 0.754
+         size 0.362 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -516,8 +516,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget21 {
          ignorepointer 1
-         position 0.0919 0.80016
-         size 0.40722 0.04799
+         position 0.092 0.8
+         size 0.407 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -527,8 +527,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget22 {
          ignorepointer 1
-         position 0.04326 0.84531
-         size 0.40804 0.04926
+         position 0.043 0.845
+         size 0.408 0.049
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -538,8 +538,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget23 {
          ignorepointer 1
-         position 0.00967 0.89459
-         size 0.43431 0.04799
+         position 0.01 0.895
+         size 0.434 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -549,8 +549,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget24 {
          ignorepointer 1
-         position 0.01618 0.94127
-         size 0.43898 0.04799
+         position 0.016 0.941
+         size 0.439 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -559,8 +559,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         EditBoxWidgetClass Starter {
-         position 0.43832 0.0511
-         size 0.52392 0.04806
+         position 0.438 0.051
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -569,8 +569,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass Max {
-         position 0.43832 0.10208
-         size 0.52392 0.04806
+         position 0.438 0.102
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -579,8 +579,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         CheckBoxWidgetClass ClanActive {
-         position 0.43844 0.1568
-         size 0.13225 0.039
+         position 0.438 0.157
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -589,8 +589,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold22"
         }
         EditBoxWidgetClass ClanCosts {
-         position 0.43908 0.19746
-         size 0.52392 0.04806
+         position 0.439 0.197
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -599,8 +599,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass AddCosts {
-         position 0.43832 0.2468
-         size 0.52392 0.04806
+         position 0.438 0.247
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -609,8 +609,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass MaxClanMoney {
-         position 0.43832 0.29613
-         size 0.52392 0.04806
+         position 0.438 0.296
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -619,8 +619,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass MaxClanMember {
-         position 0.43687 0.34397
-         size 0.52392 0.04806
+         position 0.437 0.344
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -629,8 +629,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass MinTransfer {
-         position 0.43687 0.38789
-         size 0.52392 0.04806
+         position 0.437 0.388
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -639,8 +639,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass TransferFees {
-         position 0.43687 0.43259
-         size 0.16427 0.04806
+         position 0.437 0.433
+         size 0.164 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -650,8 +650,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget110 {
          ignorepointer 1
-         position 0.60347 0.43433
-         size 0.04275 0.04799
+         position 0.603 0.434
+         size 0.043 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -660,8 +660,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         CheckBoxWidgetClass AtmRobActive {
-         position 0.43754 0.48213
-         size 0.13225 0.039
+         position 0.438 0.482
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -670,8 +670,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold22"
         }
         EditBoxWidgetClass MinPlayerRob {
-         position 0.43818 0.52376
-         size 0.52392 0.04806
+         position 0.438 0.524
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -680,8 +680,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass MinMoneyRob {
-         position 0.43728 0.57149
-         size 0.52392 0.04806
+         position 0.437 0.571
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -690,8 +690,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass SecondsRob {
-         position 0.43728 0.66402
-         size 0.52392 0.04806
+         position 0.437 0.664
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -700,8 +700,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         EditBoxWidgetClass MaxMoneyRob {
-         position 0.43728 0.61727
-         size 0.52392 0.04806
+         position 0.437 0.617
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -710,8 +710,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         CheckBoxWidgetClass RobMessageActive {
-         position 0.43754 0.7118
-         size 0.13225 0.039
+         position 0.438 0.712
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -720,8 +720,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold22"
         }
         EditBoxWidgetClass PaycheckValue {
-         position 0.43811 0.75293
-         size 0.52392 0.04806
+         position 0.438 0.753
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -730,8 +730,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         CheckBoxWidgetClass PaycheckMessageActive {
-         position 0.43754 0.80341
-         size 0.13225 0.039
+         position 0.438 0.803
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -740,8 +740,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold22"
         }
         EditBoxWidgetClass PaycheckMinPlayers {
-         position 0.43652 0.84583
-         size 0.52392 0.04806
+         position 0.437 0.846
+         size 0.524 0.048
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -750,8 +750,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold58"
         }
         CheckBoxWidgetClass CanAddToFullAccount {
-         position 0.43675 0.89545
-         size 0.13225 0.039
+         position 0.437 0.895
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -760,8 +760,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold22"
         }
         CheckBoxWidgetClass NeedBankCardToOpen {
-         position 0.43841 0.94575
-         size 0.13225 0.039
+         position 0.438 0.946
+         size 0.132 0.039
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -769,12 +769,33 @@ FrameWidgetClass rootFrame {
          text "Yes"
          font "gui/fonts/metron-bold22"
         }
+        TextWidgetClass TextWidget211 {
+         ignorepointer 1
+         position 0.582 0.8
+         size 0.25 0.048
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Paycheck Tick:"
+         font "gui/fonts/metron-bold28"
+        }
+        EditBoxWidgetClass PayCheckTickTime {
+         position 0.837 0.798
+         size 0.126 0.048
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "3600"
+         font "gui/fonts/metron-bold58"
+        }
        }
       }
       ButtonWidgetClass BtnClManager3 {
-       color 0.4314 0.051 0.3373 1
-       position 0.21456 0.83889
-       size 0.54569 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.215 0.839
+       size 0.546 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -786,9 +807,9 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       ButtonWidgetClass BtnClManager4 {
-       color 0.4314 0.051 0.3373 1
-       position 0.21466 0.9135
-       size 0.54569 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.215 0.914
+       size 0.546 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -804,9 +825,9 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelInsertNewATM {
      visible 0
      ignorepointer 1
-     color 0.0314 0.0314 0.0314 1
-     position 0.125 0.0184
-     size 0.56897 0.58815
+     color 0.031 0.031 0.031 1
+     position 0.125 0.018
+     size 0.569 0.588
      halign center_ref
      valign center_ref
      hexactpos 0
@@ -816,9 +837,9 @@ FrameWidgetClass rootFrame {
      style rover_sim_colorable
      {
       TextListboxWidgetClass ATMClassNameList {
-       color 0.502 0 0.3765 1
-       position 0.01395 0.14756
-       size 0.35142 0.83473
+       color 0.502 0 0.377 1
+       position 0.014 0.148
+       size 0.351 0.835
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -839,8 +860,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget26 {
        ignorepointer 1
-       position 0.00335 0.07474
-       size 0.36355 0.05691
+       position 0.003 0.075
+       size 0.364 0.057
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -852,8 +873,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget27 {
        ignorepointer 1
-       position 0.53104 0.07652
-       size 0.36355 0.05691
+       position 0.531 0.077
+       size 0.364 0.057
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -864,9 +885,9 @@ FrameWidgetClass rootFrame {
        "text valign" center
       }
       ButtonWidgetClass BtnInsertATM {
-       color 0.4314 0.051 0.3373 1
-       position 0.22289 0.7659
-       size 0.38963 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.223 0.766
+       size 0.39 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -879,8 +900,8 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass ButtonWidget2 {
        visible 1
-       position 0.9722 0.00675
-       size 0.02396 0.04643
+       position 0.972 0.007
+       size 0.024 0.046
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -891,8 +912,8 @@ FrameWidgetClass rootFrame {
          visible 1
          inheritalpha 1
          ignorepointer 1
-         position 0.01997 -0.00036
-         size 0.96628 0.99854
+         position 0.02 0
+         size 0.966 0.999
          halign right_ref
          valign center_ref
          hexactpos 0
@@ -902,14 +923,14 @@ FrameWidgetClass rootFrame {
          imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
          mode blend
          "src alpha" 1
-         stretch 1
+         "stretch mode" stretch_w_h
         }
        }
       }
       CheckBoxWidgetClass CheckBoxCanRob {
        visible 1
-       position 0.58404 0.69361
-       size 0.25691 0.05638
+       position 0.584 0.694
+       size 0.257 0.056
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -922,9 +943,9 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass Header {
      visible 1
      ignorepointer 1
-     color 0.2118 0.2118 0.2118 1
-     position 0.0003 0.00028
-     size 0.99823 0.06207
+     color 0.212 0.212 0.212 1
+     position 0 0
+     size 0.998 0.062
      halign center_ref
      hexactpos 0
      vexactpos 0
@@ -935,8 +956,8 @@ FrameWidgetClass rootFrame {
       TextWidgetClass AdmimText {
        visible 1
        ignorepointer 1
-       position 0 0.01959
-       size 0.39516 0.94695
+       position 0 0.02
+       size 0.395 0.947
        halign center_ref
        valign center_ref
        hexactpos 0
@@ -954,8 +975,8 @@ FrameWidgetClass rootFrame {
        visible 1
        inheritalpha 1
        ignorepointer 1
-       position 0.00756 0.00555
-       size 0.02386 0.70308
+       position 0.008 0.006
+       size 0.024 0.703
        halign right_ref
        valign center_ref
        hexactpos 0
@@ -965,12 +986,12 @@ FrameWidgetClass rootFrame {
        imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
        mode blend
        "src alpha" 1
-       stretch 1
+       "stretch mode" stretch_w_h
       }
       ButtonWidgetClass ButtonWidget0 {
        visible 1
-       position 0.96884 0.16158
-       size 0.02396 0.69085
+       position 0.969 0.162
+       size 0.024 0.691
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -982,8 +1003,8 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelTabPlayerManager {
      visible 0
      ignorepointer 1
-     position 0.21179 0.05705
-     size 0.78798 0.94639
+     position 0.212 0.057
+     size 0.788 0.946
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -993,8 +1014,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.014 0.02449
-       size 0.42307 0.95493
+       position 0.014 0.024
+       size 0.423 0.955
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1002,9 +1023,9 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         ButtonWidgetClass BtnClManager5 {
-         color 0.4314 0.051 0.3373 1
-         position -0.00353 0.00272
-         size 1.0002 0.04156
+         color 0.431 0.051 0.337 1
+         position -0.004 0.003
+         size 1 0.042
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1027,7 +1048,7 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         TextListboxWidgetClass TextListboxPlayers {
-         color 0.502 0 0.3765 1
+         color 0.502 0 0.377 1
          position 0 0.047
          size 0.993 0.873
          hexactpos 0
@@ -1044,9 +1065,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnSavePlayer {
        visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.21954 0.5225
-       size 0.54569 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.22 0.522
+       size 0.546 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1061,8 +1082,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.00487 0.02445
-       size 0.55077 0.57303
+       position 0.005 0.024
+       size 0.551 0.573
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -1072,9 +1093,9 @@ FrameWidgetClass rootFrame {
        {
         ButtonWidgetClass BtnClManager6 {
          visible 1
-         color 0.4314 0.051 0.3373 1
-         position 0.00153 0.00348
-         size 0.99991 0.072
+         color 0.431 0.051 0.337 1
+         position 0.002 0.003
+         size 1 0.072
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1088,8 +1109,8 @@ FrameWidgetClass rootFrame {
         TextWidgetClass PlayerName {
          visible 0
          ignorepointer 1
-         position -0.0035 0.08836
-         size 0.71749 0.1199
+         position -0.004 0.088
+         size 0.717 0.12
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1103,7 +1124,7 @@ FrameWidgetClass rootFrame {
         TextWidgetClass TextWidget0 {
          ignorepointer 1
          position 0.019 0.253
-         size 0.16187 0.06511
+         size 0.162 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1114,8 +1135,8 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         EditBoxWidgetClass BankOnAtm {
-         position 0.18524 0.25284
-         size 0.39718 0.06569
+         position 0.185 0.253
+         size 0.397 0.066
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1125,8 +1146,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget1 {
          ignorepointer 1
-         position 0.02023 0.47003
-         size 0.16187 0.06511
+         position 0.02 0.47
+         size 0.162 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1138,8 +1159,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass SteamIDBox {
          ignorepointer 1
-         position 0.19138 0.47057
-         size 0.39597 0.06511
+         position 0.191 0.471
+         size 0.396 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1150,8 +1171,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget3 {
          ignorepointer 1
-         position 0.02012 0.57248
-         size 0.16187 0.06511
+         position 0.02 0.572
+         size 0.162 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1163,8 +1184,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass ClanIDBox {
          ignorepointer 1
-         position 0.1908 0.57277
-         size 0.39597 0.06511
+         position 0.191 0.573
+         size 0.396 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1175,8 +1196,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget5 {
          ignorepointer 1
-         position 0.019 0.33154
-         size 0.18849 0.06511
+         position 0.019 0.332
+         size 0.188 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1187,8 +1208,8 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         EditBoxWidgetClass Bonus {
-         position 0.18397 0.33138
-         size 0.39718 0.06569
+         position 0.184 0.331
+         size 0.397 0.066
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1200,9 +1221,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnRefreshInfo {
        visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.21954 0.44772
-       size 0.54569 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.22 0.448
+       size 0.546 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1214,8 +1235,8 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       EditBoxWidgetClass SearchOfflineBox {
-       position 0.55129 0.688
-       size 0.36471 0.061
+       position 0.551 0.688
+       size 0.365 0.061
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1225,8 +1246,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget2 {
        ignorepointer 1
-       position 0.61174 0.62912
-       size 0.2112 0.04555
+       position 0.612 0.629
+       size 0.211 0.046
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1238,9 +1259,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnSearchOfflineID {
        visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.21074 0.77543
-       size 0.4225 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.211 0.775
+       size 0.423 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1253,9 +1274,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass OpenInClanManagerBtn {
        visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.39793 0.15214
-       size 0.17941 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.398 0.152
+       size 0.179 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1268,8 +1289,8 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageWidget0 {
        ignorepointer 1
-       position -0.01217 0.85658
-       size 0.1003 0.16151
+       position -0.012 0.857
+       size 0.1 0.162
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1277,13 +1298,13 @@ FrameWidgetClass rootFrame {
        imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
        mode blend
        "src alpha" 1
-       "no wrap" 1
-       stretch 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
       }
       ImageWidgetClass ImageWidget1 {
        ignorepointer 1
-       position 0.47552 0.63781
-       size 0.1003 0.16151
+       position 0.476 0.638
+       size 0.1 0.162
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1291,8 +1312,8 @@ FrameWidgetClass rootFrame {
        imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
        mode blend
        "src alpha" 1
-       "no wrap" 1
-       stretch 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
       }
      }
     }
@@ -1300,9 +1321,9 @@ FrameWidgetClass rootFrame {
      visible 0
      inheritalpha 0
      ignorepointer 1
-     color 0.1725 0.1725 0.1725 1
-     position 0.12439 0.0262
-     size 0.63071 0.69413
+     color 0.172 0.172 0.172 1
+     position 0.124 0.026
+     size 0.631 0.694
      halign center_ref
      valign center_ref
      hexactpos 0
@@ -1313,8 +1334,8 @@ FrameWidgetClass rootFrame {
      {
       ButtonWidgetClass ButtonWidget1 {
        visible 1
-       position 0.00436 0.01092
-       size 0.0323 0.0539
+       position 0.004 0.011
+       size 0.032 0.054
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -1326,8 +1347,8 @@ FrameWidgetClass rootFrame {
        visible 1
        inheritalpha 1
        ignorepointer 1
-       position 0.00436 0.01092
-       size 0.0322 0.05165
+       position 0.004 0.011
+       size 0.032 0.052
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -1336,10 +1357,10 @@ FrameWidgetClass rootFrame {
        imageTexture "{E09E82AC9FAC2178}KR_Banking/GUI/textures/CloseIcon.edds"
        mode blend
        "src alpha" 1
-       stretch 1
+       "stretch mode" stretch_w_h
       }
       MapWidgetClass MapWidget0 {
-       size 0.9773 0.845
+       size 0.977 0.845
        halign center_ref
        valign center_ref
        hexactpos 0
@@ -1352,8 +1373,8 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelWidgetClanManager {
      visible 0
      ignorepointer 1
-     position 0.21179 0.05705
-     size 0.78798 0.94639
+     position 0.212 0.057
+     size 0.788 0.946
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -1363,8 +1384,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.014 0.02577
-       size 0.42307 0.95365
+       position 0.014 0.026
+       size 0.423 0.954
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1372,9 +1393,9 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         ButtonWidgetClass BtnClManager7 {
-         color 0.4314 0.051 0.3373 1
-         position -0.00353 0.00272
-         size 1.0002 0.04156
+         color 0.431 0.051 0.337 1
+         position -0.004 0.003
+         size 1 0.042
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1387,7 +1408,7 @@ FrameWidgetClass rootFrame {
         }
         EditBoxWidgetClass EditBoxClansFind {
          visible 1
-         position 0.11739 0.83319
+         position 0.117 0.833
          size 0.873 0.064
          hexactpos 0
          vexactpos 0
@@ -1397,9 +1418,9 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         TextListboxWidgetClass TextListboxClans {
-         color 0.502 0 0.3765 1
+         color 0.502 0 0.377 1
          position 0 0.047
-         size 0.993 0.70022
+         size 0.993 0.7
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1412,8 +1433,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget210 {
          ignorepointer 1
-         position 0.02554 0.16609
-         size 0.52395 0.06511
+         position 0.026 0.166
+         size 0.524 0.065
          halign center_ref
          valign bottom_ref
          hexactpos 0
@@ -1427,9 +1448,9 @@ FrameWidgetClass rootFrame {
         }
         ButtonWidgetClass BtnSearchClan {
          visible 1
-         color 0.4314 0.051 0.3373 1
-         position 0.05549 0.90344
-         size 0.87303 0.06833
+         color 0.431 0.051 0.337 1
+         position 0.055 0.903
+         size 0.873 0.068
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1444,9 +1465,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass BtnSaveClanSettings {
        visible 1
-       color 0.4314 0.051 0.3373 1
-       position 0.21954 0.5225
-       size 0.54569 0.06833
+       color 0.431 0.051 0.337 1
+       position 0.22 0.522
+       size 0.546 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1461,8 +1482,8 @@ FrameWidgetClass rootFrame {
        visible 1
        ignorepointer 1
        color 0 0 0 1
-       position 0.00435 0.02551
-       size 0.55077 0.57303
+       position 0.004 0.026
+       size 0.551 0.573
        halign right_ref
        hexactpos 0
        vexactpos 0
@@ -1472,9 +1493,9 @@ FrameWidgetClass rootFrame {
        {
         ButtonWidgetClass BtnClManager8 {
          visible 1
-         color 0.4314 0.051 0.3373 1
-         position 0.00153 0.00348
-         size 0.99991 0.072
+         color 0.431 0.051 0.337 1
+         position 0.002 0.003
+         size 1 0.072
          halign center_ref
          hexactpos 0
          vexactpos 0
@@ -1488,7 +1509,7 @@ FrameWidgetClass rootFrame {
         TextWidgetClass TextWidget28 {
          ignorepointer 1
          position 0.019 0.253
-         size 0.16187 0.06511
+         size 0.162 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1499,8 +1520,8 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         EditBoxWidgetClass BankOnClanAtm {
-         position 0.18524 0.25284
-         size 0.39718 0.06569
+         position 0.185 0.253
+         size 0.397 0.066
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1510,8 +1531,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget29 {
          ignorepointer 1
-         position 0.00489 0.3641
-         size 0.17824 0.06511
+         position 0.005 0.364
+         size 0.178 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1523,8 +1544,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass SteamIDBoxClanOwner {
          ignorepointer 1
-         position 0.18621 0.36464
-         size 0.39597 0.06511
+         position 0.186 0.365
+         size 0.396 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1535,8 +1556,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass TextWidget30 {
          ignorepointer 1
-         position 0.03254 0.45232
-         size 0.16187 0.06511
+         position 0.033 0.452
+         size 0.162 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1548,8 +1569,8 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass ClanIDBox1 {
          ignorepointer 1
-         position 0.18666 0.45419
-         size 0.39597 0.06511
+         position 0.187 0.454
+         size 0.396 0.065
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1560,7 +1581,7 @@ FrameWidgetClass rootFrame {
         }
         EditBoxWidgetClass ClanTagEdit {
          position 0.016 0.078
-         size 0.26135 0.122
+         size 0.261 0.122
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1569,8 +1590,8 @@ FrameWidgetClass rootFrame {
          font "gui/fonts/metron-bold28"
         }
         EditBoxWidgetClass ClanNameEdit {
-         position 0.28378 0.07974
-         size 0.70633 0.122
+         position 0.284 0.08
+         size 0.706 0.122
          hexactpos 0
          vexactpos 0
          hexactsize 0
@@ -1582,8 +1603,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget32 {
        ignorepointer 1
-       position 0.60885 0.60151
-       size 0.2112 0.04555
+       position 0.609 0.602
+       size 0.211 0.046
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1595,9 +1616,9 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass JoinClanButton {
        visible 1
-       color 0 0.502 0.1255 1
-       position 0.39793 0.15214
-       size 0.17941 0.06833
+       color 0 0.502 0.125 1
+       position 0.398 0.152
+       size 0.179 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1610,8 +1631,8 @@ FrameWidgetClass rootFrame {
       }
       ImageWidgetClass ImageWidget2 {
        ignorepointer 1
-       position -0.01492 0.77506
-       size 0.1003 0.16151
+       position -0.015 0.775
+       size 0.1 0.162
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1619,14 +1640,14 @@ FrameWidgetClass rootFrame {
        imageTexture "{3871255CD16CB703}KR_Banking/data/Logos/menu-players-192.edds"
        mode blend
        "src alpha" 1
-       "no wrap" 1
-       stretch 1
+       "clamp mode" clamp
+       "stretch mode" stretch_w_h
       }
       ButtonWidgetClass DeleteClanButton {
        visible 1
        color 0.502 0 0 1
-       position 0.39793 0.22806
-       size 0.17941 0.06833
+       position 0.398 0.228
+       size 0.179 0.068
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -1638,9 +1659,9 @@ FrameWidgetClass rootFrame {
        switch normal
       }
       TextListboxWidgetClass ClanLogsList {
-       color 0.502 0 0.3765 1
-       position 0.45232 0.65485
-       size 0.53732 0.31867
+       color 0.502 0 0.377 1
+       position 0.452 0.655
+       size 0.537 0.319
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1653,8 +1674,8 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PanelWidgetMisc {
      visible 0
      ignorepointer 1
-     position 0.21202 0.063
-     size 0.78751 0.92801
+     position 0.212 0.063
+     size 0.788 0.928
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -1663,7 +1684,7 @@ FrameWidgetClass rootFrame {
       TextWidgetClass TextWidget31 {
        ignorepointer 1
        position 0.01 0.011
-       size 0.25287 0.06422
+       size 0.253 0.064
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1673,8 +1694,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass OnlinePlayersAmount {
        ignorepointer 1
-       position 0.26423 0.011
-       size 0.09423 0.06422
+       position 0.264 0.011
+       size 0.094 0.064
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1684,9 +1705,9 @@ FrameWidgetClass rootFrame {
       }
       PanelWidgetClass PanelWidget0 {
        ignorepointer 1
-       color 0.502 0 0.3765 1
-       position -0.00168 0.126
-       size 1.00775 0.062
+       color 0.502 0 0.377 1
+       position -0.002 0.126
+       size 1.008 0.062
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1695,8 +1716,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget33 {
        ignorepointer 1
-       position 0.38322 0.12979
-       size 0.24405 0.05525
+       position 0.383 0.13
+       size 0.244 0.055
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1718,8 +1739,8 @@ FrameWidgetClass rootFrame {
       }
       TextWidgetClass TextWidget34 {
        ignorepointer 1
-       position 0.25156 0.20232
-       size 0.51176 0.05525
+       position 0.252 0.202
+       size 0.512 0.055
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1730,9 +1751,9 @@ FrameWidgetClass rootFrame {
        "text valign" center
       }
       ButtonWidgetClass ButtonWidget3 {
-       color 0.502 0 0.3765 1
-       position 0.43213 0.35692
-       size 0.14446 0.06444
+       color 0.502 0 0.377 1
+       position 0.432 0.357
+       size 0.144 0.064
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -1742,9 +1763,9 @@ FrameWidgetClass rootFrame {
        font "gui/fonts/metron-bold48"
       }
       ButtonWidgetClass ButtonWidget4 {
-       color 0.502 0 0.3765 1
-       position -0.00754 0.48897
-       size 1.01724 0.06444
+       color 0.502 0 0.377 1
+       position -0.008 0.489
+       size 1.017 0.064
        hexactpos 0
        vexactpos 0
        hexactsize 0

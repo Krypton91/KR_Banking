@@ -3,7 +3,7 @@ class KR_AdminConfigManager
     ref array<ref AdminUsers> m_Admins;
     void KR_AdminConfigManager()
     {
-        m_Admins = new ref array<ref AdminUsers>;
+        m_Admins = new array<ref AdminUsers>;
     }
 
     void LoadDefaultSettings()
@@ -22,7 +22,7 @@ class KR_AdminConfigManager
 
     void AddAdmin(string PlainID, string Name, AdminPermissions perms, bool shouldSafe = true)
     {
-        m_Admins.Insert(new ref AdminUsers(PlainID, Name, perms));
+        m_Admins.Insert(new AdminUsers(PlainID, Name, perms));
 
         if(shouldSafe)
             Save();
@@ -41,6 +41,7 @@ class KR_AdminConfigManager
         KR_AdminConfigManager settings = new KR_AdminConfigManager();
         if(!FileExist(m_BankingConfigDIR))
             MakeDirectory(m_BankingConfigDIR);
+        
         if(FileExist("$profile:KR_BANKING/Admins.json"))
         {
             Print("[Advanced Banking] -> Found Admin Config Loading existing config...");

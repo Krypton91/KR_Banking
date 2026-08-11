@@ -37,33 +37,6 @@ class KR_BankingConfigManager
         BankingCurrency = new array<ref CurrencySettings>();
         m_LoggingSettings = new LogSettings();
         m_DiscordWebhook = new Webhookservice();
-
-        if(!FileExist(m_BankingConfigDIR))
-            MakeDirectory(m_BankingConfigDIR);
-
-        if(FileExist(m_BankingConfigPath))
-        {
-            Print("[Advanced Banking] -> Found Config Loading existing config...");
-            bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, this);
-            if(!hasError)
-            {
-                KR_BankingMigrationModule migrationService = new KR_BankingMigrationModule();
-                migrationService.CheckConfig(this);
-            }
-            else
-            {
-                for(int i = 0; i < 100; i++)
-                {
-                    Print("[Advanced Banking] -> Server config json contains an error, please fix it!");
-                    Error("[Advanced Banking] -> Server config json contains an error, please fix it!");
-                }
-            }
-        }
-        else
-        {
-            Print("[Advanced Banking] -> No Config Found Try to write default config...");
-            LoadDefaultSettings();
-        }
     }
 
     void LoadDefaultSettings()
@@ -95,23 +68,21 @@ class KR_BankingConfigManager
         CanAddToFullAcc = false;
         NeedsBankCardToOpenMenu = false;
 
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3689.35 402.012 5988.02", "-110 0 0"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "11475.6 342.984 11320", "210 0 0"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "3433.22 192.705 13063.299", "-114.01 0 0", true, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6045.77 300.76 7841.39", "52.99 0 0", true, "ATM Gets Robbed near Stary Sobor from Player: %PlayerName%"));
-        ATM.Insert(new ref ATMPosition("KR_ATMBlack", "6597.81 8.300 2423.65", "133.0 0 0", true, "ATM Gets Robbed near Chernogorsk from Player: %PlayerName%"));
+        ATM.Insert(new ATMPosition("KR_ATMBlack", "3689.35 402.012 5988.02", "-110 0 0"));
+        ATM.Insert(new ATMPosition("KR_ATMBlack", "11475.6 342.984 11320", "210 0 0"));
+        ATM.Insert(new ATMPosition("KR_ATMBlack", "3433.22 192.705 13063.299", "-114.01 0 0", true, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
+        ATM.Insert(new ATMPosition("KR_ATMBlack", "6045.77 300.76 7841.39", "52.99 0 0", true, "ATM Gets Robbed near Stary Sobor from Player: %PlayerName%"));
+        ATM.Insert(new ATMPosition("KR_ATMBlack", "6597.81 8.300 2423.65", "133.0 0 0", true, "ATM Gets Robbed near Chernogorsk from Player: %PlayerName%"));
 
         //Importent to start with the highest Value of money!!! Todo: Make a sort function.
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble100", 100));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble50", 50));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble25", 25));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble10", 10));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble5", 5));
-        BankingCurrency.Insert(new ref CurrencySettings("MoneyRuble1", 1));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble100", 100));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble50", 50));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble25", 25));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble10", 10));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble5", 5));
+        BankingCurrency.Insert(new CurrencySettings("MoneyRuble1", 1));
 
         Save();
-
-
     }
 
     void Save()
@@ -133,7 +104,7 @@ class KR_BankingConfigManager
 
     void AddATM(string classname, bool canRob, vector Position, vector Orientation)
     {
-        ATM.Insert(new ref ATMPosition(classname, Position, Orientation, canRob, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
+        ATM.Insert(new ATMPosition(classname, Position, Orientation, canRob, "ATM Gets Robbed near Novaya Petrovka from Player: %PlayerName%"));
         Save();
     }
 
@@ -144,10 +115,67 @@ class KR_BankingConfigManager
         Save();
     }
 
+    static ref KR_BankingConfigManager Load()
+    {
+        KR_BankingConfigManager settings = new KR_BankingConfigManager();
+        if(!FileExist(m_BankingConfigDIR))
+            MakeDirectory(m_BankingConfigDIR);
+        
+        if(FileExist(m_BankingConfigPath))
+        {
+            Print("[Advanced Banking] -> Found Config Loading existing config...");
+            bool hasError = BankingJsonFileLoader<KR_BankingConfigManager>.JsonLoadFile(m_BankingConfigPath, settings);
+            if(settings && settings.IsConfigOutdated())
+            {
+                settings.CreateNewConfig();
+            }
+            else
+            {
+                if(hasError)
+                {
+                    Print("Banking -> JSON ERROR ON YOUR CONFIG CAN NOT START!");
+                }
+            }
+        }
+        else
+        {
+            Print("[Advanced Banking] -> No Config Found Try to write default config...");
+            settings.LoadDefaultSettings();
+        }
+        return settings;
+    }
+
+    void CreateNewConfig()
+    {
+        if (!FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"))
+			MakeDirectory(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/");
+
+        string BKFileName = "OldConfig.AdvancedBanking";
+        int TryCount = 1;
+        while(FileExist(m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/"+ BKFileName))
+        {
+            BKFileName = TryCount.ToString() + BKFileName;
+            TryCount++;
+        }
+
+        CopyFile(m_BankingConfigPath, m_BankingProfileDIR + m_BankingConfigDIR + "/" + "OLDCONFIG/" + BKFileName);
+        DeleteFile(m_BankingConfigPath);
+        ATM.Clear();
+        BankingCurrency.Clear();
+        LoadDefaultSettings();
+    }
+
     int GetCorrectPayCheckTime()
     {
         return PayCheckTickTime * 60000;
     }
+
+    bool IsConfigOutdated() 
+    {
+		if(this.ModVersion != GetModVersion())
+			return true;
+		return false;
+	}
 
     protected string GetModVersion()
     {
@@ -164,7 +192,7 @@ static KR_BankingConfigManager GetKR_BankingServerConfig()
 {
     if (g_Game.IsServer() && !g_KR_BankingConfigManager) 
     {
-        g_KR_BankingConfigManager = new KR_BankingConfigManager();
+        g_KR_BankingConfigManager = KR_BankingConfigManager.Load();
         g_KR_BankingConfigManager.Save();
     }
     return g_KR_BankingConfigManager;

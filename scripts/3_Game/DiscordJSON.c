@@ -8,6 +8,7 @@ class BankingDiscordJSON
 	ref BankingDiscordObject_Provider m_provider;
 	ref BankingDiscordObject_Author m_author;
 
+	// ewwww.
 	string GetJSON()
 	{
 		string jsonData = "{";
@@ -24,7 +25,7 @@ class BankingDiscordJSON
 		return jsonData;
 	}
 	
-	string GetModuleJSON(ref BankingDiscordObject module)
+	string GetModuleJSON(BankingDiscordObject module)
 	{
 		if (module)
 		{

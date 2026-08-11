@@ -13,7 +13,7 @@ class KR_BankingClientConfig
     int     ServersMaxCurrency;
     protected bool m_MaxCurrencyUpdated;
 
-    void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, ref array<ref CurrencySettings> ServersCurrency, int coststocreateclan, int MaxClanAmount, bool clanAcc)
+    void KR_BankingClientConfig(int mxcur, float interdelay, bool rob, bool card, array<ref CurrencySettings> ServersCurrency, int coststocreateclan, int MaxClanAmount, bool clanAcc)
     {
         MaxCurrency = mxcur;
         InteractDelay = interdelay;
