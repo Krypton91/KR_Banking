@@ -784,8 +784,6 @@ class KR_AdminMenu extends UIScriptedMenu
 
 		PPEffects.SetBlurMenu(0.5);
 
-		GetGame().GetInput().ChangeGameFocus(1);
-
 		SetFocus( layoutRoot );
 
 		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
@@ -798,8 +796,6 @@ class KR_AdminMenu extends UIScriptedMenu
 		super.OnHide();
 
 		PPEffects.SetBlurMenu(0);
-
-		GetGame().GetInput().ResetGameFocus();
 
 		GetGame().GetMission().PlayerControlEnable(false);
 
