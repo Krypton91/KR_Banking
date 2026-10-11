@@ -649,7 +649,12 @@ class BankingAdminManager extends PluginBase
         string pattern = "$profile:KR_BANKING/ClanDataBase/*.json";
         string fileName;
         FileAttr fileAttr;
-        FindFileHandle handle = FindFile(pattern, fileName, fileAttr, FindFileFlags.DIRECTORIES);
+        // DayZ 1.30 (Bohemia DZEXP-134) reads FindFile's last argument as a file system index, so the
+        // normal flags list the server folder instead of $profile:. -1 lists $profile: correctly on 1.30
+        // but finds nothing on 1.29, so try -1 first and fall back to the normal flags (1.29, or a fixed 1.30+).
+        FindFileHandle handle = FindFile(pattern, fileName, fileAttr, -1);
+        if (!handle)
+            handle = FindFile(pattern, fileName, fileAttr, FindFileFlags.DIRECTORIES);
 
         if (!handle)
             return null;
