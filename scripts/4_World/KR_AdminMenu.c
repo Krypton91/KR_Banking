@@ -784,7 +784,9 @@ class KR_AdminMenu extends UIScriptedMenu
 
 		PPEffects.SetBlurMenu(0.5);
 
+#ifdef DAYZ_1_29
 		GetGame().GetInput().ChangeGameFocus(1);
+#endif
 
 		SetFocus( layoutRoot );
 
@@ -799,7 +801,9 @@ class KR_AdminMenu extends UIScriptedMenu
 
 		PPEffects.SetBlurMenu(0);
 
+#ifdef DAYZ_1_29
 		GetGame().GetInput().ResetGameFocus();
+#endif
 
 		GetGame().GetMission().PlayerControlEnable(false);
 
