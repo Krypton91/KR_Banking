@@ -1,4 +1,4 @@
-modded class Crowbar: Inventory_Base
+modded class Crowbar
 {
 	override void SetActions()
 	{
